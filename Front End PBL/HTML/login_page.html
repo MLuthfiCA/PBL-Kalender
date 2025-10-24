@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>formulir dengan css eksternal</title>
+    <link rel="stylesheet" href="../CSS/login.css">
+</head>
+
+<body>
+
+    <form action="#" method="post">
+        <a href="admin_page.html">
+            <img src="../mentahan_profil-removebg-preview.png" alt="logo" width="100">
+        </a>
+        <h3 style="text-align: center; color:#000000">MASUK</h3>
+        <label style="color:#000000" for="nama">Nama Akun</label>
+        <input type="text" id="nama" class="input-field" name="nama" placeholder="masukkan nama akun anda" required>
+
+        <label style="color:#000000" for="password">Kata Sandi</label>
+        <input type="password" id="password" class="input-field" name="password" placeholder="masukkan masukkan kata sandi"
+            required>
+
+        <a href="forgetpass_page.html">LUPA PASSWORD?</a>
+        <a href="register_page.html" style="float: right;">REGISTER</a>
+
+        <button type="button" onclick="loginUser()">Login</button>
+    </form>
+    <script src="../JS/login.js"></script>
+</body>
+
+</html>

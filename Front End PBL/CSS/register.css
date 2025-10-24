@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+*{   
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-image: url(../logo\ login.jpg);
+    background-position: center;
+    background-size: cover;
+}
+form {
+    width: 40% ;
+    margin: 100px auto;
+    padding: 20px;
+    border-radius: 30px;
+    background: #ffffff57;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    backdrop-filter: blur(7px) brightness(90%) contrast(120%);
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input{
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    color:#000000 ;
+    border: 1px solid #032b6d90;
+    border-radius: 30px;
+    box-sizing: border-box;
+    font-size: 14px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-field:focus {
+    transform: scale(105%);
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #1184db;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #032b6d90;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+.error-message {
+    color: red;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+}

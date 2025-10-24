@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>contoh landing page</title>
+    <link rel="stylesheet" href="../CSS/home.css" />
+  </head>
+
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a href="home_page.html"><img src="../logo login.png" class="logo" height="90px" width="90px"></a>
+        <ul class="nav-links">
+          <li><a href="#home">Halaman</a></li>
+          <li><a href="#calendar">Kalender</a></li>
+          <li><a href="#tentang">Tentang Kami</a></li>
+          <li><a href="login_page.html">Keluar</a></li>
+        </ul>
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Cari jadwal..." />
+          <button id="searchBtn">🔍</button>
+        </div>
+      </div>
+    </nav>
+    <section id="home" class="hero"></section>
+    <section class="main-content">
+      <h2>Selamat datang Mahasiswa</h2>
+      <div class="container">
+        <div class="features-box">
+          <div class="features1">
+            <img src="../GAMBAR_BUKU.jpeg" alt="buku" />
+            <h2>Mata Kuliah</h2>
+            <p>Semester Ini</p>
+          </div>
+          <div class="features2">
+            <img src="../GAMBAR_JAM.jpeg" alt="jam" />
+            <h2>Tugas Pending</h2>
+            <p>Tenggat Minggu Ini</p>
+          </div>
+          <div class="features3">
+            <img src="../GAMBAR_KALENDER.jpeg" alt="kalender" />
+            <h2>Minggu Ini</h2>
+            <p>Kelas & Praktikum</p>
+          </div>
+        </div>
+        <!-- kotak 2 -->
+        <div class="features-box1">
+          <div class="box1">
+            <div class="kotak-aktivitas skroll">
+              <h3>Aktivitas Terbaru</h3>
+              <p class="sub">Tugas dan kegiatan yang perlu perhatian</p>
+              <div class="tugas">
+                <div>
+                  <h4>Tugas Pemrograman Web</h4>
+                  <p>Tenggat: 2024-10-15</p>
+                </div>
+                <span class="status pending">Pending</span>
+              </div>
+              <div class="tugas">
+                <div>
+                  <h4>Kuiz Basis Data</h4>
+                  <p>Tenggat: 2024-10-13</p>
+                </div>
+                <span class="status done">Selesai</span>
+              </div>
+              <div class="tugas">
+                <div>
+                  <h4>Presentasi Proyek</h4>
+                  <p>Tenggat: 2024-10-17</p>
+                </div>
+                <span class="status akandatang">Akan Datang</span>
+              </div>
+              <div class="tugas">
+                <div>
+                  <h4>Laporan Praktikum</h4>
+                  <p>Tenggat: 2024-10-18</p>
+                </div>
+                <span class="status pending">Pending</span>
+              </div>
+              <div class="tugas">
+                <div>
+                  <h4>Ujian Tengah Semester</h4>
+                  <p>Tenggat: 2024-10-20</p>
+                </div>
+                <span class="status akandatang">Akan Datang</span>
+              </div>
+            </div>
+          </div>
+          <div class="box2" onclick="">
+            <div class="kotak-jadwal skroll">
+              <h3>Jadwal Hari Ini</h3>
+              <p class="sub">Kelas dan kegiatan hari ini</p>
+              <div class="jadwal">
+                <h4>Pemrograman Web</h4>
+                <p>Ruang 3.11 — 08.00-10.30</p>
+              </div>
+              <div class="jadwal">
+                <h4>Basis Data</h4>
+                <p>Ruang 2.09 — 10.30-12.30</p>
+              </div>
+              <div class="jadwal">
+                <h4>Praktikum RPL</h4>
+                <p>Lab Komputer — 13.00-15.30</p>
+              </div>
+              <div class="jadwal">
+                <h4>Konsultasi Tugas Akhir</h4>
+                <p>Ruang Dosen — 15.30-16.30</p>
+              </div>
+              <div class="jadwal">
+                <h4>Rapat Proyek</h4>
+                <p>Ruang 2.01 — 17.00-18.00</p>
+              </div>
+              <div class="jadwal">
+                <h4>Seminar Teknologi</h4>
+                <p>Aula Kampus — 19.00-21.00</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- calender -->
+      <div class="calendar-box">
+        <h1>Kalender Perkuliahan</h1>
+        <div id="container">
+          <div id="header">
+            <div id="monthDisplay"></div>
+            <div>
+              <button id="backButton">Back</button>
+              <button id="nextButton">Next</button>
+            </div>
+          </div>
+
+          <div id="weekdays">
+            <div>Min</div>
+            <div>Sen</div>
+            <div>Sel</div>
+            <div>Rab</div>
+            <div>Kam</div>
+            <div>Jum</div>
+            <div>Sab</div>
+          </div>
+
+          <div id="calendar"></div>
+        </div>
+      </div>
+
+      <div id="newEventModal">
+        <h2>Tambah Jadwal</h2>
+        <input id="eventTitleInput" placeholder="Nama Mata Kuliah" />
+        <label for="eventDate">Tanggal:</label>
+        <input type="date" id="eventDate" />
+
+        <label for="eventDosen">Dosen:</label>
+        <input id="eventTitleInput" placeholder="Nama Dosen">
+
+        <label for="eventTime">Waktu:</label>
+        <select id="eventTime">
+          <option value="00:00">00:00</option>
+          <option value="01:00">01:00</option>
+          <option value="02:00">02:00</option>
+          <option value="03:00">03:00</option>
+          <option value="04:00">04:00</option>
+          <option value="05:00">05:00</option>
+          <option value="06:00">06:00</option>
+          <option value="07:00">07:00</option>
+          <option value="08:00">08:00</option>
+          <option value="09:00">09:00</option>
+          <option value="10:00">10:00</option>
+          <option value="11:00">11:00</option>
+          <option value="12:00">12:00</option>
+          <option value="13:00">13:00</option>
+          <option value="14:00">14:00</option>
+          <option value="15:00">15:00</option>
+          <option value="16:00">16:00</option>
+          <option value="17:00">17:00</option>
+          <option value="18:00">18:00</option>
+          <option value="19:00">19:00</option>
+          <option value="20:00">20:00</option>
+          <option value="21:00">21:00</option>
+          <option value="22:00">22:00</option>
+          <option value="23:00">23:00</option>
+        </select>
+
+        <label for="eventRoom">Ruangan:</label>
+        <input id="eventRoom" placeholder="Masukkan ruangan" />
+
+        <button id="saveButton">Simpan</button>
+        <button id="cancelButton">Batal</button>
+      </div>
+
+      <div id="deleteEventModal">
+        <h2>Jadwal</h2>
+        <p id="eventText"></p>
+        <button id="deleteButton">Hapus</button>
+        <button id="closeButton">Tutup</button>
+      </div>
+
+      <div id="modalBackDrop"></div>
+    </section>
+    <!-- tentang web -->
+    <section id="tentang" class="about">
+      <div class="container">
+        <h2>Tentang Kami</h2>
+        <p class="tebal-jelas">
+          Website ini merupakan platform yang dirancang khusus untuk membantu
+          mahasiswa dalam mengelola dan memantau jadwal perkuliahan pribadi.
+          Melalui website ini, mahasiswa dapat melihat, menambahkan, serta
+          mengatur jadwal kegiatan akademik secara terstruktur dan efisien.
+        </p>
+      </div>
+    </section>
+
+    <!-- footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2025 All rights reserved.</p>
+        <ul class="social-link">
+          <li>
+            <a href="https://www.facebook.com/damarrwn.damarrwn">Facebook</a>
+          </li>
+          <li><a href="https://x.com/WidhiDamar99089">Twitter</a></li>
+          <li>
+            <a href="https://www.instagram.com/dam_dim_dum_dom/">Instagram</a>
+          </li>
+          <li>
+            <a href="https://mail.google.com/mail/u/0/#inbox?compose=new"
+              >Gmail</a
+            >
+          </li>
+        </ul>
+      </div>
+    </footer>
+    <script src="../JS/home.js"></script>
+  </body>
+</html>
