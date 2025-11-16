@@ -457,7 +457,14 @@
     background-color: #d36c6c;
   }
 
-  #saveButton, #closeButton, #editButton {
+ .button-row {
+  display: flex;
+  justify-content: left; 
+  gap: 10px;               
+  margin-top: 10px;
+ }
+
+  #saveButton, #closeButton{
     background-color: #92a1d1;
   }
 
