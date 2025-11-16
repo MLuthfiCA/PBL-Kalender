@@ -11,6 +11,7 @@ const backDrop = document.getElementById("modalBackDrop");
 const eventTitleInput = document.getElementById("eventTitleInput");
 const eventTimeInput = document.getElementById("eventTime");
 const eventRoomInput = document.getElementById("eventRoom");
+const repeatWeeklyCheckbox = document.getElementById("repeatWeekly");
 const eventText = document.getElementById("eventText");
 const monthDisplay = document.getElementById("monthDisplay");
 
@@ -119,14 +120,34 @@ function closeModal() {
 
 function saveEvent() {
   if (eventTitleInput.value) {
-    events.push({
+    const baseEvent = {
       date: clicked,
       title: eventTitleInput.value,
       time: eventTimeInput.value,
       room: eventRoomInput.value,
-      // 🟩 tambahan — simpan nama dosen
+      //simpan nama dosen
       dosen: eventDosenInput ? eventDosenInput.value : ""
-    });
+    };
+    const repeatWeekly = repeatWeeklyCheckbox.checked;
+
+    if (repeatWeekly) {
+      // Buat event berulang selama 3 bulan ke depan (12 minggu)
+      const startDate = new Date(clicked);
+      for (let i = 0; i < 12; i++) {
+        const nextDate = new Date(startDate);
+        nextDate.setDate(startDate.getDate() + i * 7); // tiap 7 hari
+        const formattedDate = nextDate.toISOString().split("T")[0];
+
+        events.push({
+          ...baseEvent,
+          date: formattedDate,
+          repeatId: clicked, // penanda grup perulangan
+        });
+      }
+    } else {
+      // event biasa, tidak berulang
+      events.push(baseEvent);
+    }
 
     localStorage.setItem('events', JSON.stringify(events));
     closeModal();
@@ -137,6 +158,27 @@ function saveEvent() {
 
 function deleteEvent() {
   events = events.filter(e => e.date !== clicked);
+  const eventForDay = events.find(e => e.date === clicked);
+
+  if (!eventForDay) return;
+
+  // Jika event memiliki repeatId, berarti dia termasuk jadwal berulang
+  if (eventForDay.repeatId) {
+    const confirmAll = confirm("Hapus semua jadwal berulang ini?\nPilih OK untuk semua, Batal untuk hanya minggu ini.");
+
+    if (confirmAll) {
+      // hapus semua event dengan repeatId yang sama
+      events = events.filter(e => e.repeatId !== eventForDay.repeatId);
+    } else {
+      // hapus hanya minggu ini
+      events = events.filter(e => e.date !== clicked);
+    }
+  } else {
+    // event biasa
+    if (confirm("Yakin ingin menghapus jadwal ini?")) {
+      events = events.filter(e => e.date !== clicked);
+    }
+  }
   localStorage.setItem('events', JSON.stringify(events));
   closeModal();
 }
