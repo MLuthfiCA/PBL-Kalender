@@ -266,4 +266,3 @@ function editStudent(index) {
 }
 
 renderStudents();
-

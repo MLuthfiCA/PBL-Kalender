@@ -277,3 +277,69 @@ document.getElementById('closeButton').addEventListener('click', closeModal);
 
 load();
 setTimeout(renderActivityAndTodayBoxes, 100);
+
+// ================== ADMIN PANEL SCRIPT ==================
+const studentForm = document.getElementById("addStudentForm");
+const studentTable = document.getElementById("studentTable").querySelector("tbody");
+
+let students = JSON.parse(localStorage.getItem("students")) || [];
+
+function renderStudents() {
+  studentTable.innerHTML = "";
+  students.forEach((s, index) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${s.name}</td>
+      <td>${s.email}</td>
+      <td>${s.active ? "Aktif" : "Nonaktif"}</td>
+      <td>
+        <button class="action-btn edit-btn" onclick="editStudent(${index})">Edit</button>
+        <button class="action-btn toggle-btn" onclick="toggleStatus(${index})">
+          ${s.active ? "Nonaktifkan" : "Aktifkan"}
+        </button>
+        <button class="action-btn delete-btn" onclick="deleteStudent(${index})">Hapus</button>
+      </td>
+    `;
+    studentTable.appendChild(row);
+  });
+}
+
+studentForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = document.getElementById("studentName").value;
+  const email = document.getElementById("studentEmail").value;
+  const password = document.getElementById("studentPassword").value;
+
+  students.push({ name, email, password, active: true });
+  localStorage.setItem("students", JSON.stringify(students));
+
+  studentForm.reset();
+  renderStudents();
+});
+
+function deleteStudent(index) {
+  if (confirm("Yakin ingin menghapus akun ini?")) {
+    students.splice(index, 1);
+    localStorage.setItem("students", JSON.stringify(students));
+    renderStudents();
+  }
+}
+
+function toggleStatus(index) {
+  students[index].active = !students[index].active;
+  localStorage.setItem("students", JSON.stringify(students));
+  renderStudents();
+}
+
+function editStudent(index) {
+  const newName = prompt("Nama baru:", students[index].name);
+  if (newName) students[index].name = newName;
+
+  const newEmail = prompt("Email baru:", students[index].email);
+  if (newEmail) students[index].email = newEmail;
+
+  localStorage.setItem("students", JSON.stringify(students));
+  renderStudents();
+}
+
+renderStudents();
