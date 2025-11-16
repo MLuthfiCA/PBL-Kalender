@@ -9,13 +9,12 @@ const newEventModal = document.getElementById("newEventModal");
 const deleteEventModal = document.getElementById("deleteEventModal");
 const backDrop = document.getElementById("modalBackDrop");
 const eventTitleInput = document.getElementById("eventTitleInput");
-const eventDateInput = document.getElementById("eventDate");
 const eventTimeInput = document.getElementById("eventTime");
 const eventRoomInput = document.getElementById("eventRoom");
 const eventText = document.getElementById("eventText");
 const monthDisplay = document.getElementById("monthDisplay");
 
-// 🟩 tambahan — ambil input nama dosen
+//ambil input nama dosen
 const eventDosenInput = document.querySelector('input[placeholder="Nama Dosen"]');
 
 const weekdays = ['Ming', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
@@ -27,7 +26,7 @@ function openModal(date) {
   if (eventForDay) {
     eventText.innerText = `${eventForDay.title} | ${eventForDay.time} | ${eventForDay.room}`;
     
-    // 🟩 tambahan — tampilkan dosen jika ada
+    //tampilkan dosen jika ada
     if (eventForDay.dosen) {
       eventText.innerText += ` | Dosen: ${eventForDay.dosen}`;
     }
@@ -105,11 +104,10 @@ function load() {
 
 function closeModal() {
   eventTitleInput.value = '';
-  eventDateInput.value = '';
   eventTimeInput.value = '';
   eventRoomInput.value = '';
   
-  // 🟩 tambahan — kosongkan input dosen
+  //kosongkan input dosen
   if (eventDosenInput) eventDosenInput.value = '';
 
   newEventModal.style.display = 'none';
@@ -120,9 +118,9 @@ function closeModal() {
 }
 
 function saveEvent() {
-  if (eventTitleInput.value && eventDateInput.value) {
+  if (eventTitleInput.value) {
     events.push({
-      date: eventDateInput.value,
+      date: clicked,
       title: eventTitleInput.value,
       time: eventTimeInput.value,
       room: eventRoomInput.value,
