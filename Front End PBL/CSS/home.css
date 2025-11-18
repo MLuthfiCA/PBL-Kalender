@@ -37,6 +37,16 @@
       margin: 0 auto;
   }
   
+  .logout-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 18px;
+  }
+  .logout-btn:hover {
+      color: red;
+  }
 
   .navbar .logo:hover {
       color: #fF6347;
@@ -253,28 +263,6 @@
       min-width: 80px;
   }
 
-  .status.pending {
-      background-color: #f4b266;
-  }
-  .status.pending:hover {
-      background-color: #e39943;
-  }
-
-  .status.done {
-      background-color: #50c878;
-  }
-  .status.done:hover {
-      background-color: #37a35b;
-  }
-
-  .status.akandatang {
-      background-color: #4a90e2;
-  }
-  .status.akandatang:hover {
-      background-color: #2569b6;
-  }
-
-
   .features-box2 {
       display: flex;
       flex-wrap: wrap;
@@ -457,14 +445,7 @@
     background-color: #d36c6c;
   }
 
- .button-row {
-  display: flex;
-  justify-content: left; 
-  gap: 10px;               
-  margin-top: 10px;
- }
-
-  #saveButton, #closeButton{
+  #saveButton, #closeButton, #editButton {
     background-color: #92a1d1;
   }
 
