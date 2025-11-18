@@ -53,6 +53,17 @@
       margin-left: 130px;
   }
 
+  .logout-btn {
+      background: none;
+      border: none;
+      color: #ffffff;
+      cursor: pointer;
+      font-size: 18px;
+  }
+  .logout-btn:hover {
+      color: red;
+  }
+
   .navbar .nav-links li {
       display: inline-block;
       list-style: none;
@@ -460,14 +471,7 @@
     background-color: #d36c6c;
   }
 
-  .button-row {
-  display: flex;
-  justify-content: left; 
-  gap: 10px;               
-  margin-top: 10px;
-}
-
-  #saveButton, #closeButton{
+  #saveButton, #closeButton, #editButton {
     background-color: #92a1d1;
   }
 
