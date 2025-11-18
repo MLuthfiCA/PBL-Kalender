@@ -1,3 +1,16 @@
+<?php
+session_start();
+  if (!isset($_SESSION['is_admin'])) {
+      header("Location: admin_login.php");
+      exit();
+  }
+  if (isset($_POST["logout"])) {
+      session_unset();
+      session_destroy();
+      header("location: admin_login.php");
+      exit();
+  } 
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -16,7 +29,10 @@
           <li><a href="#calendar">Kalender</a></li>
           <li><a href="#tentang">Tentang Kami</a></li>
           <li><a href="akun.html">Akun</a></li>
-          <li><a href="login_page.html">Keluar</a></li>
+            <form action="admin_homepage.php" method="POST">
+              <li><button type="submit" name="logout" class="logout-btn">Keluar</button></li>
+            </form>
+
         </ul>
         <div class="search-box">
           <input type="text" id="searchInput" placeholder="Cari jadwal..." />
@@ -26,7 +42,7 @@
     </nav>
     <section id="home" class="hero"></section>
     <section class="main-content">
-      <h2>Selamat datang Admin</h2>
+      <h2>Selamat datang, <?= htmlspecialchars($_SESSION['admin_name']); ?>!</h2>
       <div class="container">
         <div class="features-box">
           <div class="features1">
@@ -45,7 +61,7 @@
             <p>Kelas & Praktikum</p>
           </div>
         </div>
-        <!-- kotak 2 -->
+
         <div class="features-box1">
           <div class="box1">
             <div class="kotak-aktivitas skroll">
@@ -60,7 +76,7 @@
           </div>
         </div>
       </div>
-      <!-- calender -->
+
       <div class="calendar-box">
         <h1>Kalender Perkuliahan</h1>
         <div id="container">
@@ -149,7 +165,6 @@
       </div>
     </section>
 
-    <!-- footer -->
     <footer class="footer">
       <div class="container">
         <p>&copy; 2025 All rights reserved.</p>
