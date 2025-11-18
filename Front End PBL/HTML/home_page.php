@@ -1,3 +1,18 @@
+<?php
+  session_start();
+  if (!isset($_SESSION["nama"])) {
+      header("Location: login_page.php");
+      exit();
+  }
+
+  if (isset($_POST["logout"])) {
+      session_unset();
+      session_destroy();
+      header("location: login_page.php");
+      exit();
+  } 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -10,14 +25,15 @@
   <body>
     <nav class="navbar">
       <div class="container">
-        <a href="home_page.html"
-          ><img src="../logo login.png" class="logo" height="90px" width="90px"
-        /></a>
+        <a href="home_page.php"><img src="../logo login.png" class="logo" height="90px" width="90px"/></a>
         <ul class="nav-links">
           <li><a href="#home">Beranda</a></li>
           <li><a href="#calendar">Kalender</a></li>
           <li><a href="#tentang">Tentang Kami</a></li>
-          <li><a href="login_page.html">Keluar</a></li>
+          <form action="home_page.php" method="POST">
+          <li><button type="submit" name="logout" class="logout-btn">Keluar</button></li>
+          </form>
+
         </ul>
         <div class="search-box">
           <input type="text" id="searchInput" placeholder="Cari jadwal..." />
@@ -27,7 +43,7 @@
     </nav>
     <section id="home" class="hero"></section>
     <section class="main-content">
-      <h2>Selamat datang Mahasiswa</h2>
+      <h2>Selamat datang <?= htmlspecialchars($_SESSION["nama"]) ?></h2>
       <div class="container">
         <div class="features-box">
           <div class="features1">
@@ -61,7 +77,7 @@
           </div>
         </div>
       </div>
-      <!-- calender -->
+      
       <div class="calendar-box">
         <h1>Kalender Perkuliahan</h1>
         <div id="container">
@@ -154,7 +170,6 @@
       </div>
     </section>
 
-    <!-- footer -->
     <footer class="footer">
       <div class="container">
         <p>&copy; 2025 All rights reserved.</p>
