@@ -1,3 +1,31 @@
+<?php
+    include("../PHP/database.php");
+    session_start();
+
+    if (isset($_SESSION['is_login'])) {
+        header('location: home_page.php');
+    }
+    
+    if(isset($_POST["register"])) {
+        $nama = $_POST['nama'];
+        $password = $_POST['password'];
+        $email = $_POST['email'];
+
+        try {
+            $sql = "INSERT INTO user (nama, password, email) 
+        VALUES ('$nama', '$password', '$email')";
+
+        if($db->query($sql)) {
+        }else{
+        }
+
+        } catch (mysqli_sql_exception $e) {
+            
+        }
+    }
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -10,7 +38,7 @@
 
 <body>
 
-    <form action="#" method="post">
+    <form action="register_page.php" method="post">
         <img src="../mentahan_profil-removebg-preview.png" alt="logo" width="100" length="100">
         <h3  style="text-align: center; color:#000000">BUAT AKUN</h3>
         <label style="color:#000000" for="nama">Nama lengkap</label>
@@ -23,10 +51,10 @@
         <label style="color:#000000" for="email">Email</label>
         <input type="email" id="email" class="input-field" name="email" placeholder="masukkan email" required>
 
-        <a href="login_page.html">KEMBALI</a>
+        <a href="login_page.php">KEMBALI</a>
 
 
-        <button type="button" onclick="registerUser()">Register</button>
+        <button type="submit" name="register">Register</button>
     </form>
     <script src="../JS/register.js"></script>
 </body>
