@@ -66,7 +66,7 @@ session_start();
                 <div class="features3">
                     <img src="../GAMBAR_KALENDER.jpeg" alt="kalender" />
                     <h2>Minggu Ini</h2>
-                    <p>Kelas & Praktikum</p>
+                    <p>Kelas/Praktikum</p>
                 </div>
             </div>
             
