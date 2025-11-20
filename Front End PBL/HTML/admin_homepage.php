@@ -1,43 +1,40 @@
 <?php
 session_start();
-if (!isset($_SESSION["nama"])) {
-    header("Location: login_page.php");
-    exit();
-}
-
-if (isset($_POST["logout"])) {
-    session_unset();
-    session_destroy();
-    header("location: login_page.php");
-    exit();
-} 
+  if (!isset($_SESSION['is_admin'])) {
+      header("Location: admin_login.php");
+      exit();
+  }
+  if (isset($_POST["logout"])) {
+      session_unset();
+      session_destroy();
+      header("location: admin_login.php");
+      exit();
+  } 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sistem Penjadwalan Kuliah</title>
-    <link rel="stylesheet" href="../CSS/home.css" /> 
-</head>
+    <title>Admin Homepage</title>
+    <link rel="stylesheet" href="../CSS/admin_homepage.css" />
+  </head>
 
-<body>
+  <body>
     <nav class="navbar">
-        <div class="container">
-            <a href="home_page.php">
-                <img src="../logo login.png" class="logo" height="90px" width="90px"/>
-            </a>
-            <ul class="nav-links">
-                <li><a href="#home">Beranda</a></li>
-                <li><a href="#calendar">Kalender</a></li>
-                <li><a href="#tentang">Tentang Kami</a></li>
-                <form action="home_page.php" method="POST">
-                    <li><button type="submit" name="logout" class="logout-btn">Keluar</button></li>
-                </form>
-            </ul>
-            
-            <div class="search-box">
+      <div class="container">
+        <a href="admin_homepage.html"><img src="../logo login.png" class="logo" height="90px" width="90px"></a>
+        <ul class="nav-links">
+          <li><a href="#home">Beranda</a></li>
+          <li><a href="#calendar">Kalender</a></li>
+          <li><a href="#tentang">Tentang Kami</a></li>
+          <li><a href="akun.html">Akun</a></li>
+            <form action="admin_homepage.php" method="POST">
+              <li><button type="submit" name="logout" class="logout-btn">Keluar</button></li>
+            </form>
+
+        </ul>
+        <div class="search-box">
                 <input type="text" id="searchInput" placeholder="Cari Dosen atau Mata Kuliah..." onkeyup="filterBoxes()" />
                 <select id="filterSelect" onchange="filterBoxes()">
                     <option value="">Semua</option>
@@ -52,7 +49,7 @@ if (isset($_POST["logout"])) {
     <section id="home" class="hero"></section>
     
     <section class="main-content">
-        <h2>Selamat datang <?= htmlspecialchars($_SESSION["nama"]) ?></h2>
+        <h2>Selamat datang <?= htmlspecialchars($_SESSION["admin_name"]) ?></h2>
         
         <div class="container">
             <div class="features-box">

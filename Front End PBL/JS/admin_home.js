@@ -1,8 +1,8 @@
 let nav = 0;
 let clicked = null;
 let events = localStorage.getItem("events")
-  ? JSON.parse(localStorage.getItem("events"))
-  : [];
+  ? JSON.parse(localStorage.getItem("events"))
+  : [];
 
 const calendar = document.getElementById("calendar");
 const newEventModal = document.getElementById("newEventModal");
@@ -14,183 +14,320 @@ const eventRoomInput = document.getElementById("eventRoom");
 const repeatWeeklyCheckbox = document.getElementById("repeatWeekly");
 const eventText = document.getElementById("eventText");
 const monthDisplay = document.getElementById("monthDisplay");
-
-//ambil input nama dosen
-const eventDosenInput = document.querySelector('input[placeholder="Nama Dosen"]');
-
+const eventDosenInput = document.getElementById("eventDosenInput"); // Input Dosen
 const weekdays = ['Ming', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
-function openModal(date) {
-  clicked = date;
-  const eventForDay = events.find(e => e.date === clicked);
+// ===============================================
+// FUNGSI UTAMA KALENDER (MODIFIKASI: Menampilkan Dosen di Kotak Tanggal)
+// ===============================================
+function load() {
+  const dt = new Date();
 
-  if (eventForDay) {
-    eventText.innerText = `${eventForDay.title} | ${eventForDay.time} | ${eventForDay.room}`;
+  if (nav !== 0) {
+    dt.setMonth(new Date().getMonth() + nav);
+  }
+
+  const day = dt.getDate();
+  const month = dt.getMonth();
+  const year = dt.getFullYear();
+
+  const firstDayOfMonth = new Date(year, month, 1);
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const dateString = firstDayOfMonth.toLocaleDateString('id-ID', {
+    weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric'
+  });
+  const paddingDays = weekdays.indexOf(dateString.split(', ')[0].slice(0,3));
+
+  monthDisplay.innerText = `${dt.toLocaleDateString('id-ID', { month: 'long' })} ${year}`;
+  calendar.innerHTML = '';
+
+  for (let i = 1; i <= paddingDays + daysInMonth; i++) {
+    const daySquare = document.createElement('div');
+    daySquare.classList.add('day');
+
+    const dayString = `${year}-${(month + 1)
+      .toString()
+      .padStart(2, '0')}-${(i - paddingDays)
+      .toString()
+      .padStart(2, '0')}`;
+
+    if (i > paddingDays) {
+      daySquare.innerText = i - paddingDays;
+
+      const eventForDay = events.find(e => e.date === dayString);
+      if (eventForDay) {
+        const eventDiv = document.createElement('div');
+        eventDiv.classList.add('event');
+        
+        // Judul Mata Kuliah
+        eventDiv.innerHTML = `<strong>${eventForDay.title}</strong>`;
+
+        // Menambahkan Nama Dosen di bawah judul event di kotak tanggal
+        if (eventForDay.dosen && eventForDay.dosen.trim() !== "") {
+          const dosenDiv = document.createElement('div');
+          dosenDiv.classList.add('event-dosen');
+          dosenDiv.innerText = `${eventForDay.dosen}`;
+          eventDiv.appendChild(dosenDiv);
+        }
+
+        daySquare.appendChild(eventDiv);
+      }
+
+      daySquare.addEventListener('click', () => openModal(dayString));
+    } else {
+      daySquare.classList.add('padding');
+    }
     
-    //tampilkan dosen jika ada
-    if (eventForDay.dosen) {
-      eventText.innerText += ` | Dosen: ${eventForDay.dosen}`;
+    // Highlight hari ini
+    if (dayString === new Date().toISOString().split("T")[0] && nav === 0) {
+        daySquare.id = 'currentDay';
     }
 
-    deleteEventModal.style.display = 'block';
-  } else {
-    newEventModal.style.display = 'block';
-  }
-  backDrop.style.display = 'block';
+    calendar.appendChild(daySquare);
+  }
+
+  renderActivityAndTodayBoxes();
 }
 
-function load() {
-  const dt = new Date();
+// ===============================================
+// FUNGSI AKTIVITAS & JADWAL HARI INI (MODIFIKASI: Memastikan Dosen Ada)
+// ===============================================
+function renderActivityAndTodayBoxes() {
+    const now = new Date();
+    const oneWeekBefore = new Date();
+    const oneWeekAfter = new Date();
+    oneWeekBefore.setDate(now.getDate() - 7);
+    oneWeekAfter.setDate(now.getDate() + 7);
 
-  if (nav !== 0) {
-    dt.setMonth(new Date().getMonth() + nav);
-  }
+    const activityBox = document.getElementById("activityList");
+    const todayBox = document.getElementById("todaySchedule");
+    if (!activityBox || !todayBox) return;
 
-  const day = dt.getDate();
-  const month = dt.getMonth();
-  const year = dt.getFullYear();
+    activityBox.innerHTML = '<h3>Aktivitas Minggu Ini</h3><p class="sub">Tugas dan Jadwal yang Akan Datang</p>';
+    todayBox.innerHTML = '<h3>Jadwal Hari Ini</h3><p class="sub">Jadwal Kuliah dan Praktikum Hari Ini</p>';
 
-  const firstDayOfMonth = new Date(year, month, 1);
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const eventsInRange = events.filter(e => {
+        const eventDate = new Date(e.date);
+        return eventDate >= oneWeekBefore && eventDate <= oneWeekAfter;
+    });
 
-  const dateString = firstDayOfMonth.toLocaleDateString('id-ID', {
-    weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric'
-  });
-  const paddingDays = weekdays.indexOf(dateString.split(', ')[0].slice(0,3));
+    const todayStr = now.toISOString().split("T")[0];
+    const eventsToday = events.filter(e => e.date === todayStr);
 
-  monthDisplay.innerText = `${dt.toLocaleDateString('id-ID', { month: 'long' })} ${year}`;
+    // 1. Aktivitas Mingguan
+    eventsInRange.forEach((e, index) => {
+        const eventDate = new Date(e.date);
+        const diffDays = Math.floor((eventDate - now) / (1000 * 60 * 60 * 24));
 
-  calendar.innerHTML = '';
+        let status = (diffDays < 0) ? "Tertunda" : "Akan Datang";
+        let color = (diffDays < 0) ? "#f4b266" : "#4a90e2";
+        
+        const dosenName = (e.dosen && e.dosen.trim() !== "") ? e.dosen : 'Tidak Ada Data';
 
-  for (let i = 1; i <= paddingDays + daysInMonth; i++) {
-    const daySquare = document.createElement('div');
-    daySquare.classList.add('day');
+        const eventDiv = document.createElement("div");
+        eventDiv.classList.add("tugas");
+        
+        eventDiv.setAttribute('data-event-title', e.title ? e.title.toLowerCase() : '');
+        eventDiv.setAttribute('data-event-dosen', dosenName.toLowerCase());
+        
+        eventDiv.style.display = "flex";
+        eventDiv.style.justifyContent = "space-between";
+        eventDiv.style.alignItems = "center";
+        eventDiv.style.marginBottom = "8px";
 
-    const dayString = `${year}-${(month + 1)
-      .toString()
-      .padStart(2, '0')}-${(i - paddingDays)
-      .toString()
-      .padStart(2, '0')}`;
+        eventDiv.innerHTML = `
+            <div>
+                <h4>${e.title}</h4>
+                <p>Dosen: ${dosenName} | Ruangan: ${e.room || '-'} | ${e.time || '-'}</p>
+                <p>Tenggat: ${e.date}</p>
+            </div>
+            <span class="status" style="
+                background-color: ${color};
+                color: white;
+                padding: 4px 8px;
+                border-radius: 6px;
+                font-size: 12px;
+            ">${status}</span>
+        `;
 
-    if (i > paddingDays) {
-      daySquare.innerText = i - paddingDays;
+        activityBox.appendChild(eventDiv);
+    });
 
-      const eventForDay = events.find(e => e.date === dayString);
-      if (eventForDay) {
-        const eventDiv = document.createElement('div');
-        eventDiv.classList.add('event');
-        eventDiv.innerText = `${eventForDay.title}`;
-
-        // 🟩 tambahan — tampilkan nama dosen kecil di bawah judul event
-        if (eventForDay.dosen) {
-          const dosenDiv = document.createElement('div');
-          dosenDiv.classList.add('event-dosen');
-          dosenDiv.style.fontSize = "11px";
-          dosenDiv.style.color = "#444";
-          dosenDiv.innerText = `Dosen: ${eventForDay.dosen}`;
-          eventDiv.appendChild(dosenDiv);
-        }
-
-        daySquare.appendChild(eventDiv);
-      }
-
-      daySquare.addEventListener('click', () => openModal(dayString));
-    } else {
-      daySquare.classList.add('padding');
+    if (activityBox.querySelectorAll('.tugas').length <= 0) {
+        activityBox.innerHTML += `<p style="color:#666;">Tidak ada aktivitas minggu ini</p>`;
     }
 
-    calendar.appendChild(daySquare);
-  }
+    // 2. Jadwal Hari Ini
+    eventsToday.forEach((e, index) => {
+        const div = document.createElement("div");
+        const dosenName = (e.dosen && e.dosen.trim() !== "") ? e.dosen : 'Tidak Ada Data';
+        
+        div.classList.add("jadwal");
+        
+        div.setAttribute('data-event-title', e.title ? e.title.toLowerCase() : '');
+        div.setAttribute('data-event-dosen', dosenName.toLowerCase());
+        
+        div.innerHTML = `
+            <h4>${e.title}</h4>
+            <p>Dosen: ${dosenName} | Ruang ${e.room || '-'} — ${e.time || '-'}</p>
+        `;
+        todayBox.appendChild(div);
+    });
+
+    if (todayBox.querySelectorAll('.jadwal').length <= 0) {
+        todayBox.innerHTML += `<p style="color:#666;">Tidak ada jadwal hari ini</p>`;
+    }
+    
+    filterBoxes();
+}
+
+
+// ===============================================
+// MODAL DAN EVENT HANDLER (MODIFIKASI: Menampilkan Dosen di Modal Detail)
+// ===============================================
+function openModal(date) {
+  clicked = date;
+  const eventForDay = events.find(e => e.date === clicked);
+
+  if (eventForDay) {
+    // Ambil nama dosen dan pastikan ada
+    const dosenName = (eventForDay.dosen && eventForDay.dosen.trim() !== "") ? eventForDay.dosen : 'Tidak Ada Data';
+    
+    // Format teks di modal
+    eventText.innerHTML = `
+        <strong>${eventForDay.title}</strong>
+        <br>Waktu: ${eventForDay.time}
+        <br>Ruangan: ${eventForDay.room || '-'}
+        <br>Dosen: ${dosenName}
+    `;
+    deleteEventModal.style.display = 'block';
+  } else {
+    newEventModal.style.display = 'block';
+  }
+  backDrop.style.display = 'block';
 }
 
 function closeModal() {
-  eventTitleInput.value = '';
-  eventTimeInput.value = '';
-  eventRoomInput.value = '';
-  
-  //kosongkan input dosen
-  if (eventDosenInput) eventDosenInput.value = '';
+  eventTitleInput.value = '';
+  eventTimeInput.value = '';
+  eventRoomInput.value = '';
+  if (eventDosenInput) eventDosenInput.value = ''; // Reset input Dosen
+  repeatWeeklyCheckbox.checked = false;
 
-  newEventModal.style.display = 'none';
-  deleteEventModal.style.display = 'none';
-  backDrop.style.display = 'none';
-  clicked = null;
-  load();
+  newEventModal.style.display = 'none';
+  deleteEventModal.style.display = 'none';
+  backDrop.style.display = 'none';
+  clicked = null;
+  load();
 }
 
 function saveEvent() {
-  if (eventTitleInput.value) {
-    const baseEvent = {
-      date: clicked,
-      title: eventTitleInput.value,
-      time: eventTimeInput.value,
-      room: eventRoomInput.value,
-      //simpan nama dosen
-      dosen: eventDosenInput ? eventDosenInput.value : ""
-    };
-    const repeatWeekly = repeatWeeklyCheckbox.checked;
+  if (eventTitleInput.value) {
+    const baseEvent = {
+      title: eventTitleInput.value,
+      date: clicked,
+      time: eventTimeInput.value,
+      room: eventRoomInput.value,
+      dosen: eventDosenInput ? eventDosenInput.value : "" // Ambil nilai Dosen
+    };
 
-    if (repeatWeekly) {
-      // Buat event berulang selama 3 bulan ke depan (12 minggu)
-      const startDate = new Date(clicked);
-      for (let i = 0; i < 12; i++) {
-        const nextDate = new Date(startDate);
-        nextDate.setDate(startDate.getDate() + i * 7); // tiap 7 hari
-        const formattedDate = nextDate.toISOString().split("T")[0];
+    const repeatWeekly = repeatWeeklyCheckbox.checked;
 
-        events.push({
-          ...baseEvent,
-          date: formattedDate,
-          repeatId: clicked, // penanda grup perulangan
-        });
-      }
-    } else {
-      // event biasa, tidak berulang
-      events.push(baseEvent);
-    }
+    if (repeatWeekly) {
+      const startDate = new Date(clicked);
+      for (let i = 0; i < 12; i++) {
+        const nextDate = new Date(startDate);
+        nextDate.setDate(startDate.getDate() + i * 7);
+        const formattedDate = nextDate.toISOString().split("T")[0];
+        events.push({ ...baseEvent, date: formattedDate, repeatId: clicked });
+      }
+    } else {
+      events.push(baseEvent);
+    }
 
-    localStorage.setItem('events', JSON.stringify(events));
-    closeModal();
-  } else {
-    alert('Harap isi semua field!');
-  }
+    localStorage.setItem('events', JSON.stringify(events));
+    closeModal();
+    renderActivityAndTodayBoxes();
+  } else {
+    alert('Harap isi semua field!');
+  }
 }
 
 function deleteEvent() {
-  events = events.filter(e => e.date !== clicked);
-  const eventForDay = events.find(e => e.date === clicked);
+  const eventForDay = events.find(e => e.date === clicked);
+  if (!eventForDay) return;
 
-  if (!eventForDay) return;
+  if (eventForDay.repeatId) {
+    const confirmAll = confirm("Hapus semua jadwal berulang ini?\nPilih OK untuk semua, Batal untuk hanya minggu ini.");
+    if (confirmAll) {
+      events = events.filter(e => e.repeatId !== eventForDay.repeatId);
+    } else {
+      events = events.filter(e => e.date !== clicked);
+    }
+  } else {
+    if (confirm("Yakin ingin menghapus jadwal ini?")) {
+      events = events.filter(e => e.date !== clicked);
+    }
+  }
 
-  // Jika event memiliki repeatId, berarti dia termasuk jadwal berulang
-  if (eventForDay.repeatId) {
-    const confirmAll = confirm("Hapus semua jadwal berulang ini?\nPilih OK untuk semua, Batal untuk hanya minggu ini.");
-
-    if (confirmAll) {
-      // hapus semua event dengan repeatId yang sama
-      events = events.filter(e => e.repeatId !== eventForDay.repeatId);
-    } else {
-      // hapus hanya minggu ini
-      events = events.filter(e => e.date !== clicked);
-    }
-  } else {
-    // event biasa
-    if (confirm("Yakin ingin menghapus jadwal ini?")) {
-      events = events.filter(e => e.date !== clicked);
-    }
-  }
-  localStorage.setItem('events', JSON.stringify(events));
-  closeModal();
+  localStorage.setItem('events', JSON.stringify(events));
+  closeModal();
+  renderActivityAndTodayBoxes();
 }
 
+// =========================================================
+// FUNGSI SEARCH DAN FILTER
+// =========================================================
+function filterBoxes() {
+    const searchValue = document.getElementById('searchInput').value.toLowerCase();
+    const filterType = document.getElementById('filterSelect').value; 
+    const allItems = document.querySelectorAll('#activityList .tugas, #todaySchedule .jadwal');
+    const targetHeader = document.querySelector('.main-content h2');
+
+    let firstMatchFound = false;
+
+    allItems.forEach(item => {
+        const title = item.getAttribute('data-event-title') || '';
+        const dosen = item.getAttribute('data-event-dosen') || '';
+        
+        let isMatch = false;
+        let textToSearch = '';
+
+        if (filterType === 'dosen') {
+            textToSearch = dosen;
+        } else if (filterType === 'title') {
+            textToSearch = title;
+        } else { // Semua
+            textToSearch = `${title} ${dosen}`;
+        }
+
+        if (textToSearch.includes(searchValue)) {
+            isMatch = true;
+        }
+        
+        if (isMatch) {
+            item.classList.remove('hidden-item');
+            if (searchValue.length > 0 && !firstMatchFound) {
+                targetHeader.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                firstMatchFound = true;
+            }
+        } else {
+            item.classList.add('hidden-item');
+        }
+    });
+}
+
+
+// Event Listeners
 document.getElementById('nextButton').addEventListener('click', () => {
-  nav++;
-  load();
+  nav++;
+  load();
 });
 
 document.getElementById('backButton').addEventListener('click', () => {
-  nav--;
-  load();
+  nav--;
+  load();
 });
 
 document.getElementById('saveButton').addEventListener('click', saveEvent);
@@ -198,71 +335,6 @@ document.getElementById('cancelButton').addEventListener('click', closeModal);
 document.getElementById('deleteButton').addEventListener('click', deleteEvent);
 document.getElementById('closeButton').addEventListener('click', closeModal);
 
+
 load();
-
-
-// ================== ADMIN PANEL SCRIPT ==================
-const studentForm = document.getElementById("addStudentForm");
-const studentTable = document.getElementById("studentTable").querySelector("tbody");
-
-let students = JSON.parse(localStorage.getItem("students")) || [];
-
-function renderStudents() {
-  studentTable.innerHTML = "";
-  students.forEach((s, index) => {
-    const row = document.createElement("tr");
-    row.innerHTML = `
-      <td>${s.name}</td>
-      <td>${s.email}</td>
-      <td>${s.active ? "Aktif" : "Nonaktif"}</td>
-      <td>
-        <button class="action-btn edit-btn" onclick="editStudent(${index})">Edit</button>
-        <button class="action-btn toggle-btn" onclick="toggleStatus(${index})">
-          ${s.active ? "Nonaktifkan" : "Aktifkan"}
-        </button>
-        <button class="action-btn delete-btn" onclick="deleteStudent(${index})">Hapus</button>
-      </td>
-    `;
-    studentTable.appendChild(row);
-  });
-}
-
-studentForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const name = document.getElementById("studentName").value;
-  const email = document.getElementById("studentEmail").value;
-  const password = document.getElementById("studentPassword").value;
-
-  students.push({ name, email, password, active: true });
-  localStorage.setItem("students", JSON.stringify(students));
-
-  studentForm.reset();
-  renderStudents();
-});
-
-function deleteStudent(index) {
-  if (confirm("Yakin ingin menghapus akun ini?")) {
-    students.splice(index, 1);
-    localStorage.setItem("students", JSON.stringify(students));
-    renderStudents();
-  }
-}
-
-function toggleStatus(index) {
-  students[index].active = !students[index].active;
-  localStorage.setItem("students", JSON.stringify(students));
-  renderStudents();
-}
-
-function editStudent(index) {
-  const newName = prompt("Nama baru:", students[index].name);
-  if (newName) students[index].name = newName;
-
-  const newEmail = prompt("Email baru:", students[index].email);
-  if (newEmail) students[index].email = newEmail;
-
-  localStorage.setItem("students", JSON.stringify(students));
-  renderStudents();
-}
-
-renderStudents();
+setTimeout(renderActivityAndTodayBoxes, 100);
