@@ -571,6 +571,8 @@
     margin-left: 20px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     transition: all 0.3s ease;
+    display: flex;
+    gap: 5px;
   }
 
   .search-box input {
@@ -619,3 +621,18 @@
       width: 100%;
     }
   }
+  /* Style tambahan untuk Select Filter */
+.search-box select {
+    padding: 6px 8px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+/* Kelas untuk menyembunyikan baris */
+.hidden-item {
+    display: none !important;
+}

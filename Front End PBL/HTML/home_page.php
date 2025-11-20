@@ -36,10 +36,14 @@
 
         </ul>
         <div class="search-box">
-          <input type="text" id="searchInput" placeholder="Cari jadwal..." />
-          <button id="searchBtn">🔍</button>
-        </div>
-      </div>
+  <input type="text" id="searchInput" placeholder="Cari Dosen atau Mata Kuliah..." onkeyup="filterBoxes()">
+  <select id="filterSelect" onchange="filterBoxes()">
+    <option value="">Semua</option>
+    <option value="dosen">Dosen</option>
+    <option value="title">Mata Kuliah</option>
+  </select>
+  <button id="searchBtn">🔍</button>
+</div>
     </nav>
     <section id="home" class="hero"></section>
     <section class="main-content">
