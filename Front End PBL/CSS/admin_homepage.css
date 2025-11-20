@@ -1,329 +1,283 @@
-  *{
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'poppins',sans-serif;
-  }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'poppins', sans-serif;
+}
 
-  body {
-      font-family: arial,sans-serif;
-      line-height: 1.6;
-      background-color: #ffffff;                                                                      
-  }
+body {
+    font-family: arial, sans-serif;
+    line-height: 1.6;
+    background-color: #ffffff;
+    padding-top: 70px; /* Memberi ruang untuk navbar fixed */
+}
 
-  body {
-      padding: 70;
-  }
+::placeholder {
+    color: rgb(0, 8, 8);
+}
 
-  ::placeholder {
-      color: rgb(0, 8, 8);
-  }
+/* === Navbar === */
+.navbar {
+    background: #1a6099;
+    padding: 1rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+}
 
-  .navbar {
-      background: #1a6099;
-      padding: 1rem 0;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      z-index: 1000;
-  }
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
 
-  .navbar .container {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
-  }
+.logout-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    font-size: 18px;
+    transition: color 0.3s ease-in-out;
+}
 
-  .navbar .logo {
-    width: 100px;
-  }
+.logout-btn:hover {
+    color: red;
+}
 
-  .navbar .logo:hover {
-      color: #fF6347;
-      transition: color 0.3s ease-in-out;
-  }
+.navbar .logo {
+    transition: transform 0.3s ease;
+}
 
-  .navbar .nav-links {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      margin-left: 130px;
-  }
+.navbar .logo:hover {
+    transform: scale(1.05);
+}
 
-  .logout-btn {
-      background: none;
-      border: none;
-      color: #ffffff;
-      cursor: pointer;
-      font-size: 18px;
-  }
-  .logout-btn:hover {
-      color: red;
-  }
+.navbar .nav-links {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 130px;
+}
 
-  .navbar .nav-links li {
-      display: inline-block;
-      list-style: none;
-      margin: 10px 20px;
-      margin-left: 15px;
-      flex-wrap: wrap;
-  }
+.navbar .nav-links li {
+    display: inline-block;
+    margin: 10px 20px;
+}
 
-  .navbar .nav-links a {
-      color: #fff;
-      text-decoration: none;
-      font-size: 1rem;
-      transition:  transform 0.6s ease, color 0.6s ease;
-  }
+.navbar .nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: transform 0.6s ease, color 0.6s ease;
+}
 
-  .navbar .nav-links a:hover {
-      transform: scale(1.05);
-      color: #fF6347;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-  }
+.navbar .nav-links a:hover {
+    transform: scale(1.05);
+    color: #fF6347;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
 
+/* === Hero Section === */
+.hero {
+    background: url(../logo\ login.jpg) no-repeat center center/cover;
+    height: 400px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 70px;
+    margin-top: 20px;
+}
 
-  .hero {
-      background: url(../logo\ login.jpg) no-repeat center center/cover;
-      background-color: 0 0 10px rgba(255, 255, 255, 0.5);
-      height: 400px;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      margin-bottom: 70px;
-  }
+.main-content {
+    padding: 50px 0;
+    background-color: hsl(0, 0%, 100%);
+}
 
-  .main-content {
-      padding: 50px 0;
-      background-color: hsl(0, 0%, 100%);
-  }
-
-  .main-content h2 {
-      font-size: 2rem;
-      text-align: center;
-      margin-left: calc(50px);
-  }
+.main-content h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 50px;
+}
 
 
-  /* 3 kotak */
-  .features-box {
-      margin-top: 120px;
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      flex-wrap: wrap;
-      gap: 82px;
-      margin-bottom: 60px;
-  }
+/* === 3 Kotak Features === */
+.features-box {
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: 82px;
+    margin-bottom: 60px;
+}
 
-  .features-box .features1, .features-box .features2, .features-box .features3 {
-      background-color: #e9e9e9;
-      border: 2px solid #ddd;
-      border-radius: 16px;
-      text-align: center;
-      width: 400px;
-      padding: 40px 20px;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-      cursor: pointer;
-  }
+.features-box .features1, 
+.features-box .features2, 
+.features-box .features3 {
+    background-color: #e9e9e9;
+    border: 2px solid #ddd;
+    border-radius: 16px;
+    text-align: center;
+    width: 400px;
+    padding: 40px 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
 
-  /* gambar di 3 kotak */
-  .features-box img {
-      width: 90px;
-      height: 90px;
-      display: block;
-      margin: 0 auto 15px;
-      border-radius: 50%;
-      background-color: #fff;
-      padding: 10px;
-      box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+.features-box img {
+    width: 90px;
+    height: 90px;
+    display: block;
+    margin: 0 auto 15px;
+    border-radius: 50%;
+    background-color: #fff;
+    padding: 10px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+}
 
-  }
-  /* judul kotak */
-  .features-box h2 {
-      font-size: 1.5rem;
-      color: black;
-      margin-bottom: 10px;
-      font-weight: 700;
-      margin-right: 50px;
-  }
-  /* paragraf kotak 3 tu */
-  .features-box p{
-      font-size: 1rem;
-      color: black;
-  }
+.features-box h2 {
+    font-size: 1.5rem;
+    color: black;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.features-box p{
+    font-size: 1rem;
+    color: black;
+}
 
 
-  /* feature aktivitas dan jadwal hari ini (2kotak) */
-  .features-box1 {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 30px;
-      margin-top: 0px;
-      margin-bottom: 60px;
-  }
+/* === Aktivitas dan Jadwal Hari Ini (2 kotak) === */
+.features-box1 {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 60px;
+}
 
-  /* kotak kotak */
-  .kotak-aktivitas,
-  .kotak-jadwal {
-      background-color: #d7d7d7;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      padding: 25px 30px;
-      width: 635px;
-      height: 360px; /* tinggi tetap agar bisa di-scroll */
-      overflow-y: auto;
-      transition: all 0.3s ease;
-      border: 1px solid #eee;
-  }
+.kotak-aktivitas,
+.kotak-jadwal {
+    background-color: #d7d7d7;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 25px 30px;
+    width: 635px;
+    height: 360px;
+    overflow-y: auto;
+    transition: all 0.3s ease;
+    border: 1px solid #eee;
+}
 
-  .kotak-aktivitas {
-      margin-right: 35px;
-  }
+/* Kustom Scrollbar (Perbaikan: Menggunakan standar webkit) */
+.skroll::-webkit-scrollbar {
+    width: 8px;
+}
 
-  .kotak-jadwal {
-      margin-left: 35px;
-  }
+.skroll::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
 
-  /* barskroll kustom (agar lembut dan modern) */
-  .skroll::-webkit-barskroll {
-      width: 8px;
-  }
+.skroll::-webkit-scrollbar-thumb:hover {
+    background: #999;
+}
 
-  .skroll::-webkit-barskroll {
-      background: #ccc;
-      border-radius: 10px;
-  }
+.kotak-aktivitas:hover,
+.kotak-jadwal:hover {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
 
-  .skroll::-webkit-barskroll:hover {
-      background: #999;
-  }
+/* Judul dan subjudul kotak */
+.kotak-aktivitas h3,
+.kotak-jadwal h3 {
+    font-size: 1.3rem;
+    color: #222;
+    margin-bottom: 5px;
+}
 
-  /* Efek kotak hover */
-  .kotak-aktivitas:hover,
-  .kotak-jadwal:hover {
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-  }
+.sub {
+    color: #777;
+    font-size: 0.95rem;
+    margin-bottom: 15px;
+}
 
-  /* Judul dan subjudul */
-  .kotak-aktivitas h3,
-  .kotak-jadwal h3 {
-      font-size: 1.3rem;
-      color: #222;
-      margin-bottom: 5px;
-  }
+/* Item tugas dan jadwal */
+.tugas,
+.jadwal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    cursor: pointer;
+}
 
-  .sub {
-      color: #777;
-      font-size: 0.95rem;
-      margin-bottom: 15px;
-  }
+.tugas:hover,
+.jadwal:hover {
+    background-color: #f9f9ff;
+}
 
-  /* Item tugas dan jadwal */
-  .tugas,
-  .jadwal {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #ffffff;
-      border-radius: 10px;
-      padding: 12px 16px;
-      margin-bottom: 10px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05);
-  }
+.tugas h4,
+.jadwal h4 {
+    font-size: 1rem;
+    color: #222;
+}
 
-  .tugas:hover,
-  .jadwal:hover {
-      background-color: #f9f9ff;
-  }
+.tugas p,
+.jadwal p {
+    font-size: 0.9rem;
+    color: #666;
+}
 
-  /* Judul item */
-  .tugas h4,
-  .jadwal h4 {
-      font-size: 1rem;
-      color: #222;
-  }
-
-  .tugas p,
-  .jadwal p {
-      font-size: 0.9rem;
-      color: #666;
-  }
-
-  /* Status label */
-  .status {
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: white;
-      text-align: center;
-      min-width: 80px;
-  }
-
-  .status.pending {
-      background-color: #f4b266;
-  }
-  .status.pending:hover {
-      background-color: #e39943;
-  }
-
-  .status.done {
-      background-color: #50c878;
-  }
-  .status.done:hover {
-      background-color: #37a35b;
-  }
-
-  .status.akandatang {
-      background-color: #4a90e2;
-  }
-  .status.akandatang:hover {
-      background-color: #2569b6;
-  }
+/* Status label */
+.status {
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: white;
+    text-align: center;
+    min-width: 80px;
+    white-space: nowrap;
+}
 
 
-  .features-box2 {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-evenly;
-  }
-
-
-  /* 🌟 Box besar pembungkus semua elemen kalender */
-  .calendar-box {
+/* === Kalender === */
+.calendar-box {
     background-color: #d7d7d7;
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     padding: 25px;
     width: 90%;
-    max-width: 1500px;
-    margin: 60px auto 50px;
-    transition: all 0.3s ease;
+    max-width: 1200px;
+    margin: 60px auto 90px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 90px;
-  }
+}
 
-  .calendar-box h1 {
+.calendar-box h1 {
     text-align: center;
     color: #247BA0;
     margin-bottom: 15px;
-  }
+}
 
-  #container {
+#container {
     width: 100%;
-  }
+}
 
-  #header {
+#header {
     padding: 10px;
     color: #247BA0;
     font-size: 22px;
@@ -331,9 +285,9 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-  }
+}
 
-  button {
+button {
     background-color: #92a1d1;
     color: white;
     border: none;
@@ -341,14 +295,14 @@
     border-radius: 6px;
     cursor: pointer;
     transition: 0.3s;
-  }
+}
 
-  button:hover {
+button:hover {
     transform: scale(1.05);
     background-color: #7b8fc5;
-  }
+}
 
-  #weekdays {
+#weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
@@ -356,21 +310,20 @@
     font-weight: bold;
     font-size: 14px;
     margin-bottom: 8px;
-  }
+}
 
-  #weekdays div {
+#weekdays div {
     padding: 10px 0;
     border-bottom: 2px solid #e0e0e0;
-  }
+}
 
-  #calendar {
+#calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     gap: 6px;
-  }
+}
 
-  /* 📅 Kotak Tanggal */
-  .day {
+.day {
     background-color: white;
     border-radius: 8px;
     aspect-ratio: 1 / 1;
@@ -383,19 +336,19 @@
     padding: 6px;
     transition: 0.2s;
     overflow-y: auto;
-  }
+}
 
-  .day:hover {
+.day:hover {
     background-color: #e8faed;
     transform: scale(1.03);
-  }
+}
 
-  #currentDay {
+#currentDay {
     background-color: #fff6e0;
     border: 2px solid #ffb84d;
-  }
+}
 
-  .event {
+.event {
     font-size: 10px;
     padding: 3px 4px;
     background-color: #58bae4;
@@ -405,30 +358,18 @@
     width: 90%;
     margin-top: 5px;
     overflow: hidden;
-  }
+    line-height: 1.2;
+}
 
-  /* 🧾 Tombol Edit/Hapus teks kecil */
-  .event-actions {
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 4px;
-    font-size: 10px;
-  }
+.event .event-dosen {
+    font-size: 9px !important;
+    color: #f0f0f0 !important;
+    margin-top: 1px;
+}
 
-  .event-actions span {
-    color: #247BA0;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-
-  .event-actions span:hover {
-    color: #1d5e7b;
-  }
-
-  /* 📋 Modal */
-  #newEventModal,
-  #deleteEventModal {
+/* === Modal (Tambah/Hapus Jadwal) === */
+#newEventModal,
+#deleteEventModal {
     display: none;
     z-index: 20;
     padding: 25px;
@@ -441,18 +382,18 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-  }
+}
 
-  #newEventModal h2,
-  #deleteEventModal h2 {
+#newEventModal h2,
+#deleteEventModal h2 {
     color: #247BA0;
     margin-bottom: 15px;
-  }
+}
 
-  #eventTitleInput,
-  #eventDate,
-  #eventTime,
-  #eventRoom {
+#eventTitleInput,
+#eventTime,
+#eventRoom,
+#eventDosenInput {
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
@@ -461,21 +402,28 @@
     border: 1px solid #ccc;
     outline: none;
     font-size: 14px;
-  }
+}
 
-  #eventTitleInput.error {
+#eventTitleInput.error {
     border: 2px solid red;
-  }
+}
 
-  #cancelButton, #deleteButton {
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+#cancelButton, #deleteButton {
     background-color: #d36c6c;
-  }
+}
 
-  #saveButton, #closeButton, #editButton {
+#saveButton, #closeButton {
     background-color: #92a1d1;
-  }
+}
 
-  #modalBackDrop {
+#modalBackDrop {
     display: none;
     top: 0;
     left: 0;
@@ -484,111 +432,74 @@
     height: 100vh;
     position: fixed;
     background-color: rgba(0,0,0,0.6);
-  }
+}
 
-  /* 🗂️ Untuk box jadwal & aktivitas */
-  .kotak-jadwal .jadwal .actions,
-  .kotak-aktivitas .tugas .actions {
-    margin-top: 5px;
-    font-size: 12px;
-    display: flex;
-    gap: 10px;
-  }
-
-  .kotak-jadwal .jadwal .actions span,
-  .kotak-aktivitas .tugas .actions span {
-    color: #247BA0;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-
-  .kotak-jadwal .jadwal .actions span:hover,
-  .kotak-aktivitas .tugas .actions span:hover {
-    color: #1d5e7b;
-  }
-
-  /* 📱 Responsif */
-  @media (max-width: 600px) {
-    #weekdays div {
-      font-size: 12px;
-    }
-    .day {
-      aspect-ratio: 1 / 1.1;
-    }
-    button {
-      padding: 6px 10px;
-    }
-  }
-
-
-  .about {
+/* === About Section === */
+.about {
     padding: 30px 0px;
     box-shadow: 0 4px 15px rgba(88, 186, 228, 0.25);
     background: #ff8400;
+}
 
+.about h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #ffffff;
+    text-align: center;
+}
 
-  }
+.about p {
+    font-size: 1.1rem;
+    margin: 0 auto;
+    max-width: 800px;
+    padding: 0 20px;
+    color: #ffffff;
+    text-align: justify;
+    transition: transform 0.6s ease, text-shadow 0.6s ease;
+}
 
-  .about h2 {
-      margin-bottom: 20px;
-      font-size: 2rem;
-      color: #ffffff;
-      text-align: center;
-  }
+.about p:hover {
+    transform: scale(1.01);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
 
-  .about p {
-      font-size: 1.1rem;
-      margin-inline-start: 300px;
-      margin-inline-end: 300px;
-      color: #ffffff;
-      text-align-last: center;
-      text-align: justify;
-      transition:  transform 0.6s ease, color 0.6s ease;
-  }
+.tebal-jelas {
+    color: #ffffff;
+    text-shadow: 0 0 1px #00000020;
+    font-size: 1.2em;
+}
 
-  .about p:hover {
-      transform: scale(1.05);
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-  }
+/* === Footer === */
+footer {
+    background: #333;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px 0;
+}
 
-  .tebal-jelas {
-      color: #ffffff;
-      text-shadow: 0 0 1px #00000020;
-      font-size: 1.2em;
-  }
+footer .social-link {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
 
+footer .social-link li {
+    margin: 0 10px;
+}
 
-  footer {
-      background: #333;
-      color: #ffffff;
-      text-align: center;
-      padding: 20px 0;
-  }
+footer .social-link a {
+    color: #ffffff;
+    font-size: 1.2rem;
+    text-decoration: none;
+}
 
-  footer .social-link {
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      margin-bottom: 15px 0;
-  }
+footer .social-link a:hover {
+    color: #fF6347;
+}
 
-  footer .social-link li {
-      margin: 0 10px;
-  }
-
-  footer .social-link a {
-      color: #ffffff;
-      font-size: 1.2rem;
-      text-decoration: none;
-      text-align: center;
-  }
-
-  footer .social-link a:hover {
-      color: #fF6347;
-  }
-
-  /* === 🔍 Search Box di Navbar === */
-  .search-box {
+/* === Search Box di Navbar === */
+.search-box {
     display: flex;
     align-items: center;
     background-color: #ffffff;
@@ -596,10 +507,10 @@
     padding: 5px 10px;
     margin-left: 20px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    transition: all 0.3s ease;
-  }
+    gap: 5px;
+}
 
-  .search-box input {
+.search-box input {
     border: none;
     outline: none;
     padding: 6px 10px;
@@ -607,13 +518,19 @@
     width: 160px;
     font-size: 14px;
     color: #333;
-  }
+}
 
-  .search-box input:focus {
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-  }
+.search-box select {
+    padding: 6px 8px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
 
-  .search-box button {
+.search-box button {
     background-color: #58bae4;
     border: none;
     color: white;
@@ -622,26 +539,78 @@
     border-radius: 50%;
     cursor: pointer;
     transition: 0.3s;
-  }
+}
 
-  .search-box button:hover {
+.search-box button:hover {
     background-color: #429cc0;
-  }
+}
 
-  /* Hasil Pencarian Highlight */
-  .day.highlight {
+/* Hasil Pencarian Highlight */
+.day.highlight {
     border: 2px solid #58bae4;
     background-color: #e1f7ff;
-  }
+}
 
-  /* Responsif */
-  @media (max-width: 768px) {
+.hidden-item {
+    display: none !important;
+}
+
+/* === Responsif === */
+@media (max-width: 1200px) {
+    .navbar .container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .navbar .nav-links {
+        margin-left: 0;
+    }
     .search-box {
-      width: 100%;
-      margin-top: 10px;
+        margin-left: 0;
     }
+    .features-box {
+        gap: 30px;
+    }
+    .features-box .features1, 
+    .features-box .features2, 
+    .features-box .features3 {
+        width: 90%;
+        max-width: 400px;
+    }
+    .features-box1 {
+        flex-direction: column;
+        align-items: center;
+    }
+    .kotak-aktivitas,
+    .kotak-jadwal {
+        width: 90%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .about p {
+        margin: 0 auto;
+    }
+}
 
-    .search-box input {
-      width: 100%;
+@media (max-width: 600px) {
+    #weekdays div {
+        font-size: 12px;
     }
-  }
+    .day {
+        aspect-ratio: 1 / 1.1;
+        padding: 4px;
+    }
+    .event {
+        font-size: 8px;
+        padding: 2px;
+    }
+    .event .event-dosen {
+        font-size: 7px !important;
+    }
+    button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    .search-box input {
+        width: 100px;
+    }
+}
