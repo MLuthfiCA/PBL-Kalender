@@ -37,7 +37,7 @@ if (isset($_POST["logout"])) {
                 </form>
             </ul>
             
- <div class="search-box">
+            <div class="search-box">
                 <input type="text" id="searchInput" placeholder="Cari Dosen atau Mata Kuliah..." onkeyup="filterBoxes()" />
                 <select id="filterSelect" onchange="filterBoxes()">
                     <option value="">Semua</option>
@@ -69,7 +69,7 @@ if (isset($_POST["logout"])) {
                 <div class="features3">
                     <img src="../GAMBAR_KALENDER.jpeg" alt="kalender" />
                     <h2>Minggu Ini</h2>
-                    <p>Kelas/Praktikum</p>
+                    <p>Kelas & Praktikum</p>
                 </div>
             </div>
             
