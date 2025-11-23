@@ -14,12 +14,9 @@ const eventRoomInput = document.getElementById("eventRoom");
 const repeatWeeklyCheckbox = document.getElementById("repeatWeekly");
 const eventText = document.getElementById("eventText");
 const monthDisplay = document.getElementById("monthDisplay");
-const eventDosenInput = document.getElementById("eventDosenInput"); // Input Dosen
+const eventDosenInput = document.getElementById("eventDosenInput");
 const weekdays = ['Ming', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
-// ===============================================
-// FUNGSI UTAMA KALENDER (MODIFIKASI: Menampilkan Dosen di Kotak Tanggal)
-// ===============================================
 function load() {
   const dt = new Date();
 
@@ -60,7 +57,6 @@ function load() {
         const eventDiv = document.createElement('div');
         eventDiv.classList.add('event');
         
-        // Judul Mata Kuliah
         eventDiv.innerHTML = `<strong>${eventForDay.title}</strong>`;
 
         // Menambahkan Nama Dosen di bawah judul event di kotak tanggal
@@ -90,9 +86,7 @@ function load() {
   renderActivityAndTodayBoxes();
 }
 
-// ===============================================
-// FUNGSI AKTIVITAS & JADWAL HARI INI (MODIFIKASI: Memastikan Dosen Ada)
-// ===============================================
+// fungsi aktivitas dan jadwal hari ini
 function renderActivityAndTodayBoxes() {
     const now = new Date();
     const oneWeekBefore = new Date();
@@ -115,7 +109,7 @@ function renderActivityAndTodayBoxes() {
     const todayStr = now.toISOString().split("T")[0];
     const eventsToday = events.filter(e => e.date === todayStr);
 
-    // 1. Aktivitas Mingguan
+    // aktivitas mingguan
     eventsInRange.forEach((e, index) => {
         const eventDate = new Date(e.date);
         const diffDays = Math.floor((eventDate - now) / (1000 * 60 * 60 * 24));
@@ -158,7 +152,7 @@ function renderActivityAndTodayBoxes() {
         activityBox.innerHTML += `<p style="color:#666;">Tidak ada aktivitas minggu ini</p>`;
     }
 
-    // 2. Jadwal Hari Ini
+    // jadwal hari ini
     eventsToday.forEach((e, index) => {
         const div = document.createElement("div");
         const dosenName = (e.dosen && e.dosen.trim() !== "") ? e.dosen : 'Tidak Ada Data';
@@ -183,18 +177,15 @@ function renderActivityAndTodayBoxes() {
 }
 
 
-// ===============================================
-// MODAL DAN EVENT HANDLER (MODIFIKASI: Menampilkan Dosen di Modal Detail)
-// ===============================================
 function openModal(date) {
   clicked = date;
   const eventForDay = events.find(e => e.date === clicked);
 
   if (eventForDay) {
-    // Ambil nama dosen dan pastikan ada
+
     const dosenName = (eventForDay.dosen && eventForDay.dosen.trim() !== "") ? eventForDay.dosen : 'Tidak Ada Data';
     
-    // Format teks di modal
+
     eventText.innerHTML = `
         <strong>${eventForDay.title}</strong>
         <br>Waktu: ${eventForDay.time}
@@ -212,7 +203,7 @@ function closeModal() {
   eventTitleInput.value = '';
   eventTimeInput.value = '';
   eventRoomInput.value = '';
-  if (eventDosenInput) eventDosenInput.value = ''; // Reset input Dosen
+  if (eventDosenInput) eventDosenInput.value = '';
   repeatWeeklyCheckbox.checked = false;
 
   newEventModal.style.display = 'none';
@@ -229,7 +220,7 @@ function saveEvent() {
       date: clicked,
       time: eventTimeInput.value,
       room: eventRoomInput.value,
-      dosen: eventDosenInput ? eventDosenInput.value : "" // Ambil nilai Dosen
+      dosen: eventDosenInput ? eventDosenInput.value : "" 
     };
 
     const repeatWeekly = repeatWeeklyCheckbox.checked;
@@ -276,9 +267,7 @@ function deleteEvent() {
   renderActivityAndTodayBoxes();
 }
 
-// =========================================================
-// FUNGSI SEARCH DAN FILTER
-// =========================================================
+// fungsi search and filter
 function filterBoxes() {
     const searchValue = document.getElementById('searchInput').value.toLowerCase();
     const filterType = document.getElementById('filterSelect').value; 
@@ -298,7 +287,7 @@ function filterBoxes() {
             textToSearch = dosen;
         } else if (filterType === 'title') {
             textToSearch = title;
-        } else { // Semua
+        } else { 
             textToSearch = `${title} ${dosen}`;
         }
 
@@ -319,7 +308,7 @@ function filterBoxes() {
 }
 
 
-// Event Listeners
+
 document.getElementById('nextButton').addEventListener('click', () => {
   nav++;
   load();

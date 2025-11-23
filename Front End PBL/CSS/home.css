@@ -9,14 +9,14 @@ body {
     font-family: arial, sans-serif;
     line-height: 1.6;
     background-color: #ffffff;
-    padding-top: 70px; /* Memberi ruang untuk navbar fixed */
+    padding-top: 70px;
 }
 
 ::placeholder {
     color: rgb(0, 8, 8);
 }
 
-/* === Navbar === */
+/* navbar */
 .navbar {
     background: #1a6099;
     padding: 1rem 0;
@@ -82,7 +82,7 @@ body {
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-/* === Hero Section === */
+/* hero */
 .hero {
     background: url(../logo\ login.jpg) no-repeat center center/cover;
     height: 400px;
@@ -105,7 +105,7 @@ body {
 }
 
 
-/* === 3 Kotak Features === */
+/* 3 box diatas */
 .features-box {
     display: flex;
     justify-content: center;
@@ -153,7 +153,7 @@ body {
 }
 
 
-/* === Aktivitas dan Jadwal Hari Ini (2 kotak) === */
+/* 2 kotak itu */
 .features-box1 {
     display: flex;
     justify-content: center;
@@ -176,7 +176,7 @@ body {
     border: 1px solid #eee;
 }
 
-/* Kustom Scrollbar (Perbaikan: Menggunakan standar webkit) */
+/* skroll bar */
 .skroll::-webkit-scrollbar {
     width: 8px;
 }
@@ -253,7 +253,7 @@ body {
 }
 
 
-/* === Kalender === */
+/* kalender */
 .calendar-box {
     background-color: #d7d7d7;
     border-radius: 15px;
@@ -367,7 +367,7 @@ button:hover {
     margin-top: 1px;
 }
 
-/* === Modal (Tambah/Hapus Jadwal) === */
+/* modal tambah atau hapus jadwal */
 #newEventModal,
 #deleteEventModal {
     display: none;
@@ -434,7 +434,7 @@ button:hover {
     background-color: rgba(0,0,0,0.6);
 }
 
-/* === About Section === */
+/* bagian about */
 .about {
     padding: 30px 0px;
     box-shadow: 0 4px 15px rgba(88, 186, 228, 0.25);
@@ -469,7 +469,7 @@ button:hover {
     font-size: 1.2em;
 }
 
-/* === Footer === */
+/* footer */
 footer {
     background: #333;
     color: #ffffff;
@@ -498,7 +498,7 @@ footer .social-link a:hover {
     color: #fF6347;
 }
 
-/* === Search Box di Navbar === */
+/* search box dan navbar */
 .search-box {
     display: flex;
     align-items: center;
@@ -545,7 +545,7 @@ footer .social-link a:hover {
     background-color: #429cc0;
 }
 
-/* Hasil Pencarian Highlight */
+/* bagian highlight */
 .day.highlight {
     border: 2px solid #58bae4;
     background-color: #e1f7ff;
@@ -555,7 +555,7 @@ footer .social-link a:hover {
     display: none !important;
 }
 
-/* === Responsif === */
+/* responsif */
 @media (max-width: 1200px) {
     .navbar .container {
         flex-direction: column;
