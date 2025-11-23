@@ -18,6 +18,10 @@ const repeatWeeklyCheckbox = document.getElementById("repeatWeekly");
 const eventText = document.getElementById("eventText");
 const monthDisplay = document.getElementById("monthDisplay");
 const eventDosenInput = document.getElementById("eventDosenInput");
+
+// BARU: Variabel untuk input Catatan
+const eventNotesInput = document.getElementById("eventNotes");
+
 const weekdays = ['Ming', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
 async function loadEventsFromDB() {
@@ -145,6 +149,8 @@ function renderActivityAndTodayBoxes() {
         let color = (diffDays < 0) ? "#f4b266" : "#4a90e2";
         
         const dosenName = (e.dosen && e.dosen.trim() !== "") ? e.dosen : 'Tidak Ada Data';
+        // BARU: Tampilkan Catatan di box aktivitas
+        const notesText = (e.notes && e.notes.trim() !== "") ? ` | Catatan: ${e.notes}` : ''; 
 
         const eventDiv = document.createElement("div");
         eventDiv.classList.add("tugas");
@@ -160,7 +166,7 @@ function renderActivityAndTodayBoxes() {
         eventDiv.innerHTML = `
             <div>
                 <h4>${e.title}</h4>
-                <p>Dosen: ${dosenName} | Ruangan: ${e.room || '-'} | ${e.time || '-'}</p>
+                <p>Dosen: ${dosenName} | Ruangan: ${e.room || '-'} | ${e.time || '-'}${notesText}</p>
                 <p>Tenggat: ${e.date}</p>
             </div>
             <span class="status" style="
@@ -183,6 +189,8 @@ function renderActivityAndTodayBoxes() {
     eventsToday.forEach((e, index) => {
         const div = document.createElement("div");
         const dosenName = (e.dosen && e.dosen.trim() !== "") ? e.dosen : 'Tidak Ada Data';
+        // BARU: Tampilkan Catatan di box jadwal hari ini
+        const notesText = (e.notes && e.notes.trim() !== "") ? ` | Catatan: ${e.notes}` : ''; 
         
         div.classList.add("jadwal");
         
@@ -191,7 +199,7 @@ function renderActivityAndTodayBoxes() {
         
         div.innerHTML = `
             <h4>${e.title}</h4>
-            <p>Dosen: ${dosenName} | Ruang ${e.room || '-'} — ${e.time || '-'}</p>
+            <p>Dosen: ${dosenName} | Ruang ${e.room || '-'} — ${e.time || '-'}${notesText}</p>
         `;
         todayBox.appendChild(div);
     });
@@ -215,6 +223,11 @@ function openModal(date) {
         eventsForDay.forEach(eventForDay => {
             const dosenName = (eventForDay.dosen && eventForDay.dosen.trim() !== "") ? eventForDay.dosen : 'Tidak Ada Data';
             
+            // BARU: Tampilkan Catatan
+            const notesText = (eventForDay.notes && eventForDay.notes.trim() !== "") 
+                ? `<br>Catatan: ${eventForDay.notes}` 
+                : '';
+            
             eventListHTML += `
                 <div class="single-event-detail" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
                     <p style="margin: 0;">
@@ -222,6 +235,7 @@ function openModal(date) {
                         <br>Waktu: ${eventForDay.time}
                         <br>Ruangan: ${eventForDay.room || '-'}
                         <br>Dosen: ${dosenName}
+                        ${notesText}
                     </p>
                     <button 
                         class="delete-single-btn" 
@@ -260,6 +274,10 @@ function closeModal() {
     eventTimeInput.value = '';
     eventRoomInput.value = '';
     if (eventDosenInput) eventDosenInput.value = '';
+    
+    // BARU: Bersihkan input Catatan
+    if (eventNotesInput) eventNotesInput.value = ''; 
+    
     repeatWeeklyCheckbox.checked = false;
 
     newEventModal.style.display = 'none';
@@ -276,12 +294,17 @@ function closeModal() {
 
 async function saveEvent() {
     if (eventTitleInput.value) {
+        
+        // BARU: Ambil nilai catatan
+        const notes = eventNotesInput ? eventNotesInput.value : "";
+        
         const baseEventData = {
             title: eventTitleInput.value,
             date: clicked,
             time: eventTimeInput.value,
             room: eventRoomInput.value,
             dosen: eventDosenInput ? eventDosenInput.value : "",
+            notes: notes, // BARU: Kirim catatan ke API
             action: 'save_event' 
         };
 
@@ -438,7 +461,6 @@ function filterBoxes() {
         }
     });
 }
-
 
 
 document.getElementById('nextButton').addEventListener('click', () => {
