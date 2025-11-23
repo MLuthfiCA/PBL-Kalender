@@ -91,7 +91,7 @@ if (isset($_POST["logout"])) {
             </div>
         </div> 
 
-        <div id="calendar" class="calendar-box">
+        <div class="calendar-box">
             <h1>Kalender Perkuliahan</h1>
             <div id="container">
                 <div id="header">
