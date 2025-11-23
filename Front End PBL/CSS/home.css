@@ -390,10 +390,12 @@ button:hover {
     margin-bottom: 15px;
 }
 
+/* MODIFIKASI: Tambahkan #eventNotes di sini */
 #eventTitleInput,
 #eventTime,
 #eventRoom,
-#eventDosenInput {
+#eventDosenInput,
+#eventNotes {
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
@@ -402,6 +404,12 @@ button:hover {
     border: 1px solid #ccc;
     outline: none;
     font-size: 14px;
+}
+
+/* BARU: Styling Khusus untuk Textarea Catatan */
+#eventNotes {
+    resize: vertical;
+    min-height: 80px;
 }
 
 #eventTitleInput.error {
