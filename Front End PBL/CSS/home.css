@@ -114,6 +114,22 @@ body {
     gap: 82px;
     margin-bottom: 60px;
 }
+.add-btn {
+    margin-left: 8px;
+    padding: 4px 10px;
+    font-size: 1rem;
+    border: none;
+    background-color: #4a90e2;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-btn:hover {
+    background-color: #357ABD;
+}
+
 
 .features-box .features1, 
 .features-box .features2, 

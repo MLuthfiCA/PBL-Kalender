@@ -158,7 +158,9 @@ function renderActivityAndTodayBoxes() {
         eventDiv.style.marginBottom = "8px";
 
         eventDiv.innerHTML = `
-            <div>
+            <div style="display:flex; gap:10px;">
+                <strong>${index + 1}.</strong>
+                <div>
                 <h4>${e.title}</h4>
                 <p>Dosen: ${dosenName} | Ruangan: ${e.room || '-'} | ${e.time || '-'}</p>
                 <p>Tenggat: ${e.date}</p>
@@ -178,6 +180,21 @@ function renderActivityAndTodayBoxes() {
     if (activityBox.querySelectorAll('.tugas').length <= 0) {
         activityBox.innerHTML += `<p style="color:#666;">Tidak ada aktivitas minggu ini</p>`;
     }
+    document.getElementById("addSubjectBtn").addEventListener("click", function () {
+    let jumlah = prompt("Masukkan jumlah mata kuliah:");
+
+    if (jumlah === null) return;  
+    jumlah = parseInt(jumlah);
+
+    if (isNaN(jumlah) || jumlah < 0) {
+        alert("Input tidak valid!");
+        return;
+    }
+
+    // update tampilan
+    document.getElementById("subjectCount").textContent = jumlah;
+});
+
 
     // jadwal hari ini
     eventsToday.forEach((e, index) => {
