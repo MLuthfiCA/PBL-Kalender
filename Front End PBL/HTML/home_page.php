@@ -150,6 +150,8 @@ if (isset($_POST["logout"])) {
             <label for="eventRoom">Ruangan:</label>
             <input id="eventRoom" placeholder="Masukkan ruangan" />
             
+            <label for="eventNotes">Catatan Tambahan (Opsional):</label>
+            <textarea id="eventNotes" placeholder="Tambahkan catatan khusus untuk jadwal ini..."></textarea>
             <label for="repeatWeekly">
                 <input type="checkbox" id="repeatWeekly" /> Ulangi setiap minggu
             </label>
