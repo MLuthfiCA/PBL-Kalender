@@ -56,17 +56,12 @@ if (isset($_POST["logout"])) {
         
         <div class="container">
             <div class="features-box">
-                <div class="features1">
+                <div class="features2">
                     <img src="../GAMBAR_BUKU.jpeg" alt="buku" />
                     <h2>Mata Kuliah
                         <button id="addSubjectBtn" class="add-btn">+</button>
                     </h2>
                     <p>Total: <span id="subjectCount">0</span> Mata Kuliah</p>
-                </div>
-                <div class="features2">
-                    <img src="../GAMBAR_JAM.jpeg" alt="jam" />
-                    <h2>Tugas Pending</h2>
-                    <p><span id="pendingCount">0</span> Tugas Minggu Ini</p>
                 </div>
                 <div class="features3">
                     <img src="../GAMBAR_KALENDER.jpeg" alt="kalender" />
@@ -199,3 +194,4 @@ if (isset($_POST["logout"])) {
     <script src="../JS/home.js"></script>
 </body>
 </html>
+ 

@@ -276,7 +276,7 @@ body {
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     padding: 25px;
     width: 90%;
-    max-width: 1200px;
+    width: 1300px;
     margin: 60px auto 90px;
     display: flex;
     flex-direction: column;
