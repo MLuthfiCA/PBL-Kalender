@@ -186,6 +186,7 @@ function renderActivityAndTodayBoxes() {
     if (activityBox.querySelectorAll('.tugas').length <= 0) {
         activityBox.innerHTML += `<p style="color:#666;">Tidak ada aktivitas minggu ini</p>`;
     }
+ HEAD
     document.getElementById("addSubjectBtn").addEventListener("click", function () {
     let jumlah = prompt("Masukkan jumlah mata kuliah:");
 
@@ -202,6 +203,21 @@ function renderActivityAndTodayBoxes() {
 });
 
 
+    document.getElementById("addSubjectBtn").addEventListener("click", function () {
+    let jumlah = prompt("Masukkan jumlah mata kuliah:");
+
+
+    if (jumlah === null) return;  
+    jumlah = parseInt(jumlah);
+
+    if (isNaN(jumlah) || jumlah < 0) {
+        alert("Input tidak valid!");
+        return;
+    }
+
+    // update tampilan
+    document.getElementById("subjectCount").textContent = jumlah;
+});
     // jadwal hari ini
     eventsToday.forEach((e, index) => {
         const div = document.createElement("div");
