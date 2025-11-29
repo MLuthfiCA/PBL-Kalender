@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catatan Pribadi</title>
+    <link rel="stylesheet" href="../CSS/catatan.css">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="home_page.php" class="nav-logo">
+                <img src="../logo login.png" class="logo" />
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="home_page.php">Beranda</a></li>
+                <li><a href="#catatan">Catatan Pribadi</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content">
+        <h2>Catatan Hari Ini</h2>
+
+        <form action="Catatan_page.php" method="post" class="note-form">
+            <textarea name="catatan" placeholder="Tulis catatan Anda di sini..."></textarea>
+            <button type="submit" name="simpan_catatan">Simpan Catatan</button>
+        </form>
+
+        <div class="riwayat-container">
+            <h3>Catatan Lama</h3>
+
+            <table class="riwayat-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Tanggal</th>
+                        <th>Catatan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Contoh, nanti diganti pakai PHP -->
+                    <tr>
+                        <td>1</td>
+                        <td>2025-11-29</td>
+                        <td>Belajar membuat halaman catatan pribadi.</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>2025-11-28</td>
+                        <td>Mengerjakan latihan HTML + CSS.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
