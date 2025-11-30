@@ -28,13 +28,17 @@ if (isset($_POST["logout"])) {
             <a href="home_page.php">
                 <img src="../logo login.png" class="logo" height="90px" width="90px"/>
             </a>
+            
             <ul class="nav-links">
                 <li><a href="#home">Beranda</a></li>
+                <li><a href="catatan_page.php">Catatan</a></li>
                 <li><a href="#calendar">Kalender</a></li>
                 <li><a href="#tentang">Tentang Kami</a></li>
-                <form action="home_page.php" method="POST">
-                    <li><button type="submit" name="logout" class="logout-btn">Keluar</button></li>
-                </form>
+                <li class="logout-item">
+                    <form action="home_page.php" method="POST">
+                        <button type="submit" name="logout" class="logout-btn">Keluar</button>
+                    </form>
+                </li>
             </ul>
             
             <div class="search-box">
@@ -46,7 +50,8 @@ if (isset($_POST["logout"])) {
                 </select>
                 <button id="searchBtn">🔍</button>
             </div>
-            </div>
+            
+        </div>
     </nav>
     
     <section id="home" class="hero"></section>
@@ -66,8 +71,8 @@ if (isset($_POST["logout"])) {
                 <div class="features3">
                     <img src="../GAMBAR_KALENDER.jpeg" alt="kalender" />
                     <h2>Aktivitas</h2>
-                    <p><span id="activityCount">0</span> Jadwal Minggu Ini</p>
-                </div>
+                    <p>Jadwal Minggu Ini</p> 
+                    </div>
             </div>
             
             <div class="features-box1">
@@ -85,7 +90,7 @@ if (isset($_POST["logout"])) {
                 </div>
             </div>
         </div> 
-
+        
         <div class="calendar-box">
             <h1>Kalender Perkuliahan</h1>
             <div id="container">
@@ -108,7 +113,7 @@ if (isset($_POST["logout"])) {
                 </div>
 
                 <div id="calendar">
-                    </div>
+                </div>
             </div>
         </div>
 
@@ -145,8 +150,6 @@ if (isset($_POST["logout"])) {
             <label for="eventRoom">Ruangan:</label>
             <input id="eventRoom" placeholder="Masukkan ruangan" />
             
-            <label for="eventNotes">Catatan Tambahan (Opsional):</label>
-            <textarea id="eventNotes" placeholder="Tambahkan catatan khusus untuk jadwal ini..."></textarea>
             <label for="repeatWeekly">
                 <input type="checkbox" id="repeatWeekly" /> Ulangi setiap minggu
             </label>
@@ -160,7 +163,7 @@ if (isset($_POST["logout"])) {
         <div id="deleteEventModal">
             <h2>Jadwal</h2>
             <p id="eventText"></p>
-            <button id="deleteButton">Hapus</button>
+            <button id="deleteButton" style="display:none;">Hapus</button>
             <button id="closeButton">Tutup</button>
         </div>
 
@@ -194,4 +197,3 @@ if (isset($_POST["logout"])) {
     <script src="../JS/home.js"></script>
 </body>
 </html>
- 
