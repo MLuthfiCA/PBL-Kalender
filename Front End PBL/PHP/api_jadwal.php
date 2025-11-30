@@ -12,26 +12,20 @@ if (!isset($_SESSION["mahasiswa_id"])) {
 
 $mahasiswa_id = $_SESSION["mahasiswa_id"];
 
-// 1. Ambil Data Input (Prioritas JSON Body, lalu GET/POST biasa)
 $input_json = file_get_contents('php://input');
 $data = json_decode($input_json, true) ?? []; 
 
-// 2. Tentukan Aksi dari berbagai sumber
-// Cek JSON Body, lalu POST, lalu GET
 $action = $data['action'] ?? $_POST['action'] ?? $_GET['action'] ?? '';
 
-
-// logika crud
 switch ($action) {
     
     case 'get_events':
-        // Logika GET EVENTS (tetap menggunakan $_GET['action'])
         $sql = "SELECT jadwal_id, nama_matkul, dosen, tanggal, 
-                         TIME_FORMAT(waktu_mulai, '%H:%i') AS waktu_mulai, 
-                         TIME_FORMAT(waktu_selesai, '%H:%i') AS waktu_selesai, 
-                         ruangan, repeat_id 
-                    FROM jadwal_kuliah 
-                    WHERE mahasiswa_id = ?";
+                        TIME_FORMAT(waktu_mulai, '%H:%i') AS waktu_mulai, 
+                        TIME_FORMAT(waktu_selesai, '%H:%i') AS waktu_selesai, 
+                        ruangan, repeat_id 
+                FROM jadwal_kuliah 
+                WHERE mahasiswa_id = ?";
         
         $stmt = $db->prepare($sql);
         $stmt->bind_param("i", $mahasiswa_id);
@@ -56,24 +50,16 @@ switch ($action) {
         $stmt->close();
         break;
 
-    // nyimpan jadwal baru
+    // ✅ SIMPAN JADWAL BARU (dengan logika berulang 12 minggu)
     case 'save_event':
-        // AMBIL DATA DARI $data (JSON BODY)
         $matkul = $data['title'] ?? '';
         $dosen = $data['dosen'] ?? '';
         $date = $data['date'] ?? '';
         $time_range = $data['time'] ?? '';
         $room = $data['room'] ?? '';
-        $repeat_weekly = $data['repeatWeekly'] ?? false; // Ambil checkbox repeat
+        $repeat_weekly = $data['repeatWeekly'] ?? false;
         
-        // UNTUK PENGULANGAN MINGGUAN, BUAT repeat_id JIKA BELUM ADA
-        $repeat_id = null;
-        if ($repeat_weekly) {
-            // Logika sederhana: buat ID unik dari timestamp dan ID Mahasiswa
-            $repeat_id = 'R' . time() . $mahasiswa_id; 
-        }
-
-        // validasi input
+        // Validasi input
         if (empty($matkul) || empty($date) || empty($time_range)) {
             http_response_code(400);
             echo json_encode(["status" => "error", "message" => "Data Matkul, Tanggal, atau Waktu tidak lengkap."]);
@@ -82,37 +68,68 @@ switch ($action) {
 
         [$waktu_mulai, $waktu_selesai] = explode(' - ', $time_range);
 
-        $sql = "INSERT INTO jadwal_kuliah (mahasiswa_id, nama_matkul, dosen, tanggal, waktu_mulai, waktu_selesai, ruangan, repeat_id) 
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        
-        $stmt = $db->prepare($sql);
-        // Perbaiki binding parameter agar sesuai dengan urutan
-        $stmt->bind_param("isssssss", $mahasiswa_id, $matkul, $dosen, $date, $waktu_mulai, $waktu_selesai, $room, $repeat_id);
+        // Buat repeat_id jika berulang
+        $repeat_id = $repeat_weekly ? 'R' . time() . $mahasiswa_id : null;
 
-        if ($stmt->execute()) {
-            echo json_encode(["status" => "success", "message" => "Jadwal berhasil disimpan.", "id" => $db->insert_id]);
-        } else {
+        // Simpan jadwal utama dulu
+        $sql = "INSERT INTO jadwal_kuliah 
+                (mahasiswa_id, nama_matkul, dosen, tanggal, waktu_mulai, waktu_selesai, ruangan, repeat_id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $db->prepare($sql);
+
+        if (!$stmt) {
             http_response_code(500);
-            echo json_encode(["status" => "error", "message" => "Gagal menyimpan jadwal: " . $stmt->error]);
+            echo json_encode(["status" => "error", "message" => "Gagal menyiapkan query utama: " . $db->error]);
+            break;
         }
+
+        $stmt->bind_param("isssssss", $mahasiswa_id, $matkul, $dosen, $date, $waktu_mulai, $waktu_selesai, $room, $repeat_id);
+        $success = $stmt->execute();
+
+        if (!$success) {
+            http_response_code(500);
+            echo json_encode(["status" => "error", "message" => "Gagal menyimpan jadwal pertama: " . $stmt->error]);
+            $stmt->close();
+            break;
+        }
+
+        // Kalau berulang, buat 12 minggu ke depan
+        if ($repeat_weekly) {
+            $tanggal_awal = new DateTime($date);
+
+            for ($i = 1; $i <= 12; $i++) { // 12 minggu = 3 bulan
+                $tanggal_awal->modify('+7 days');
+                $next_date = $tanggal_awal->format('Y-m-d');
+
+                $stmt2 = $db->prepare($sql);
+                if ($stmt2) {
+                    $stmt2->bind_param("isssssss", $mahasiswa_id, $matkul, $dosen, $next_date, $waktu_mulai, $waktu_selesai, $room, $repeat_id);
+                    $stmt2->execute();
+                    $stmt2->close();
+                }
+            }
+        }
+
+        echo json_encode([
+            "status" => "success", 
+            "message" => $repeat_weekly 
+                ? "Jadwal berhasil disimpan dan diulang selama 3 bulan ke depan." 
+                : "Jadwal berhasil disimpan.",
+            "id" => $db->insert_id
+        ]);
         $stmt->close();
         break;
 
-    // hapus jadwal
     case 'delete_event':
-        // AMBIL DATA DARI $data (JSON BODY)
         $jadwal_id = $data['id'] ?? 0;
         $repeat_id = $data['repeatId'] ?? null;
-        
-        // Cek apakah ini permintaan hapus berulang atau tunggal
+
         if ($repeat_id !== null) {
-            // Hapus semua event berulang
             $sql = "DELETE FROM jadwal_kuliah WHERE repeat_id = ? AND mahasiswa_id = ?";
             $stmt = $db->prepare($sql);
             $stmt->bind_param("si", $repeat_id, $mahasiswa_id);
             $message = "Semua jadwal berulang berhasil dihapus.";
         } else if ($jadwal_id > 0) {
-            // Hapus jadwal tunggal (seperti yang dilakukan di modal)
             $sql = "DELETE FROM jadwal_kuliah WHERE jadwal_id = ? AND mahasiswa_id = ?";
             $stmt = $db->prepare($sql);
             $stmt->bind_param("ii", $jadwal_id, $mahasiswa_id);
@@ -132,7 +149,6 @@ switch ($action) {
         $stmt->close();
         break;
 
-    
     default:
         http_response_code(400);
         echo json_encode(["status" => "error", "message" => "Aksi tidak valid atau tidak dikenal."]);
