@@ -12,19 +12,26 @@ if (!isset($_SESSION["mahasiswa_id"])) {
 
 $mahasiswa_id = $_SESSION["mahasiswa_id"];
 
-$action = $_POST['action'] ?? $_GET['action'] ?? '';
+// 1. Ambil Data Input (Prioritas JSON Body, lalu GET/POST biasa)
+$input_json = file_get_contents('php://input');
+$data = json_decode($input_json, true) ?? []; 
+
+// 2. Tentukan Aksi dari berbagai sumber
+// Cek JSON Body, lalu POST, lalu GET
+$action = $data['action'] ?? $_POST['action'] ?? $_GET['action'] ?? '';
 
 
 // logika crud
 switch ($action) {
     
     case 'get_events':
+        // Logika GET EVENTS (tetap menggunakan $_GET['action'])
         $sql = "SELECT jadwal_id, nama_matkul, dosen, tanggal, 
-                       TIME_FORMAT(waktu_mulai, '%H:%i') AS waktu_mulai, 
-                       TIME_FORMAT(waktu_selesai, '%H:%i') AS waktu_selesai, 
-                       ruangan, repeat_id 
-                FROM jadwal_kuliah 
-                WHERE mahasiswa_id = ?";
+                         TIME_FORMAT(waktu_mulai, '%H:%i') AS waktu_mulai, 
+                         TIME_FORMAT(waktu_selesai, '%H:%i') AS waktu_selesai, 
+                         ruangan, repeat_id 
+                    FROM jadwal_kuliah 
+                    WHERE mahasiswa_id = ?";
         
         $stmt = $db->prepare($sql);
         $stmt->bind_param("i", $mahasiswa_id);
@@ -51,12 +58,20 @@ switch ($action) {
 
     // nyimpan jadwal baru
     case 'save_event':
-        $matkul = $_POST['title'] ?? '';
-        $dosen = $_POST['dosen'] ?? '';
-        $date = $_POST['date'] ?? '';
-        $time_range = $_POST['time'] ?? '';
-        $room = $_POST['room'] ?? '';
-        $repeat_id = $_POST['repeatId'] ?? NULL;
+        // AMBIL DATA DARI $data (JSON BODY)
+        $matkul = $data['title'] ?? '';
+        $dosen = $data['dosen'] ?? '';
+        $date = $data['date'] ?? '';
+        $time_range = $data['time'] ?? '';
+        $room = $data['room'] ?? '';
+        $repeat_weekly = $data['repeatWeekly'] ?? false; // Ambil checkbox repeat
+        
+        // UNTUK PENGULANGAN MINGGUAN, BUAT repeat_id JIKA BELUM ADA
+        $repeat_id = null;
+        if ($repeat_weekly) {
+            // Logika sederhana: buat ID unik dari timestamp dan ID Mahasiswa
+            $repeat_id = 'R' . time() . $mahasiswa_id; 
+        }
 
         // validasi input
         if (empty($matkul) || empty($date) || empty($time_range)) {
@@ -68,9 +83,10 @@ switch ($action) {
         [$waktu_mulai, $waktu_selesai] = explode(' - ', $time_range);
 
         $sql = "INSERT INTO jadwal_kuliah (mahasiswa_id, nama_matkul, dosen, tanggal, waktu_mulai, waktu_selesai, ruangan, repeat_id) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         
         $stmt = $db->prepare($sql);
+        // Perbaiki binding parameter agar sesuai dengan urutan
         $stmt->bind_param("isssssss", $mahasiswa_id, $matkul, $dosen, $date, $waktu_mulai, $waktu_selesai, $room, $repeat_id);
 
         if ($stmt->execute()) {
@@ -84,24 +100,31 @@ switch ($action) {
 
     // hapus jadwal
     case 'delete_event':
-        $jadwal_id = $_POST['id'] ?? 0;
-        $delete_type = $_POST['delete_type'] ?? 'single'; 
-        $repeat_id = $_POST['repeatId'] ?? NULL;
-
-        if ($delete_type === 'all_repeat' && $repeat_id) {
-            // hapus semua jadwal
+        // AMBIL DATA DARI $data (JSON BODY)
+        $jadwal_id = $data['id'] ?? 0;
+        $repeat_id = $data['repeatId'] ?? null;
+        
+        // Cek apakah ini permintaan hapus berulang atau tunggal
+        if ($repeat_id !== null) {
+            // Hapus semua event berulang
             $sql = "DELETE FROM jadwal_kuliah WHERE repeat_id = ? AND mahasiswa_id = ?";
             $stmt = $db->prepare($sql);
             $stmt->bind_param("si", $repeat_id, $mahasiswa_id);
-        } else {
-            // hapus jadwal tunggal
+            $message = "Semua jadwal berulang berhasil dihapus.";
+        } else if ($jadwal_id > 0) {
+            // Hapus jadwal tunggal (seperti yang dilakukan di modal)
             $sql = "DELETE FROM jadwal_kuliah WHERE jadwal_id = ? AND mahasiswa_id = ?";
             $stmt = $db->prepare($sql);
             $stmt->bind_param("ii", $jadwal_id, $mahasiswa_id);
+            $message = "Jadwal berhasil dihapus.";
+        } else {
+            http_response_code(400);
+            echo json_encode(["status" => "error", "message" => "ID jadwal tidak ditemukan."]);
+            break;
         }
 
         if ($stmt->execute()) {
-            echo json_encode(["status" => "success", "message" => "Jadwal berhasil dihapus."]);
+            echo json_encode(["status" => "success", "message" => $message]);
         } else {
             http_response_code(500);
             echo json_encode(["status" => "error", "message" => "Gagal menghapus jadwal: " . $stmt->error]);
