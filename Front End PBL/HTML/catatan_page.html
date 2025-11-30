@@ -1,3 +1,38 @@
+<?php
+session_start();
+include 'database.php'; // memakai koneksi yg sama seperti jadwal
+
+if (!isset($_SESSION["mahasiswa_id"])) {
+    header("Location: login.php");
+    exit();
+}
+
+$mahasiswa_id = $_SESSION["mahasiswa_id"];
+
+// SIMPAN CATATAN BARU
+if (isset($_POST['simpan_catatan'])) {
+    $isi = mysqli_real_escape_string($db, $_POST['catatan']);
+    $tanggal = date("Y-m-d");
+
+    if (!empty($isi)) {
+        $sql = "INSERT INTO catatan_pribadi (mahasiswa_id, tanggal, isi) 
+                VALUES ('$mahasiswa_id', '$tanggal', '$isi')";
+        mysqli_query($db, $sql);
+    }
+
+    header("Location: Catatan_page.php");
+    exit();
+}
+
+// AMBIL CATATAN LAMA UNTUK MAHASISWA INI
+$sql = "SELECT id, tanggal, isi 
+        FROM catatan_pribadi 
+        WHERE mahasiswa_id = '$mahasiswa_id'
+        ORDER BY id DESC";
+$result = mysqli_query($db, $sql);
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,8 +60,8 @@
     <div class="content">
         <h2>Catatan Hari Ini</h2>
 
-        <form action="Catatan_page.php" method="post" class="note-form">
-            <textarea name="catatan" placeholder="Tulis catatan Anda di sini..."></textarea>
+        <form action="" method="post" class="note-form">
+            <textarea name="catatan" placeholder="Tulis catatan Anda di sini..." required></textarea>
             <button type="submit" name="simpan_catatan">Simpan Catatan</button>
         </form>
 
@@ -42,17 +77,27 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Contoh, nanti diganti pakai PHP -->
-                    <tr>
-                        <td>1</td>
-                        <td>2025-11-29</td>
-                        <td>Belajar membuat halaman catatan pribadi.</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>2025-11-28</td>
-                        <td>Mengerjakan latihan HTML + CSS.</td>
-                    </tr>
+                    <?php
+                    if (mysqli_num_rows($result) > 0) {
+                        $no = 1;
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo "
+                                <tr>
+                                    <td>{$no}</td>
+                                    <td>{$row['tanggal']}</td>
+                                    <td>{$row['isi']}</td>
+                                </tr>
+                            ";
+                            $no++;
+                        }
+                    } else {
+                        echo '
+                        <tr>
+                            <td colspan="3" style="text-align:center;">Belum ada catatan.</td>
+                        </tr>
+                        ';
+                    }
+                    ?>
                 </tbody>
             </table>
         </div>
