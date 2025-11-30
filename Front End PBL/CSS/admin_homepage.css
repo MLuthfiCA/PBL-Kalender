@@ -416,11 +416,11 @@ button:hover {
 }
 
 #cancelButton, #deleteButton {
-    background-color: #d36c6c;
+    background-color: #c00000;
 }
 
 #saveButton, #closeButton {
-    background-color: #92a1d1;
+    background-color: #0074a6;
 }
 
 #modalBackDrop {
