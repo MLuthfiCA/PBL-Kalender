@@ -2,129 +2,284 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
 }
 
 body {
-    background-color: #f4f4f4;
-    padding: 20px;
+    background-color: #f4f7f9; 
+    padding-top: 80px; 
 }
 
-/* === NAVBAR === */
+/* navbar */
 .navbar {
-    background-color: #1a6099;
-    padding: 10px 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
+    background: #1a6099; 
+    padding: 10px 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
 .nav-container {
-    max-width: 1000px;
-    margin: auto;
+    max-width: 1200px; 
+    margin: 0 auto;
+    padding: 0 20px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    align-items: center;
 }
 
-.logo {
-    height: 60px;
-    width: 60px;
+.nav-logo .logo {
+    height: 75px; 
+    width: 75px;
+    vertical-align: middle;
 }
 
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 25px;
+    gap: 30px;
 }
 
 .nav-links li a {
     color: white;
     text-decoration: none;
-    font-weight: bold;
+    font-size: 1rem;
+    padding: 5px 0;
+    transition: color 0.3s, border-bottom 0.3s;
 }
 
-.nav-links li a:hover {
-    text-decoration: underline;
+.nav-links li a:hover { 
+    color: #ff8400; 
 }
 
 
-/* === CONTENT === */
+/* kotak utama */
 .content {
-    max-width: 700px;
-    margin-left: 0;
+    max-width: 1200px; 
+    margin: 40px auto;
+    padding: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-    margin-bottom: 15px;
     color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
 }
 
-/* === FORM STYLE === */
+/* form catatan */
 .note-form {
     display: flex;
     flex-direction: column;
-    width: 300px;
+    max-width: 1000px; 
+    margin: 0 auto 50px auto;
+    padding: 25px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background-color: #f9f9f9;
 }
 
 textarea {
     width: 100%;
-    height: 120px;
-    padding: 10px;
+    height: 180px; 
+    padding: 15px;
     border: 1px solid #ccc;
-    border-radius: 10px;
-    font-size: 16px;
+    border-radius: 8px;
+    font-size: 1rem;
     resize: vertical;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    outline: none;
+    transition: border-color 0.3s;
 }
 
+textarea:focus {
+    border-color: #4a90e2;
+}
+
+/* tombol simpan */
 button {
-    width: 100%;
-    padding: 10px;
-    background-color: #1a6099;
+    width: 100%; 
+    padding: 14px 20px;
+    background-color: #4a90e2;
     color: white;
     border: none;
-    border-radius: 10px;
-    font-size: 16px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 button:hover {
-    opacity: 0.9;
+    background-color: #13385e;
 }
 
-/* === TABEL RIWAYAT CATATAN === */
+/* tabel "catatan anda" */
 .riwayat-container {
     margin-top: 30px;
-    width: 100%;
-    max-width: 700px;
 }
 
 .riwayat-container h3 {
-    margin-bottom: 10px;
     color: #333;
+    margin-bottom: 20px;
+    font-size: 1.7rem;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 10px;
 }
 
 .riwayat-table {
     width: 100%;
     border-collapse: collapse;
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    overflow: hidden;
+}
+
+.riwayat-table th,
+.riwayat-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+    vertical-align: top;
 }
 
 .riwayat-table th {
     background-color: #1a6099;
     color: white;
-    padding: 10px;
-    text-align: left;
+    font-weight: 600;
 }
 
-.riwayat-table td {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+.riwayat-table tr:nth-child(even) {
+    background-color: #f7f7f7;
 }
 
 .riwayat-table tr:hover {
-    background-color: #f4f4f4;
+    background-color: #eef;
+}
+
+/* Pengaturan lebar kolom */
+.riwayat-table td:nth-child(1) { width: 5%; text-align: center; font-weight: bold; }
+.riwayat-table td:nth-child(2) { width: 15%; white-space: nowrap; }
+.riwayat-table td:nth-child(3) { width: 65%; white-space: pre-wrap; } 
+.riwayat-table th.aksi-kolom, .riwayat-table td.aksi-kolom { 
+    width: 15%; 
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* gaya tombol */
+.edit-btn, .hapus-btn {
+    width: auto; 
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    font-weight: normal;
+    margin: 0 5px;
+    border-radius: 5px;
+}
+
+.edit-btn {
+    background-color: #ff8400; 
+}
+.edit-btn:hover {
+    background-color: #cc6a00;
+}
+
+.hapus-btn {
+    background-color: #d9534f; 
+}
+.hapus-btn:hover {
+    background-color: #b52b27;
+}
+
+/* modal edit */
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 2000; 
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; 
+    padding: 25px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 500px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    position: relative;
+}
+
+.close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#editModal h3 {
+    margin-bottom: 20px;
+    color: #000000;
+    border-bottom: none;
+}
+
+#editForm label {
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #555;
+}
+
+#editTanggal,
+#editCatatan {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    font-size: 1rem;
+    box-sizing: border-box;
+}
+
+#editTanggal {
+    background-color: #eee; 
+    color: #666;
+}
+
+.btn-update {
+    background-color: #4a90e2; 
+}
+.btn-update:hover {
+    background-color: #13385e;
+}
+
+
+/* tampilan untuk mobel */
+@media (max-width: 768px) {
+    .riwayat-table td:nth-child(4)::before { content: "Aksi"; } 
+    
+    .riwayat-table td.aksi-kolom {
+        text-align: center; 
+        padding-left: 10px; 
+    }
+    .riwayat-table td:nth-child(4) { 
+        width: 100%; 
+    }
 }
