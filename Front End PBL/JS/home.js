@@ -93,26 +93,23 @@ async function load() {
     const firstDayOfMonth = new Date(year, month, 1);
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    const dateString = firstDayOfMonth.toLocaleDateString('id-ID', {
-        weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric'
-    });
-    const paddingDays = weekdays.indexOf(dateString.split(', ')[0].slice(0,3)); 
+    // 🔥 FIX DIMULAI DARI SINI 🔥
+    // Dulu pakai toLocaleDateString untuk hitung paddingDays, sekarang diganti agar tidak salah di Februari 2026
+    const paddingDays = firstDayOfMonth.getDay(); // 0 = Minggu, 1 = Senin, dst
+    // 🔥 SAMPAI SINI 🔥
 
     monthDisplay.innerText = `${dt.toLocaleDateString('id-ID', { month: 'long' })} ${year}`;
     calendar.innerHTML = '';
 
-    for (let i = 1; i <= paddingDays + daysInMonth; i++) {
+    // 🔥 FIX BAGIAN LOOP INI SAJA 🔥
+    for (let i = 0; i < paddingDays + daysInMonth; i++) {
         const daySquare = document.createElement('div');
         daySquare.classList.add('day');
 
-        const dayString = `${year}-${(month + 1)
-            .toString()
-            .padStart(2, '0')}-${(i - paddingDays)
-            .toString()
-            .padStart(2, '0')}`;
-
-        if (i > paddingDays) {
-            daySquare.innerText = i - paddingDays;
+        if (i >= paddingDays) {
+            const dayNum = i - paddingDays + 1;
+            const dayString = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
+            daySquare.innerText = dayNum;
 
             const eventsForDay = events.filter(e => e.date === dayString);
             
@@ -139,16 +136,19 @@ async function load() {
             }
 
             daySquare.addEventListener('click', () => openModal(dayString));
+
+            const todayStr = new Date().toISOString().split("T")[0];
+            if (dayString === todayStr && nav === 0) {
+                daySquare.id = 'currentDay';
+            }
+
         } else {
             daySquare.classList.add('padding');
-        }
-        
-        if (dayString === new Date().toISOString().split("T")[0] && nav === 0) {
-            daySquare.id = 'currentDay';
         }
 
         calendar.appendChild(daySquare);
     }
+    // 🔥 FIX SAMPAI SINI 🔥
 
     renderActivityAndTodayBoxes();
 }
@@ -225,30 +225,49 @@ function renderActivityAndTodayBoxes() {
     } 
 
     // render Jadwal Hari Ini
-    eventsToday.forEach((e) => {
-        const div = document.createElement("div");
-        const dosenName = (e.dosen && e.dosen.trim() !== "") ? e.dosen : 'Tidak Ada Data';
-        const notesText = '';
-        
-        div.classList.add("jadwal");
-        
-        div.setAttribute('data-event-title', e.title ? e.title.toLowerCase() : '');
-        div.setAttribute('data-event-dosen', dosenName.toLowerCase());
-        
-        div.innerHTML = `
-            <h4>${e.title}</h4>
-            <p>Dosen: ${dosenName} | Ruang ${e.room || '-'} — ${e.time || '-'}${notesText}</p>
-        `;
-        todayBox.appendChild(div);
-    });
+        // render Jadwal Hari Ini (REAL TIME WIB)
+    const localNow = new Date();
+    const wibOffset = 7 * 60 * 60 * 1000; // offset 7 jam ke depan
+    const wibTime = new Date(localNow.getTime() + (localNow.getTimezoneOffset() * 60000) + wibOffset);
 
-    if (todayBox.querySelectorAll('.jadwal').length === 0) {
-        todayBox.innerHTML += `<p style="color:#666; padding-top: 10px;">Tidak ada jadwal hari ini</p>`;
-    }
+// format tanggal lokal (YYYY-MM-DD)
+const todayStrWIB = `${wibTime.getFullYear()}-${String(wibTime.getMonth() + 1).padStart(2, '0')}-${String(wibTime.getDate()).padStart(2, '0')}`;
+const eventsTodayWIB = events.filter(e => {
+    const eventDate = new Date(e.date);
+    const eventStr = `${eventDate.getFullYear()}-${String(eventDate.getMonth() + 1).padStart(2, '0')}-${String(eventDate.getDate()).padStart(2, '0')}`;
+    return eventStr === todayStrWIB;
+});
+
+// tampilkan jadwal hari ini sesuai WIB
+todayBox.innerHTML = '<h3>Jadwal Hari Ini</h3><p class="sub">Jadwal Kuliah Hari Ini (Real-Time WIB)</p>';
+
+eventsTodayWIB.forEach((e) => {
+    const div = document.createElement("div");
+    const dosenName = (e.dosen && e.dosen.trim() !== "") ? e.dosen : 'Tidak Ada Data';
+    const notesText = '';
+
+    div.classList.add("jadwal");
+    div.setAttribute('data-event-title', e.title ? e.title.toLowerCase() : '');
+    div.setAttribute('data-event-dosen', dosenName.toLowerCase());
+
+    // tampilkan juga jam real-time
+    const nowTime = wibTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+    div.innerHTML = `
+        <h4>${e.title}</h4>
+        <p>Dosen: ${dosenName} | Ruang ${e.room || '-'} — ${e.time || '-'}${notesText}</p>
+        <p style="font-size:12px;color:#555;">Waktu sekarang (WIB): ${nowTime}</p>
+    `;
+    todayBox.appendChild(div);
+});
+
+if (todayBox.querySelectorAll('.jadwal').length === 0) {
+    todayBox.innerHTML += `<p style="color:#666; padding-top: 10px;">Tidak ada jadwal hari ini</p>`;
+}
+
     
     filterBoxes();
 }
-
 
 function openModal(date) {
     clicked = date;
@@ -285,9 +304,7 @@ function openModal(date) {
         
         document.getElementById('deleteButton').style.display = 'none'; 
         document.getElementById('closeButton').style.display = 'block'; 
-        
         deleteEventModal.style.display = 'block'; 
-        
     } else {
         newEventModal.style.display = 'block';
     }
