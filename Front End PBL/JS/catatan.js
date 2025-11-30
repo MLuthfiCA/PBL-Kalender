@@ -1,59 +1,42 @@
-// === AMBIL ELEMEN ===
-const form = document.querySelector(".note-form");
-const textarea = document.querySelector("textarea[name='catatan']");
-const tableBody = document.querySelector(".riwayat-table tbody");
+/**
+ * catatan.js
+ * Menangani logika tampilan Modal Edit Catatan
+ */
 
-// === LOAD CATATAN SAAT WEB DIBUKA ===
-document.addEventListener("DOMContentLoaded", () => {
-    loadNotes();
-});
-
-// === SIMPAN CATATAN KE LOCALSTORAGE ===
-form.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const isiCatatan = textarea.value.trim();
-    if (isiCatatan === "") return;
-
-    const catatanBaru = {
-        tanggal: new Date().toISOString().slice(0, 10),
-        isi: isiCatatan
-    };
-
-    // ambil catatan lama
-    let catatan = JSON.parse(localStorage.getItem("catatanList")) || [];
-    catatan.push(catatanBaru);
-
-    // simpan ulang
-    localStorage.setItem("catatanList", JSON.stringify(catatan));
-
-    // reset textarea
-    textarea.value = "";
-
-    // tampilkan langsung
-    addNoteToTable(catatan.length, catatanBaru.tanggal, catatanBaru.isi);
-});
-
-// === FUNGSI MENAMPILKAN CATATAN KE TABEL ===
-function addNoteToTable(no, tanggal, isi) {
-    const row = document.createElement("tr");
-
-    row.innerHTML = `
-        <td>${no}</td>
-        <td>${tanggal}</td>
-        <td>${isi}</td>
-    `;
-
-    tableBody.appendChild(row);
+function openEditModal(id, tanggal, isiCatatan) {
+    // 1. Ambil elemen modal
+    const modal = document.getElementById('editModal');
+    
+    // 2. Bersihkan dan atur nilai
+    document.getElementById('editCatatanId').value = id;
+    document.getElementById('editTanggal').value = tanggal;
+    
+    // PENTING: Mendekode entitas HTML/JSON yang mungkin dibawa dari PHP
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = isiCatatan;
+    
+    // Masukkan teks murni ke textarea untuk diedit
+    document.getElementById('editCatatan').value = tempDiv.textContent;
+    
+    // 3. Tampilkan modal
+    modal.style.display = 'block';
 }
 
-// === LOAD CATATAN LAMA ===
-function loadNotes() {
-    let catatan = JSON.parse(localStorage.getItem("catatanList")) || [];
+function closeEditModal() {
+    // 1. Ambil elemen modal
+    const modal = document.getElementById('editModal');
+    
+    // 2. Sembunyikan modal
+    modal.style.display = 'none';
+    
+    // 3. Reset nilai input hidden
+    document.getElementById('editCatatanId').value = '';
+}
 
-    tableBody.innerHTML = "";
-
-    catatan.forEach((item, index) => {
-        addNoteToTable(index + 1, item.tanggal, item.isi);
-    });
+// Menutup modal jika pengguna mengklik di luar area modal
+window.onclick = function(event) {
+    const modal = document.getElementById('editModal');
+    if (event.target == modal) {
+        closeEditModal();
+    }
 }
