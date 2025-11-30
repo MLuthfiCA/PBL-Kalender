@@ -172,13 +172,8 @@ if (isset($_POST["logout"])) {
     
     <section id="tentang" class="about">
         <div class="container">
-            <h2>Tentang Kami</h2>
-            <p class="tebal-jelas">
-                Website ini merupakan platform yang dirancang khusus untuk membantu
-                mahasiswa dalam mengelola dan memantau jadwal perkuliahan pribadi.
-                Melalui website ini, mahasiswa dapat melihat, menambahkan, serta
-                mengatur jadwal kegiatan akademik secara terstruktur dan efisien.
-            </p>
+
+
         </div>
     </section>
 
