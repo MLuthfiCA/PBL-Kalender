@@ -19,9 +19,6 @@ const eventText = document.getElementById("eventText");
 const monthDisplay = document.getElementById("monthDisplay");
 const eventDosenInput = document.getElementById("eventDosenInput");
 
-// BARU: Variabel untuk input Catatan
-const eventNotesInput = document.getElementById("eventNotes");
-
 const weekdays = ['Ming', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
 async function loadEventsFromDB() {
@@ -37,9 +34,47 @@ async function loadEventsFromDB() {
         
     } catch (error) {
         console.error("Error loading events:", error);
-        alert("Gagal memuat jadwal dari server. Silakan cek koneksi Anda.");
         events = [];
     }
+}
+
+// fungsi search and filter
+function filterBoxes() {
+    const searchInput = document.getElementById("searchInput").value.toLowerCase();
+    const filterType = document.getElementById("filterSelect").value; 
+
+    const allScheduleBoxes = document.querySelectorAll('.tugas, .jadwal');
+
+    allScheduleBoxes.forEach(box => {
+        const eventTitle = box.getAttribute('data-event-title') || '';
+        const eventDosen = box.getAttribute('data-event-dosen') || '';
+        
+        let shouldShow = true;
+
+        if (searchInput.length > 0) {
+            let matchesSearch = false;
+            
+            if (filterType === 'dosen' && eventDosen.includes(searchInput)) {
+                matchesSearch = true;
+            } 
+            else if (filterType === 'title' && eventTitle.includes(searchInput)) {
+                matchesSearch = true;
+            } 
+            else if (filterType === '' && (eventTitle.includes(searchInput) || eventDosen.includes(searchInput))) {
+                matchesSearch = true;
+            }
+            
+            if (!matchesSearch) {
+                shouldShow = false;
+            }
+        }
+        
+        if (shouldShow) {
+            box.style.display = 'flex'; 
+        } else {
+            box.style.display = 'none'; 
+        }
+    });
 }
 
 async function load() {
@@ -61,7 +96,7 @@ async function load() {
     const dateString = firstDayOfMonth.toLocaleDateString('id-ID', {
         weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric'
     });
-    const paddingDays = weekdays.indexOf(dateString.split(', ')[0].slice(0,3));
+    const paddingDays = weekdays.indexOf(dateString.split(', ')[0].slice(0,3)); 
 
     monthDisplay.innerText = `${dt.toLocaleDateString('id-ID', { month: 'long' })} ${year}`;
     calendar.innerHTML = '';
@@ -130,18 +165,21 @@ function renderActivityAndTodayBoxes() {
     const todayBox = document.getElementById("todaySchedule");
     if (!activityBox || !todayBox) return;
 
-    activityBox.innerHTML = '<h3>Aktivitas Minggu Ini</h3><p class="sub">Tugas dan Jadwal yang Akan Datang</p>';
-    todayBox.innerHTML = '<h3>Jadwal Hari Ini</h3><p class="sub">Jadwal Kuliah dan Praktikum Hari Ini</p>';
+    // Reset konten box
+    activityBox.innerHTML = '<h3>Aktivitas Minggu Ini</h3><p class="sub">Jadwal yang Akan Datang</p>';
+    todayBox.innerHTML = '<h3>Jadwal Hari Ini</h3><p class="sub">Jadwal Kuliah Hari Ini</p>';
 
+    // Filter event dalam rentang satu minggu
     const eventsInRange = events.filter(e => {
         const eventDate = new Date(e.date);
         return eventDate >= oneWeekBefore && eventDate <= oneWeekAfter;
     });
+    
 
     const todayStr = now.toISOString().split("T")[0];
     const eventsToday = events.filter(e => e.date === todayStr);
 
-    eventsInRange.forEach((e, index) => {
+    eventsInRange.forEach((e) => {
         const eventDate = new Date(e.date);
         const diffDays = Math.floor((eventDate - new Date(todayStr)) / (1000 * 60 * 60 * 24));
 
@@ -149,8 +187,7 @@ function renderActivityAndTodayBoxes() {
         let color = (diffDays < 0) ? "#f4b266" : "#4a90e2";
         
         const dosenName = (e.dosen && e.dosen.trim() !== "") ? e.dosen : 'Tidak Ada Data';
-        // BARU: Tampilkan Catatan di box aktivitas
-        const notesText = (e.notes && e.notes.trim() !== "") ? ` | Catatan: ${e.notes}` : ''; 
+        const notesText = ''; 
 
         const eventDiv = document.createElement("div");
         eventDiv.classList.add("tugas");
@@ -165,11 +202,11 @@ function renderActivityAndTodayBoxes() {
 
         eventDiv.innerHTML = `
             <div style="display:flex; gap:10px;">
-                <strong>${index + 1}.</strong>
                 <div>
-                <h4>${e.title}</h4>
-                <p>Dosen: ${dosenName} | Ruangan: ${e.room || '-'} | ${e.time || '-'}${notesText}</p>
-                <p>Tenggat: ${e.date}</p>
+                    <h4>${e.title}</h4>
+                    <p>Dosen: ${dosenName} | Ruangan: ${e.room || '-'} | ${e.time || '-'}${notesText}</p>
+                    <p>Tanggal: ${e.date}</p>
+                </div>
             </div>
             <span class="status" style="
                 background-color: ${color};
@@ -183,47 +220,15 @@ function renderActivityAndTodayBoxes() {
         activityBox.appendChild(eventDiv);
     });
 
-    if (activityBox.querySelectorAll('.tugas').length <= 0) {
-        activityBox.innerHTML += `<p style="color:#666;">Tidak ada aktivitas minggu ini</p>`;
-    }
- HEAD
-    document.getElementById("addSubjectBtn").addEventListener("click", function () {
-    let jumlah = prompt("Masukkan jumlah mata kuliah:");
+    if (activityBox.querySelectorAll('.tugas').length === 0) {
+         activityBox.innerHTML += `<p style="color:#666; padding-top: 10px;">Tidak ada jadwal/tugas terdekat yang ditemukan.</p>`;
+    } 
 
-    if (jumlah === null) return;  
-    jumlah = parseInt(jumlah);
-
-    if (isNaN(jumlah) || jumlah < 0) {
-        alert("Input tidak valid!");
-        return;
-    }
-
-    // update tampilan
-    document.getElementById("subjectCount").textContent = jumlah;
-});
-
-
-    document.getElementById("addSubjectBtn").addEventListener("click", function () {
-    let jumlah = prompt("Masukkan jumlah mata kuliah:");
-
-
-    if (jumlah === null) return;  
-    jumlah = parseInt(jumlah);
-
-    if (isNaN(jumlah) || jumlah < 0) {
-        alert("Input tidak valid!");
-        return;
-    }
-
-    // update tampilan
-    document.getElementById("subjectCount").textContent = jumlah;
-});
-    // jadwal hari ini
-    eventsToday.forEach((e, index) => {
+    // render Jadwal Hari Ini
+    eventsToday.forEach((e) => {
         const div = document.createElement("div");
         const dosenName = (e.dosen && e.dosen.trim() !== "") ? e.dosen : 'Tidak Ada Data';
-        // BARU: Tampilkan Catatan di box jadwal hari ini
-        const notesText = (e.notes && e.notes.trim() !== "") ? ` | Catatan: ${e.notes}` : ''; 
+        const notesText = '';
         
         div.classList.add("jadwal");
         
@@ -237,8 +242,8 @@ function renderActivityAndTodayBoxes() {
         todayBox.appendChild(div);
     });
 
-    if (todayBox.querySelectorAll('.jadwal').length <= 0) {
-        todayBox.innerHTML += `<p style="color:#666;">Tidak ada jadwal hari ini</p>`;
+    if (todayBox.querySelectorAll('.jadwal').length === 0) {
+        todayBox.innerHTML += `<p style="color:#666; padding-top: 10px;">Tidak ada jadwal hari ini</p>`;
     }
     
     filterBoxes();
@@ -255,11 +260,7 @@ function openModal(date) {
         
         eventsForDay.forEach(eventForDay => {
             const dosenName = (eventForDay.dosen && eventForDay.dosen.trim() !== "") ? eventForDay.dosen : 'Tidak Ada Data';
-            
-            // BARU: Tampilkan Catatan
-            const notesText = (eventForDay.notes && eventForDay.notes.trim() !== "") 
-                ? `<br>Catatan: ${eventForDay.notes}` 
-                : '';
+            const notesText = ''; 
             
             eventListHTML += `
                 <div class="single-event-detail" style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px;">
@@ -301,221 +302,151 @@ function confirmDeleteEvent(id, repeatId, title) {
     deleteEvent();
 }
 
-
 function closeModal() {
     eventTitleInput.value = '';
-    eventTimeInput.value = '';
+    eventTimeInput.value = '07:00 - 07:50';
     eventRoomInput.value = '';
     if (eventDosenInput) eventDosenInput.value = '';
-    
-    // BARU: Bersihkan input Catatan
-    if (eventNotesInput) eventNotesInput.value = ''; 
-    
-    repeatWeeklyCheckbox.checked = false;
+    repeatWeeklyCheckbox.checked = false; 
 
     newEventModal.style.display = 'none';
     deleteEventModal.style.display = 'none';
     backDrop.style.display = 'none';
+
     clicked = null;
-    
     clickedEventId = null;
     clickedRepeatId = null;
     clickedEventTitle = null;
-    
-    load();
+    eventTitleInput.classList.remove('error');
 }
 
+
 async function saveEvent() {
-    if (eventTitleInput.value) {
-        
-        // BARU: Ambil nilai catatan
-        const notes = eventNotesInput ? eventNotesInput.value : "";
-        
-        const baseEventData = {
-            title: eventTitleInput.value,
-            date: clicked,
-            time: eventTimeInput.value,
-            room: eventRoomInput.value,
-            dosen: eventDosenInput ? eventDosenInput.value : "",
-            notes: notes, // BARU: Kirim catatan ke API
-            action: 'save_event' 
-        };
+    const title = eventTitleInput.value;
+    const dosen = eventDosenInput.value;
+    const time = eventTimeInput.value;
+    const room = eventRoomInput.value;
+    const repeatWeekly = repeatWeeklyCheckbox.checked;
 
-        const repeatWeekly = repeatWeeklyCheckbox.checked;
-        const eventsToSave = [];
-        
-        const repeatId = repeatWeekly ? Date.now().toString() : null;
-
-        if (repeatWeekly) {
-            const startDate = new Date(clicked);
-            for (let i = 0; i < 12; i++) { // Ulangi 12 minggu
-                const nextDate = new Date(startDate);
-                nextDate.setDate(startDate.getDate() + i * 7);
-                const formattedDate = nextDate.toISOString().split("T")[0];
-                
-                eventsToSave.push({ 
-                    ...baseEventData, 
-                    date: formattedDate, 
-                    repeatId: repeatId 
-                });
-            }
-        } else {
-            eventsToSave.push(baseEventData);
-        }
-
-        let successCount = 0;
-        let failCount = 0;
-
-        for (const eventData of eventsToSave) {
-            try {
-                const bodyParams = new URLSearchParams(eventData);
-                
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: bodyParams
-                });
-
-                const result = await response.json();
-
-                if (result.status === 'success') {
-                    successCount++;
-                } else {
-                    console.error("Gagal simpan:", result.message);
-                    failCount++;
-                }
-            } catch (error) {
-                console.error("Error jaringan/fetch:", error);
-                failCount++;
-            }
-        }
-
-        if (failCount > 0) {
-            alert(`Penyimpanan selesai. ${successCount} jadwal berhasil disimpan, ${failCount} gagal. Lihat konsol untuk detail.`);
-        } else {
-            alert(`Jadwal berhasil disimpan!`);
-        }
-        
-
-        closeModal();
-
-    } else {
-        alert('Harap isi Judul (Mata Kuliah)!');
+    if (!title || !time || !clicked) {
+        eventTitleInput.classList.add('error');
+        alert("Nama Mata Kuliah, Waktu, dan Tanggal harus diisi.");
+        return;
     }
+    
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'save_event',
+                title: title,
+                dosen: dosen,
+                date: clicked,
+                time: time,
+                room: room,
+                repeatWeekly: repeatWeekly
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            alert(result.message);
+        } else {
+            alert("Gagal menyimpan jadwal ke server: " + result.message); 
+        }
+
+    } catch (error) {
+        console.error('Save Event Error:', error);
+        alert('Gagal berkomunikasi dengan server.');
+    }
+
+    closeModal();
+    load();
 }
 
 
 async function deleteEvent() {
-    const idToDelete = clickedEventId;
-    const repeatId = clickedRepeatId;
-    const eventTitle = clickedEventTitle;
+    if (!clickedEventId && !clickedRepeatId) {
+        alert("ID jadwal tidak valid.");
+        return;
+    }
+
+    let confirmationMessage;
+    if (clickedRepeatId) {
+        confirmationMessage = `Apakah Anda yakin ingin menghapus SEMUA jadwal '${clickedEventTitle}' yang berulang?`;
+    } else {
+        confirmationMessage = `Apakah Anda yakin ingin menghapus jadwal '${clickedEventTitle}'?`;
+    }
+
+    if (!confirm(confirmationMessage)) {
+        return;
+    }
     
-    if (!idToDelete) return; 
-
-    let deleteType = 'single';
-    let confirmed = true;
-
-    if (repeatId) {
-        const confirmMessage = `Jadwal "${eventTitle}" adalah bagian dari seri berulang.\nTekan OK untuk menghapus SEMUA jadwal berulang.\nTekan Batal untuk hanya menghapus jadwal ini.`;
-        confirmed = confirm(confirmMessage);
-    } 
-
-    if (repeatId && confirmed) {
-        deleteType = 'all_repeat'; 
-    } else if (repeatId && !confirmed) {
-        deleteType = 'single'; 
-    } 
-
     try {
-        const bodyParams = new URLSearchParams({
-            action: 'delete_event',
-            id: idToDelete, 
-            repeatId: repeatId,
-            delete_type: deleteType
-        });
-        
         const response = await fetch(API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: bodyParams
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'delete_event',
+                id: clickedEventId,
+                repeatId: clickedRepeatId
+            })
         });
-        
+
         const result = await response.json();
-        
+
         if (result.status === 'success') {
             alert(result.message);
         } else {
-            throw new Error(result.message || 'Gagal menghapus jadwal.');
+            alert("Gagal menghapus jadwal: " + result.message);
         }
-
+        
     } catch (error) {
-        console.error("Error menghapus jadwal:", error);
-        alert(`Gagal menghapus jadwal: ${error.message}`);
+        console.error('Delete Event Error:', error);
+        alert('Gagal berkomunikasi dengan server.');
     }
-
+    
     closeModal();
+    load();
 }
 
-// fungsi search and filter
-function filterBoxes() {
-    const searchValue = document.getElementById('searchInput').value.toLowerCase();
-    const filterType = document.getElementById('filterSelect').value; 
-    const allItems = document.querySelectorAll('#activityList .tugas, #todaySchedule .jadwal');
-    const targetHeader = document.querySelector('.main-content h2');
 
-    let firstMatchFound = false;
+function initButtons() {
+    document.getElementById("nextButton").addEventListener('click', () => {
+        nav++;
+        load();
+    });
 
-    allItems.forEach(item => {
-        const title = item.getAttribute('data-event-title') || '';
-        const dosen = item.getAttribute('data-event-dosen') || '';
-        
-        let isMatch = false;
-        let textToSearch = '';
+    document.getElementById("backButton").addEventListener('click', () => {
+        nav--;
+        load();
+    });
+    
+    document.getElementById("saveButton").addEventListener('click', saveEvent);
+    document.getElementById("cancelButton").addEventListener('click', closeModal);
+    document.getElementById("deleteButton").addEventListener('click', deleteEvent); 
+    document.getElementById("closeButton").addEventListener('click', closeModal); 
 
-        if (filterType === 'dosen') {
-            textToSearch = dosen;
-        } else if (filterType === 'title') {
-            textToSearch = title;
-        } else { 
-            textToSearch = `${title} ${dosen}`;
+    document.getElementById("addSubjectBtn").addEventListener("click", function () {
+        let jumlah = prompt("Masukkan jumlah mata kuliah:");
+
+        if (jumlah === null) return;  
+        jumlah = parseInt(jumlah);
+
+        if (isNaN(jumlah) || jumlah < 0) {
+            alert("Input tidak valid!");
+            return;
         }
 
-        if (textToSearch.includes(searchValue)) {
-            isMatch = true;
-        }
-        
-        if (isMatch) {
-            item.classList.remove('hidden-item');
-            if (searchValue.length > 0 && !firstMatchFound) {
-        
-            }
-        } else {
-            item.classList.add('hidden-item');
-        }
+        document.getElementById("subjectCount").textContent = jumlah;
     });
 }
 
-
-document.getElementById('nextButton').addEventListener('click', () => {
-    nav++;
-    load();
-});
-
-document.getElementById('backButton').addEventListener('click', () => {
-    nav--;
-    load();
-});
-
-document.getElementById('saveButton').addEventListener('click', saveEvent);
-document.getElementById('closeButton').addEventListener('click', closeModal); 
-
-
-const cancelButton = document.getElementById('cancelButton');
-if (cancelButton) {
-    cancelButton.addEventListener('click', closeModal);
-}
-
-document.getElementById('modalBackDrop').addEventListener('click', closeModal);
-
-load(); 
-setTimeout(filterBoxes, 100);
+initButtons();
+load();
