@@ -50,7 +50,7 @@ switch ($action) {
         $stmt->close();
         break;
 
-    // ✅ SIMPAN JADWAL BARU (dengan logika berulang 12 minggu)
+    // perulangan jadwal mingguan
     case 'save_event':
         $matkul = $data['title'] ?? '';
         $dosen = $data['dosen'] ?? '';
@@ -97,7 +97,7 @@ switch ($action) {
         if ($repeat_weekly) {
             $tanggal_awal = new DateTime($date);
 
-            for ($i = 1; $i <= 12; $i++) { // 12 minggu = 3 bulan
+            for ($i = 1; $i <= 12; $i++) {
                 $tanggal_awal->modify('+7 days');
                 $next_date = $tanggal_awal->format('Y-m-d');
 

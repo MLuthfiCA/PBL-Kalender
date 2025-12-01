@@ -93,15 +93,12 @@ async function load() {
     const firstDayOfMonth = new Date(year, month, 1);
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    // 🔥 FIX DIMULAI DARI SINI 🔥
-    // Dulu pakai toLocaleDateString untuk hitung paddingDays, sekarang diganti agar tidak salah di Februari 2026
-    const paddingDays = firstDayOfMonth.getDay(); // 0 = Minggu, 1 = Senin, dst
-    // 🔥 SAMPAI SINI 🔥
+    // feature 2 menampilkan jadwal pada kalender
+    const paddingDays = firstDayOfMonth.getDay();
 
     monthDisplay.innerText = `${dt.toLocaleDateString('id-ID', { month: 'long' })} ${year}`;
     calendar.innerHTML = '';
 
-    // 🔥 FIX BAGIAN LOOP INI SAJA 🔥
     for (let i = 0; i < paddingDays + daysInMonth; i++) {
         const daySquare = document.createElement('div');
         daySquare.classList.add('day');
@@ -148,7 +145,6 @@ async function load() {
 
         calendar.appendChild(daySquare);
     }
-    // 🔥 FIX SAMPAI SINI 🔥
 
     renderActivityAndTodayBoxes();
 }
