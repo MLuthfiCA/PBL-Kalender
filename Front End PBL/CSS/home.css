@@ -309,13 +309,6 @@ body {
 
 /* informasi tabel */
 .status {
-    position: absolute; 
-    right: 16px; 
-    
-    top: 50%;
-    transform: translateY(-50%); 
-    
-/* bentuk informasi */
     padding: 6px 12px; 
     border-radius: 6px; 
     
@@ -324,7 +317,6 @@ body {
     color: white;
     text-align: center;
     white-space: nowrap;
-    z-index: 5; 
 }
 
 .tugas .event-details {
