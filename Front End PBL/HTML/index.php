@@ -70,25 +70,25 @@ session_start();
                 <div class="feature-card">
                     <div class="feature-icon">📅</div>
                     <h3>Jadwal Kalender</h3>
-                    <p>Lihat semua jadwal kuliah Anda dalam satu tampilan kalender interaktif</p>
+                    <p>Isi</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">📝</div>
                     <h3>Catatan Pembelajaran</h3>
-                    <p>Catat materi pelajaran dan tugas-tugas penting dengan mudah</p>
+                    <p>Isi</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">🔄</div>
                     <h3>Jadwal Berulang</h3>
-                    <p>Atur jadwal yang berulang setiap minggu secara otomatis</p>
+                    <p>Isi</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon">⚡</div>
                     <h3>Real-time Update</h3>
-                    <p>Dapatkan update jadwal secara real-time tanpa perlu refresh halaman</p>
+                    <p>Isi</p>
                 </div>
             </div>
         </div>
@@ -107,7 +107,7 @@ session_start();
                             <div class="card-image">
                                 <img src="https://via.placeholder.com/250x250/0074a6/ffffff?text=Developer+1" alt="Developer 1" />
                             </div>
-                            <h3>Dimas Surya Cakra Ananta</h3>
+                            <h3>Nama</h3>
                             <p>Isi Sendiri</p>
                         </div>
                     </div>
@@ -117,7 +117,7 @@ session_start();
                             <div class="card-image">
                                 <img src="https://via.placeholder.com/250x250/4a90e2/ffffff?text=Developer+2" alt="Developer 2" />
                             </div>
-                            <h3>Damar Widi Nugroho</h3>
+                            <h3>Nama</h3>
                             <p>Isi Sendiri</p>
                         </div>
                     </div>
@@ -127,7 +127,7 @@ session_start();
                             <div class="card-image">
                                 <img src="https://via.placeholder.com/250x250/58bae4/ffffff?text=Developer+3" alt="Developer 3" />
                             </div>
-                            <h3>Muhammad rafi</h3>
+                            <h3>Nama</h3>
                             <p>Isi Sendiri</p>
                         </div>
                     </div>
@@ -137,18 +137,18 @@ session_start();
                             <div class="card-image">
                                 <img src="https://via.placeholder.com/250x250/f4b266/ffffff?text=Developer+4" alt="Developer 4" />
                             </div>
-                            <h3>Muhammad Lutfhi</h3>
+                            <h3>Nama</h3>
                             <p>Isi Sendiri</p>
                         </div>
                     </div>
 
-                    <!-- Clone items untuk seamless looping -->
+                    <!-- Clone items untuk Kelihatan looping -->
                     <div class="carousel-item">
                         <div class="card-profile">
                             <div class="card-image">
                                 <img src="https://via.placeholder.com/250x250/0074a6/ffffff?text=Developer+1" alt="Developer 1" />
                             </div>
-                            <h3>Dimas Surya Cakra Ananta</h3>
+                            <h3>Nama</h3>
                             <p>Isi Sendiri</p>
                         </div>
                     </div>
@@ -163,12 +163,12 @@ session_start();
             <h2>Tentang Website Kami</h2>
             <div class="about-content">
                 <p>
-                    Sistem Penjadwalan Kuliah adalah sebuah platform inovatif yang dirancang khusus untuk membantu mahasiswa dalam mengelola jadwal akademik dengan lebih efisien. Dengan antarmuka yang user-friendly dan fitur-fitur canggih, kami berkomitmen untuk meningkatkan produktivitas dan pengalaman akademik Anda.
+                    Isi
                 </p>
                 
                 <h3>Visi Kami</h3>
                 <p>
-                    Menjadi platform penjadwalan akademik terpercaya yang memudahkan mahasiswa teknik informatika semester 1 polibatam dalam mengatur jadwal kuliahnya.   
+                    Isi
                 </p>
 
                 <h3>Misi Kami</h3>
