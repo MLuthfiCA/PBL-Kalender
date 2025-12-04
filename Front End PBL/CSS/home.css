@@ -67,7 +67,7 @@ body {
 
 .navbar .nav-links a:hover {
     transform: scale(1.05);
-    color: #fF6347;
+    color: #ffb84d;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
@@ -75,15 +75,19 @@ body {
     background: none;
     border: none;
     color: #ffffff;
-    cursor: pointer;
-    font-size: 1rem; 
+    text-decoration: none;
+    font-size: 1rem;
     padding: 0;
     display: inline;
+    cursor: pointer;
 }
 
 .logout-btn:hover {
-    color: #fF6347;
+    transform: scale(1.05);
+    color: #ffb84d;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
+
 
 .search-box {
     display: flex;
@@ -317,6 +321,7 @@ body {
     color: white;
     text-align: center;
     white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .tugas .event-details {
@@ -549,7 +554,7 @@ button:hover {
 }
 
 .footer {
-    background: #333;
+    background: #1a6099;
     color: #ffffff;
     text-align: center;
     padding: 20px 0;
@@ -573,7 +578,7 @@ button:hover {
 }
 
 .footer .social-link a:hover {
-    color: #fF6347;
+    color: #ffb84d;
 }
 
 /* responsif */
