@@ -6,6 +6,7 @@ let events = [];
 let clickedEventId = null; 
 let clickedRepeatId = null;
 let clickedEventTitle = null;
+let isEditMode = false;
 
 const calendar = document.getElementById("calendar");
 const newEventModal = document.getElementById("newEventModal");
@@ -197,20 +198,23 @@ function renderActivityAndTodayBoxes() {
         eventDiv.style.marginBottom = "8px";
 
         eventDiv.innerHTML = `
-            <div style="display:flex; gap:10px;">
+            <div style="display:flex; gap:10px; flex-grow:1;">
                 <div>
                     <h4>${e.title}</h4>
                     <p>Dosen: ${dosenName} | Ruangan: ${e.room || '-'} | ${e.time || '-'}${notesText}</p>
                     <p>Tanggal: ${e.date}</p>
                 </div>
             </div>
-            <span class="status" style="
-                background-color: ${color};
-                color: white;
-                padding: 4px 8px;
-                border-radius: 6px;
-                font-size: 12px;
-            ">${status}</span>
+            <div style="display:flex; gap:8px; align-items:center; flex-shrink:0;">
+                <button onclick="openEditModal(${e.id}, '${e.date}', '${e.title.replace(/'/g, "\\'")}', '${dosenName.replace(/'/g, "\\'")}', '${e.time}', '${(e.room || '').replace(/'/g, "\\'")}'${e.repeatId ? `, '${e.repeatId}'` : ''})" style="background-color:#0074a6; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:12px;">✎ Edit</button>
+                <span class="status" style="
+                    background-color: ${color};
+                    color: white;
+                    padding: 4px 8px;
+                    border-radius: 6px;
+                    font-size: 12px;
+                ">${status}</span>
+            </div>
         `;
 
         activityBox.appendChild(eventDiv);
@@ -307,6 +311,26 @@ function openModal(date) {
     backDrop.style.display = 'block';
 }
 
+function openEditModal(eventId, eventDate, eventTitle, eventDosen, eventTime, eventRoom, repeatId) {
+    isEditMode = true;
+    clicked = eventDate;
+    clickedEventId = eventId;
+    clickedRepeatId = repeatId || null;
+    
+    eventTitleInput.value = eventTitle;
+    eventDosenInput.value = eventDosen;
+    eventTimeInput.value = eventTime;
+    eventRoomInput.value = eventRoom || '';
+    repeatWeeklyCheckbox.checked = false;
+    repeatWeeklyCheckbox.disabled = false;
+    
+    document.querySelector('#newEventModal h2').textContent = 'Edit Jadwal';
+    document.getElementById('saveButton').textContent = 'Update';
+    
+    newEventModal.style.display = 'block';
+    backDrop.style.display = 'block';
+}
+
 function confirmDeleteEvent(id, repeatId, title) {
     clickedEventId = id;
     clickedRepeatId = repeatId === 'null' ? null : repeatId; 
@@ -321,6 +345,12 @@ function closeModal() {
     eventRoomInput.value = '';
     if (eventDosenInput) eventDosenInput.value = '';
     repeatWeeklyCheckbox.checked = false; 
+    repeatWeeklyCheckbox.disabled = false;
+
+    document.querySelector('#newEventModal h2').textContent = 'Tambah Jadwal';
+    document.getElementById('saveButton').textContent = 'Simpan';
+    
+    isEditMode = false;
 
     newEventModal.style.display = 'none';
     deleteEventModal.style.display = 'none';
@@ -333,6 +363,39 @@ function closeModal() {
     eventTitleInput.classList.remove('error');
 }
 
+async function updateEvent(title, dosen, time, room) {
+    try {
+        const response = await fetch('../PHP/api_jadwal.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                action: 'update_event',
+                id: clickedEventId,
+                title: title,
+                dosen: dosen,
+                time: time,
+                room: room,
+                repeatId: clickedRepeatId,
+                repeatWeekly: repeatWeeklyCheckbox.checked
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+            alert('Jadwal berhasil diubah!');
+            closeModal();
+            load();
+        } else {
+            alert('Error: ' + result.message);
+        }
+    } catch (error) {
+        console.error('Error updating event:', error);
+        alert('Gagal mengubah jadwal. Coba lagi.');
+    }
+}
 
 async function saveEvent() {
     const title = eventTitleInput.value;
@@ -344,6 +407,11 @@ async function saveEvent() {
     if (!title || !time || !clicked) {
         eventTitleInput.classList.add('error');
         alert("Nama Mata Kuliah, Waktu, dan Tanggal harus diisi.");
+        return;
+    }
+
+    if (isEditMode) {
+        await updateEvent(title, dosen, time, room);
         return;
     }
     
