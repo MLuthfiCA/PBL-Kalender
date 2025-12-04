@@ -149,6 +149,52 @@ switch ($action) {
         $stmt->close();
         break;
 
+    case 'update_event':
+        $jadwal_id = $data['id'] ?? 0;
+        $matkul = $data['title'] ?? '';
+        $dosen = $data['dosen'] ?? '';
+        $time_range = $data['time'] ?? '';
+        $room = $data['room'] ?? '';
+        $repeat_id = $data['repeatId'] ?? null;
+        $repeat_weekly = $data['repeatWeekly'] ?? false;
+
+        if (!$jadwal_id || empty($matkul) || empty($time_range)) {
+            http_response_code(400);
+            echo json_encode(["status" => "error", "message" => "ID, Nama Matkul, atau Waktu tidak lengkap."]);
+            break;
+        }
+
+        [$waktu_mulai, $waktu_selesai] = explode(' - ', $time_range);
+
+        // Jika ada repeatId dan checkbox repeat checked, update semua dengan repeat_id yang sama
+        if ($repeat_id && $repeat_weekly) {
+            $sql = "UPDATE jadwal_kuliah 
+                    SET nama_matkul = ?, dosen = ?, waktu_mulai = ?, waktu_selesai = ?, ruangan = ?
+                    WHERE repeat_id = ? AND mahasiswa_id = ?";
+            $stmt = $db->prepare($sql);
+            $stmt->bind_param("ssssssi", $matkul, $dosen, $waktu_mulai, $waktu_selesai, $room, $repeat_id, $mahasiswa_id);
+            $success = $stmt->execute();
+            $message = "Semua jadwal berulang berhasil diubah.";
+        } else {
+            // Update hanya jadwal yang dipilih
+            $sql = "UPDATE jadwal_kuliah 
+                    SET nama_matkul = ?, dosen = ?, waktu_mulai = ?, waktu_selesai = ?, ruangan = ?
+                    WHERE jadwal_id = ? AND mahasiswa_id = ?";
+            $stmt = $db->prepare($sql);
+            $stmt->bind_param("sssssii", $matkul, $dosen, $waktu_mulai, $waktu_selesai, $room, $jadwal_id, $mahasiswa_id);
+            $success = $stmt->execute();
+            $message = "Jadwal berhasil diubah.";
+        }
+
+        if ($success) {
+            echo json_encode(["status" => "success", "message" => $message]);
+        } else {
+            http_response_code(500);
+            echo json_encode(["status" => "error", "message" => "Gagal mengubah jadwal: " . $stmt->error]);
+        }
+        $stmt->close();
+        break;
+
     default:
         http_response_code(400);
         echo json_encode(["status" => "error", "message" => "Aksi tidak valid atau tidak dikenal."]);
