@@ -191,9 +191,9 @@ session_start();
         <div class="container">
             <p>&copy; 2025 Sistem Penjadwalan Kuliah. All rights reserved.</p>
             <ul class="social-link">
-                <li><a href="https://www.facebook.com">Instagram</a></li>
-                <li><a href="https://twitter.com">Youtube</a></li>
-                <li><a href="https://www.instagram.com">Website</a></li>
+                <li><a href="https://www.instagram.com/polibatamofficial/">Instagram</a></li>
+                <li><a href="https://www.youtube.com/c/PolibatamTV/">Youtube</a></li>
+                <li><a href="https://www.polibatam.ac.id/">Website</a></li>
             </ul>
         </div>
     </footer>
