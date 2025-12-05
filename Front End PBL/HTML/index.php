@@ -191,10 +191,9 @@ session_start();
         <div class="container">
             <p>&copy; 2025 Sistem Penjadwalan Kuliah. All rights reserved.</p>
             <ul class="social-link">
-                <li><a href="https://www.facebook.com">Facebook</a></li>
-                <li><a href="https://twitter.com">Twitter</a></li>
-                <li><a href="https://www.instagram.com">Instagram</a></li>
-                <li><a href="https://mail.google.com">Email</a></li>
+                <li><a href="https://www.facebook.com">Instagram</a></li>
+                <li><a href="https://twitter.com">Youtube</a></li>
+                <li><a href="https://www.instagram.com">Website</a></li>
             </ul>
         </div>
     </footer>
