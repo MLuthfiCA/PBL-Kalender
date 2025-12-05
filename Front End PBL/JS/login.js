@@ -20,3 +20,8 @@ function loginUser() {
   localStorage.setItem("loggedInUser", JSON.stringify(user));
   window.location.href = "home_page.html"; // halaman setelah login
 }
+
+// back button ke dashboard
+document.querySelector(".btn-back")?.addEventListener("click", () => {
+    console.log("Kembali ke dashboard...");
+});
