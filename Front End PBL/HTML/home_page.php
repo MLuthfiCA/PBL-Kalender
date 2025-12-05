@@ -181,10 +181,9 @@ if (isset($_POST["logout"])) {
         <div class="container">
             <p>&copy; 2025 All rights reserved.</p>
             <ul class="social-link">
-                <li><a href="https://www.facebook.com/damarrwn.damarrwn">Facebook</a></li>
-                <li><a href="https://x.com/WidhiDamar99089">Twitter</a></li>
-                <li><a href="https://www.instagram.com/dam_dim_dum_dom/">Instagram</a></li>
-                <li><a href="https://mail.google.com/mail/u/0/#inbox?compose=new">Gmail</a></li>
+                <li><a href="https://www.instagram.com/polibatamofficial/">Instagram</a></li>
+                <li><a href="https://www.youtube.com/c/PolibatamTV/">Youtube</a></li>
+                <li><a href="https://www.polibatam.ac.id/">Website</a></li>
             </ul>
         </div>
     </footer>
