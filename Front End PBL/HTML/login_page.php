@@ -74,6 +74,9 @@
 
         <button type="submit" name="login">Login</button>
     </form>
+    <div class="back-dashboard">
+        <a href="index.php" class="btn-back">← Kembali ke Dashboard</a>
+    </div>
 
 </body>
 
