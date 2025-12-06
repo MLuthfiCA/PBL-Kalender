@@ -1,62 +1,85 @@
 <?php
-include '../PHP/database.php';
-session_start();
+    include '../PHP/database.php';
+    session_start();
 
-if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true) {
-    header('Location: admin_homepage.php');
-    exit();
-}
+    $login_message = '';
 
-if (isset($_POST["login_admin"])) {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    // Notifikasi register sukses
+    if (isset($_SESSION['register_success'])) {
+        $login_message = '<p style="color:green; text-align:center;">' . $_SESSION['register_success'] . '</p>';
+        unset($_SESSION['register_success']); 
+    }
+    
+    // Notifikasi error login
+    if (isset($_SESSION['login_error'])) {
+        $login_message = '<p style="color:red; text-align:center;">' . $_SESSION['login_error'] . '</p>';
+        unset($_SESSION['login_error']); 
+    }
 
-    $sql = "SELECT * FROM admin WHERE username='$username' AND password='$password'";
-    $result = $db->query($sql);
-
-    if ($result && $result->num_rows > 0) {
-        $data = $result->fetch_assoc();
-        $_SESSION["admin_name"] = $data["username"];
-        $_SESSION["is_admin"] = true;
-
-        echo "<script>
-                alert('Login admin berhasil!');
-                setTimeout(() => {
-                    window.location.href='admin_homepage.php';
-                }, 200);
-              </script>";
-        exit();
-    } else {
-        echo "<script>
-                alert('Username atau password admin salah!');
-                window.history.back();
-              </script>";
+    // Jika SUDAH LOGIN, jangan kembali ke login page
+    if (isset($_SESSION['is_login']) && $_SESSION['is_login'] === true) {
+        header('location: admin_homepage.php');
         exit();
     }
-}
-?>
 
+    // Jika tombol login ditekan
+    if(isset($_POST["login"])) {
+
+        $nama = $db->real_escape_string($_POST['nama']);
+        $password = $db->real_escape_string($_POST['password']);
+
+        // Cari admin berdasarkan nama dan password
+        $sql = "SELECT admin_id, nama FROM admins WHERE nama='$nama' AND password='$password'";
+        $result = $db->query($sql);
+
+        if($result->num_rows > 0) {
+            $data = $result->fetch_assoc();
+            
+            // Set session login
+            $_SESSION["admin_id"] = $data["admin_id"];
+            $_SESSION["nama"] = $data["nama"];
+            $_SESSION["is_login"] = true;
+
+            header("location: admin_homepage.php");
+            exit(); 
+        } else {
+            $_SESSION['login_error'] = "Nama pengguna atau kata sandi salah.";
+            header("Location: admin_login.php");
+            exit();
+        }
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login Admin</title>
-  <link rel="stylesheet" href="../CSS/login.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Login</title>
+    <link rel="stylesheet" href="../CSS/admin.css">
 </head>
+
 <body>
-  <form action="admin_login.php" method="post">
-    <img src="../mentahan_profil-removebg-preview.png" alt="logo" width="100">
-    <h3 style="text-align: center; color:#000000">LOGIN ADMIN</h3>
 
-    <label for="username" style="color:#000000">Username Admin</label>
-    <input type="text" id="username" name="username" placeholder="Masukkan username admin" required>
+    <!-- ❗ FORM HARUS KEMBALI KE admin_login.php -->
+    <form action="admin_login.php" method="post">
+        <img src="../mentahan_profil-removebg-preview.png" alt="logo" width="100">
+        <h3 style="text-align: center; color:#000000">MASUK</h3>
+        
+        <?php echo $login_message; ?>
 
-    <label for="password" style="color:#000000">Password</label>
-    <input type="password" id="password" name="password" placeholder="Masukkan password" required>
+        <label style="color:#000000" for="nama">Nama Akun</label>
+        <input type="text" id="nama" class="input-field" name="nama" placeholder="masukkan nama akun anda" required>
 
-    <button type="submit" name="login_admin">Login Admin</button>
-    <a href="login_page.php" style="display:block; text-align:left; margin-top:10px;">Kembali ke Login User</a>
-  </form>
+        <label style="color:#000000" for="password">Kata Sandi</label>
+        <input type="password" id="password" class="input-field" name="password" placeholder="masukkan kata sandi" required>
+
+        <button type="submit" name="login">Login</button>
+    </form>
+
+    <div class="back-dashboard">
+        <a href="index.php" class="btn-back">← Kembali ke Dashboard</a>
+    </div>
+
 </body>
 </html>
