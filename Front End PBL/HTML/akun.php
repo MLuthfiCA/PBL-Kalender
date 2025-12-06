@@ -11,7 +11,7 @@
     <!-- ================= NAVBAR ================= -->
     <nav class="navbar">
       <div class="container">
-        <a href="admin_homepage.html">
+        <a href="admin_homepage.php">
           <img src="../logo login.png" class="logo">
         </a>
         <div class="search-box">
@@ -19,7 +19,7 @@
           <button id="searchBtn">🔍</button>
         </div>
         <ul class="nav-links">
-          <li><a href="admin_homepage.html">Kembali</a></li>
+          <li><a href="admin_homepage.php">Kembali</a></li>
         </ul>
       </div>
     </nav>
