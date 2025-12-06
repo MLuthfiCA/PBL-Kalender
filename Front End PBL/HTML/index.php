@@ -166,19 +166,6 @@ session_start();
                     Isi
                 </p>
                 
-                <h3>Visi Kami</h3>
-                <p>
-                    Isi
-                </p>
-
-                <h3>Misi Kami</h3>
-                <ul class="mission-list">
-                    <li>Menyediakan solusi penjadwalan yang mudah digunakan dan dapat diakses oleh semua pengguna</li>
-                    <li>Meningkatkan efisiensi pengelolaan jadwal akademik di lingkungan pendidikan</li>
-                    <li>Memberikan dukungan teknis yang responsif dan berkelanjutan</li>
-                    <li>Terus berinovasi untuk memenuhi kebutuhan pengguna yang dinamis</li>
-                </ul>
-
                 <p>
                     Kami percaya bahwa teknologi dapat membuat perbedaan signifikan dalam kehidupan akademik. Itulah mengapa kami terus mengembangkan fitur-fitur baru dan meningkatkan pengalaman pengguna berdasarkan feedback dari komunitas kami.
                 </p>
