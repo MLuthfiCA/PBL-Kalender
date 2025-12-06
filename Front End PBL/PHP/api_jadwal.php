@@ -341,6 +341,45 @@ switch ($action) {
         break;
 
 
+    // ===== Subject Count per-user (Option A: column subject_count on user table) =====
+    case 'get_subject_count':
+        // mengambil subject_count dari tabel user untuk mahasiswa yang sedang login
+        $sql = "SELECT subject_count FROM user WHERE mahasiswa_id = ? LIMIT 1";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param("i", $mahasiswa_id);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $row = $res->fetch_assoc();
+        $count = isset($row['subject_count']) ? intval($row['subject_count']) : 0;
+        echo json_encode(["status" => "success", "subject_count" => $count]);
+        $stmt->close();
+        break;
+
+    case 'set_subject_count':
+        $subject_count = isset($data['subject_count']) ? intval($data['subject_count']) : null;
+        if ($subject_count === null || !is_int($subject_count) || $subject_count < 0) {
+            http_response_code(400);
+            echo json_encode(["status" => "error", "message" => "Nilai subject_count tidak valid"]);
+            break;
+        }
+
+        $sql = "UPDATE user SET subject_count = ? WHERE mahasiswa_id = ?";
+        $stmt = $db->prepare($sql);
+        if (!$stmt) {
+            http_response_code(500);
+            echo json_encode(["status" => "error", "message" => "Gagal menyiapkan query: " . $db->error]);
+            break;
+        }
+        $stmt->bind_param("ii", $subject_count, $mahasiswa_id);
+        if ($stmt->execute()) {
+            echo json_encode(["status" => "success", "subject_count" => $subject_count]);
+        } else {
+            http_response_code(500);
+            echo json_encode(["status" => "error", "message" => "Gagal menyimpan subject_count: " . $stmt->error]);
+        }
+        $stmt->close();
+        break;
+
     default:
         http_response_code(400);
         echo json_encode(["status" => "error", "message" => "Aksi tidak valid atau tidak dikenal."]);

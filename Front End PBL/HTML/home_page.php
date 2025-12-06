@@ -67,11 +67,13 @@ if (isset($_POST["logout"])) {
                         <button id="addSubjectBtn" class="add-btn">+</button>
                     </h2>
                     <p>Total: <span id="subjectCount">0</span> Mata Kuliah</p>
+                    <input type="hidden" id="currentUser" value="<?= htmlspecialchars($_SESSION["nama"]) ?>" />
                 </div>
                 <div class="features3">
                     <img src="../GAMBAR_KALENDER.jpeg" alt="kalender" />
                     <h2>Aktivitas</h2>
-                    <p>Jadwal Minggu Ini</p> 
+                    <p>Jadwal Minggu Ini</p>
+                    <p>Total: <span id="activityCount">0</span> Aktivitas</p>
                     </div>
             </div>
             

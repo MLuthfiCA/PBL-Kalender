@@ -20,6 +20,48 @@ const eventText = document.getElementById("eventText");
 const monthDisplay = document.getElementById("monthDisplay");
 const eventDosenInput = document.getElementById("eventDosenInput");
 
+// Current logged-in user (injected via PHP hidden input). Falls back to 'guest'.
+// Functions to load/save subject_count from/to server
+async function loadSubjectCountFromServer() {
+    try {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'get_subject_count' })
+        });
+        const json = await res.json();
+        if (json.status === 'success') {
+            const el = document.getElementById('subjectCount');
+            if (el) el.textContent = String(json.subject_count || 0);
+        } else {
+            console.warn('get_subject_count returned error', json);
+        }
+    } catch (e) {
+        console.warn('Gagal memuat subject_count dari server', e);
+    }
+}
+
+async function saveSubjectCountToServer(count) {
+    try {
+        const res = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'set_subject_count', subject_count: Number(count) })
+        });
+        const json = await res.json();
+        if (json.status === 'success') {
+            const el = document.getElementById('subjectCount');
+            if (el) el.textContent = String(json.subject_count || 0);
+        } else {
+            alert('Gagal menyimpan ke server: ' + (json.message || '')); 
+            console.warn('set_subject_count error', json);
+        }
+    } catch (e) {
+        console.error('Save subject count error', e);
+        alert('Gagal menyimpan ke server.');
+    }
+}
+
 const weekdays = ['Ming', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'];
 
 async function loadEventsFromDB() {
@@ -223,6 +265,16 @@ function renderActivityAndTodayBoxes() {
     if (activityBox.querySelectorAll('.tugas').length === 0) {
          activityBox.innerHTML += `<p style="color:#666; padding-top: 10px;">Tidak ada jadwal/tugas terdekat yang ditemukan.</p>`;
     } 
+
+    // Update activity count visible in the top-right "Aktivitas" box
+    try {
+        const activityCountEl = document.getElementById('activityCount');
+        if (activityCountEl) {
+            activityCountEl.textContent = String(eventsInRange.length);
+        }
+    } catch (e) {
+        console.warn('Gagal memperbarui activity count:', e);
+    }
 
     // render Jadwal Hari Ini
         // render Jadwal Hari Ini (REAL TIME WIB)
@@ -525,8 +577,11 @@ function initButtons() {
             return;
         }
 
-        document.getElementById("subjectCount").textContent = jumlah;
+        // Simpan ke server dan update UI
+        saveSubjectCountToServer(jumlah);
     });
+    // Load subject count dari server saat inisialisasi
+    loadSubjectCountFromServer();
 }
 
 initButtons();
