@@ -5,7 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchBtn = document.getElementById("searchBtn");
 
   // ===================== MUAT DATA DARI LOCALSTORAGE =====================
-  function loadUsers(filter = "") {
+  async function loadUsers(filter = "") {
+    const res = await fetch("api_jadwal.php?action=get_users");
     const users = JSON.parse(localStorage.getItem("users")) || [];
     tableBody.innerHTML = "";
 
@@ -35,69 +36,79 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ===================== TAMBAH AKUN BARU =====================
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
+// ========== TAMBAHAN: CREATE User via API ==========
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-    const nama = document.getElementById("studentName").value.trim();
-    const email = document.getElementById("studentEmail").value.trim();
-    const password = document.getElementById("studentPassword").value.trim();
+  const nama = document.getElementById("studentName").value.trim();
+  const email = document.getElementById("studentEmail").value.trim();
+  const password = document.getElementById("studentPassword").value.trim();
 
-    if (!nama || !email || !password) {
-      alert("Semua kolom wajib diisi!");
-      return;
-    }
-
-    let users = JSON.parse(localStorage.getItem("users")) || [];
-
-    const existing = users.find(u => u.email === email);
-    if (existing) {
-      alert("Email sudah terdaftar!");
-      return;
-    }
-
-    users.push({ nama, email, password, active: true });
-    localStorage.setItem("users", JSON.stringify(users));
-
-    form.reset();
-    loadUsers();
-    alert("Akun berhasil ditambahkan!");
+  const res = await fetch("api_jadwal.php?action=create_user", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ nama, email, password })
   });
 
-  // ===================== FUNGSI EDIT AKUN (TERMASUK PASSWORD) =====================
-  window.editUser = function (index) {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users[index];
+  const result = await res.json();
+  alert(result.message);
 
-    const newName = prompt("Masukkan nama baru:", user.nama);
-    const newEmail = prompt("Masukkan email baru:", user.email);
-    const newPassword = prompt("Masukkan password baru (kosongkan jika tidak ingin diubah):", "");
+  form.reset();
+  loadUsers();
+});
 
-    if (newName) user.nama = newName;
-    if (newEmail) user.email = newEmail;
-    if (newPassword.trim() !== "") user.password = newPassword.trim();
 
-    localStorage.setItem("users", JSON.stringify(users));
-    loadUsers();
-    alert("Data akun berhasil diperbarui!");
-  };
+  // ===================== FUNGSI EDIT AKUN (TERMASUK PASSWORD) via API =====================
+window.editUser = async function (id) {
+  const newName = prompt("Masukkan nama baru:");
+  const newEmail = prompt("Masukkan email baru:");
+  const newPassword = prompt("Masukkan password baru (kosong jika tidak diganti):");
+
+  const res = await fetch("api_jadwal.php?action=update_user", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id,
+      nama: newName,
+      email: newEmail,
+      password: newPassword
+    })
+  });
+
+  const result = await res.json();
+  alert(result.message);
+  loadUsers();
+};
+
 
   // ===================== FUNGSI AKTIF/NONAKTIF =====================
-  window.toggleStatus = function (index) {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    users[index].active = !users[index].active;
-    localStorage.setItem("users", JSON.stringify(users));
-    loadUsers();
-  };
+window.toggleStatus = async function (id) {
+  const res = await fetch("api_jadwal.php?action=toggle_status", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id })
+  });
 
-  // ===================== FUNGSI HAPUS AKUN =====================
-  window.deleteUser = function (index) {
-    if (confirm("Yakin ingin menghapus akun ini?")) {
-      const users = JSON.parse(localStorage.getItem("users")) || [];
-      users.splice(index, 1);
-      localStorage.setItem("users", JSON.stringify(users));
-      loadUsers();
-    }
-  };
+  const result = await res.json();
+  alert(result.message);
+  loadUsers();
+};
+
+
+  // ===================== FUNGSI HAPUS AKUN via API=====================
+window.deleteUser = async function (id) {
+  if (!confirm("Yakin ingin menghapus akun ini?")) return;
+
+  const res = await fetch("api_jadwal.php?action=delete_user", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id })
+  });
+  const result = await res.json();
+  alert(result.message);
+  loadUsers();
+};
+
 
 // ===================== FUNGSI DETAIL (LIHAT JADWAL) =====================
 window.showDetails = function (index) {

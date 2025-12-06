@@ -194,6 +194,152 @@ switch ($action) {
         }
         $stmt->close();
         break;
+        
+        /* ===================== CRUD USER (BARU DITAMBAHKAN) ===================== */
+
+    // ===== READ USERS =====
+    case 'get_users':
+        $sql = "SELECT id, nama, email, active FROM users ORDER BY id DESC";
+        $result = $db->query($sql);
+
+        $users = [];
+        while ($row = $result->fetch_assoc()) {
+            $users[] = $row;
+        }
+
+        echo json_encode($users);
+        break;
+
+
+    // ===== CREATE USER =====
+    case 'create_user':
+        $nama = $data['nama'] ?? '';
+        $email = $data['email'] ?? '';
+        $password = $data['password'] ?? '';
+
+        if (!$nama || !$email || !$password) {
+            echo json_encode(["status" => "error", "message" => "Data tidak lengkap"]);
+            break;
+        }
+
+        // Cek email sudah ada atau belum
+        $check = $db->prepare("SELECT id FROM users WHERE email = ?");
+        $check->bind_param("s", $email);
+        $check->execute();
+        $check->store_result();
+
+        if ($check->num_rows > 0) {
+            echo json_encode(["status" => "error", "message" => "Email sudah terdaftar"]);
+            break;
+        }
+
+        $check->close();
+
+        // Insert user baru
+        $sql = "INSERT INTO users (nama, email, password, active) VALUES (?, ?, ?, 1)";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param("sss", $nama, $email, $password);
+
+        if ($stmt->execute()) {
+            echo json_encode(["status" => "success", "message" => "Akun berhasil ditambahkan"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Gagal menambah akun"]);
+        }
+
+        $stmt->close();
+        break;
+
+
+    // ===== UPDATE USER =====
+    case 'update_user':
+        $id = $data['id'] ?? 0;
+        $nama = $data['nama'] ?? '';
+        $email = $data['email'] ?? '';
+        $password = $data['password'] ?? '';
+
+        if (!$id || !$nama || !$email) {
+            echo json_encode(["status" => "error", "message" => "Data tidak lengkap"]);
+            break;
+        }
+
+        if ($password == "" || $password == null) {
+            // Tidak ganti password
+            $sql = "UPDATE users SET nama = ?, email = ? WHERE id = ?";
+            $stmt = $db->prepare($sql);
+            $stmt->bind_param("ssi", $nama, $email, $id);
+        } else {
+            // Ganti password
+            $sql = "UPDATE users SET nama = ?, email = ?, password = ? WHERE id = ?";
+            $stmt = $db->prepare($sql);
+            $stmt->bind_param("sssi", $nama, $email, $password, $id);
+        }
+
+        if ($stmt->execute()) {
+            echo json_encode(["status" => "success", "message" => "Akun berhasil diperbarui"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Gagal memperbarui akun"]);
+        }
+
+        $stmt->close();
+        break;
+
+
+    // ===== TOGGLE ACTIVE STATUS =====
+    case 'toggle_status':
+        $id = $data['id'] ?? 0;
+
+        if (!$id) {
+            echo json_encode(["status" => "error", "message" => "ID tidak valid"]);
+            break;
+        }
+
+        // Ambil status lama
+        $sql = "SELECT active FROM users WHERE id = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+
+        $newStatus = $result['active'] == 1 ? 0 : 1;
+
+        // Update status baru
+        $sql2 = "UPDATE users SET active = ? WHERE id = ?";
+        $stmt2 = $db->prepare($sql2);
+        $stmt2->bind_param("ii", $newStatus, $id);
+
+        if ($stmt2->execute()) {
+            echo json_encode(["status" => "success", "message" => "Status berhasil diubah"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Gagal mengubah status"]);
+        }
+
+        $stmt->close();
+        $stmt2->close();
+        break;
+
+
+    // ===== DELETE USER =====
+    case 'delete_user':
+        $id = $data['id'] ?? 0;
+
+        if (!$id) {
+            echo json_encode(["status" => "error", "message" => "ID tidak valid"]);
+            break;
+        }
+
+        $sql = "DELETE FROM users WHERE id = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param("i", $id);
+
+        if ($stmt->execute()) {
+            echo json_encode(["status" => "success", "message" => "Akun berhasil dihapus"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Gagal menghapus akun"]);
+        }
+
+        $stmt->close();
+        break;
+
 
     default:
         http_response_code(400);
