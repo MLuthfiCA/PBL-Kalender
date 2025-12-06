@@ -1,40 +1,47 @@
 <?php
 session_start();
-  if (!isset($_SESSION['is_admin'])) {
-      header("Location: admin_login.php");
-      exit();
-  }
-  if (isset($_POST["logout"])) {
-      session_unset();
-      session_destroy();
-      header("location: admin_login.php");
-      exit();
-  } 
+if (!isset($_SESSION["nama"])) {
+    header("Location: admin_login.php");
+    exit();
+}
+
+if (isset($_POST["logout"])) {
+    session_unset();
+    session_destroy();
+    header("location: admin_login.php");
+    exit();
+} 
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Homepage</title>
-    <link rel="stylesheet" href="../CSS/admin_homepage.css" />
-  </head>
+    <title>Sistem Penjadwalan Kuliah</title>
+    <link rel="stylesheet" href="../CSS/home.css" /> 
+</head>
 
-  <body>
+<body>
     <nav class="navbar">
-      <div class="container">
-        <a href="admin_homepage.html"><img src="../logo login.png" class="logo" height="90px" width="90px"></a>
-        <ul class="nav-links">
-          <li><a href="#home">Beranda</a></li>
-          <li><a href="#calendar">Kalender</a></li>
-          <li><a href="#tentang">Tentang Kami</a></li>
-          <li><a href="akun.html">Akun</a></li>
-            <form action="admin_homepage.php" method="POST">
-              <li><button type="submit" name="logout" class="logout-btn">Keluar</button></li>
-            </form>
-
-        </ul>
-        <div class="search-box">
+        <div class="container">
+            <a href="home_page.php">
+                <img src="../logo login.png" class="logo" height="90px" width="90px"/>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#home">Beranda</a></li>
+                <li><a href="#calendar">Kalender</a></li>
+                <li><a href="#tentang">Tentang Kami</a></li>
+                <li><a href="akun.php">Kelola Akun</a></li>
+                <li class="logout-item">
+                    <form action="admin_homepage.php" method="POST">
+                        <button type="submit" name="logout" class="logout-btn">Keluar</button>
+                    </form>
+                </li>
+            </ul>
+            
+            <div class="search-box">
                 <input type="text" id="searchInput" placeholder="Cari Dosen atau Mata Kuliah..." onkeyup="filterBoxes()" />
                 <select id="filterSelect" onchange="filterBoxes()">
                     <option value="">Semua</option>
@@ -43,31 +50,31 @@ session_start();
                 </select>
                 <button id="searchBtn">🔍</button>
             </div>
-            </div>
+            
+        </div>
     </nav>
     
     <section id="home" class="hero"></section>
     
     <section class="main-content">
-        <h2>Selamat datang <?= htmlspecialchars($_SESSION["admin_name"]) ?></h2>
+        <h2>Selamat datang <?= htmlspecialchars($_SESSION["nama"]) ?></h2>
         
         <div class="container">
             <div class="features-box">
-                <div class="features1">
-                    <img src="../GAMBAR_BUKU.jpeg" alt="buku" />
-                    <h2>Mata Kuliah</h2>
-                    <p>Semester Ini</p>
-                </div>
                 <div class="features2">
-                    <img src="../GAMBAR_JAM.jpeg" alt="jam" />
-                    <h2>Tugas Pending</h2>
-                    <p>Tenggat Minggu Ini</p>
+                    <img src="../GAMBAR_BUKU.jpeg" alt="buku" />
+                    <h2>Mata Kuliah
+                        <button id="addSubjectBtn" class="add-btn">+</button>
+                    </h2>
+                    <p>Total: <span id="subjectCount">0</span> Mata Kuliah</p>
+                    <input type="hidden" id="currentUser" value="<?= htmlspecialchars($_SESSION["nama"]) ?>" />
                 </div>
                 <div class="features3">
                     <img src="../GAMBAR_KALENDER.jpeg" alt="kalender" />
-                    <h2>Minggu Ini</h2>
-                    <p>Kelas/Praktikum</p>
-                </div>
+                    <h2>Aktivitas</h2>
+                    <p>Jadwal Minggu Ini</p>
+                    <p>Total: <span id="activityCount">0</span> Aktivitas</p>
+                    </div>
             </div>
             
             <div class="features-box1">
@@ -85,8 +92,8 @@ session_start();
                 </div>
             </div>
         </div> 
-
-        <div id="calendar" class="calendar-box">
+        
+        <div class="calendar-box">
             <h1>Kalender Perkuliahan</h1>
             <div id="container">
                 <div id="header">
@@ -108,7 +115,7 @@ session_start();
                 </div>
 
                 <div id="calendar">
-                    </div>
+                </div>
             </div>
         </div>
 
@@ -158,7 +165,7 @@ session_start();
         <div id="deleteEventModal">
             <h2>Jadwal</h2>
             <p id="eventText"></p>
-            <button id="deleteButton">Hapus</button>
+            <button id="deleteButton" style="display:none;">Hapus</button>
             <button id="closeButton">Tutup</button>
         </div>
 
@@ -167,13 +174,8 @@ session_start();
     
     <section id="tentang" class="about">
         <div class="container">
-            <h2>Tentang Kami</h2>
-            <p class="tebal-jelas">
-                Website ini merupakan platform yang dirancang khusus untuk membantu
-                mahasiswa dalam mengelola dan memantau jadwal perkuliahan pribadi.
-                Melalui website ini, mahasiswa dapat melihat, menambahkan, serta
-                mengatur jadwal kegiatan akademik secara terstruktur dan efisien.
-            </p>
+
+
         </div>
     </section>
 
@@ -181,10 +183,9 @@ session_start();
         <div class="container">
             <p>&copy; 2025 All rights reserved.</p>
             <ul class="social-link">
-                <li><a href="https://www.facebook.com/damarrwn.damarrwn">Facebook</a></li>
-                <li><a href="https://x.com/WidhiDamar99089">Twitter</a></li>
-                <li><a href="https://www.instagram.com/dam_dim_dum_dom/">Instagram</a></li>
-                <li><a href="https://mail.google.com/mail/u/0/#inbox?compose=new">Gmail</a></li>
+                <li><a href="https://www.instagram.com/polibatamofficial/">Instagram</a></li>
+                <li><a href="https://www.youtube.com/c/PolibatamTV/">Youtube</a></li>
+                <li><a href="https://www.polibatam.ac.id/">Website</a></li>
             </ul>
         </div>
     </footer>
