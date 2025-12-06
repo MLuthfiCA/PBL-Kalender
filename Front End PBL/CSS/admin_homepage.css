@@ -9,14 +9,14 @@ body {
     font-family: arial, sans-serif;
     line-height: 1.6;
     background-color: #ffffff;
-    padding-top: 70px; /* Memberi ruang untuk navbar fixed */
+    padding-top: 70px; 
 }
 
 ::placeholder {
     color: rgb(0, 8, 8);
 }
 
-/* === Navbar === */
+/* navbar */
 .navbar {
     background: #1a6099;
     padding: 1rem 0;
@@ -36,19 +36,6 @@ body {
     padding: 0 20px;
 }
 
-.logout-btn {
-    background: none;
-    border: none;
-    color: #ffffff;
-    cursor: pointer;
-    font-size: 18px;
-    transition: color 0.3s ease-in-out;
-}
-
-.logout-btn:hover {
-    color: red;
-}
-
 .navbar .logo {
     transition: transform 0.3s ease;
 }
@@ -61,12 +48,14 @@ body {
     list-style: none;
     display: flex;
     flex-wrap: wrap;
-    margin-left: 130px;
+    margin-left: 20px; 
+    flex-grow: 1; 
+    justify-content: center;
 }
 
 .navbar .nav-links li {
     display: inline-block;
-    margin: 10px 20px;
+    margin: 10px 10px; 
 }
 
 .navbar .nav-links a {
@@ -78,11 +67,75 @@ body {
 
 .navbar .nav-links a:hover {
     transform: scale(1.05);
-    color: #fF6347;
+    color: #ffb84d;
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
-/* === Hero Section === */
+.logout-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 0;
+    display: inline;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    transform: scale(1.05);
+    color: #ffb84d;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border-radius: 25px;
+    padding: 5px 10px;
+    margin-left: 10px; 
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    gap: 5px;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    padding: 6px 10px;
+    border-radius: 25px;
+    width: 140px; 
+    font-size: 14px;
+    color: #333;
+}
+
+.search-box select {
+    padding: 6px 8px;
+    border-radius: 25px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+.search-box button {
+    background-color: #58bae4;
+    border: none;
+    color: white;
+    font-weight: bold;
+    padding: 6px 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.search-box button:hover {
+    background-color: #429cc0;
+}
+
+/* konten utama */
 .hero {
     background: url(../logo\ login.jpg) no-repeat center center/cover;
     height: 400px;
@@ -104,8 +157,6 @@ body {
     margin-bottom: 50px;
 }
 
-
-/* === 3 Kotak Features === */
 .features-box {
     display: flex;
     justify-content: center;
@@ -115,18 +166,35 @@ body {
     margin-bottom: 60px;
 }
 
-.features-box .features1, 
+.add-btn {
+    margin-left: 8px;
+    padding: 4px 10px;
+    font-size: 1rem;
+    border: none;
+    background-color: #4a90e2;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.add-btn:hover {
+    background-color: #357ABD;
+}
+/* 2 tabel (a dan b) */ 
 .features-box .features2, 
 .features-box .features3 {
     background-color: #e9e9e9;
     border: 2px solid #ddd;
     border-radius: 16px;
     text-align: center;
-    width: 400px;
-    padding: 40px 20px;
+    width: 515px;
+    padding: 40px 20px; /*ukuran kotak */
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     cursor: pointer;
+    margin-left: 90px;
+    margin-right: 90px;
 }
 
 .features-box img {
@@ -152,8 +220,7 @@ body {
     color: black;
 }
 
-
-/* === Aktivitas dan Jadwal Hari Ini (2 kotak) === */
+/* tabel aktivitas dan jadwal hari ini (tabel 1 dan 2) */
 .features-box1 {
     display: flex;
     justify-content: center;
@@ -176,7 +243,7 @@ body {
     border: 1px solid #eee;
 }
 
-/* Kustom Scrollbar (Perbaikan: Menggunakan standar webkit) */
+/* skroll bar */
 .skroll::-webkit-scrollbar {
     width: 8px;
 }
@@ -195,7 +262,6 @@ body {
     box-shadow: 0 10px 20px rgba(0,0,0,0.15);
 }
 
-/* Judul dan subjudul kotak */
 .kotak-aktivitas h3,
 .kotak-jadwal h3 {
     font-size: 1.3rem;
@@ -214,13 +280,15 @@ body {
 .jadwal {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; 
     background-color: #ffffff;
     border-radius: 10px;
     padding: 12px 16px;
     margin-bottom: 10px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    box-shadow: 0 1px 4px rgba(255, 10, 10, 0.05);
     cursor: pointer;
+    position: relative; 
+    overflow: hidden;
 }
 
 .tugas:hover,
@@ -230,37 +298,46 @@ body {
 
 .tugas h4,
 .jadwal h4 {
-    font-size: 1rem;
+    /* modifikasi huruf */
+    font-size: 1.1rem; 
     color: #222;
 }
 
 .tugas p,
 .jadwal p {
-    font-size: 0.9rem;
+    /*modif huruf */
+    font-size: 0.95rem; 
     color: #666;
 }
 
-/* Status label */
+/* informasi tabel */
 .status {
-    padding: 6px 10px;
-    border-radius: 8px;
+    padding: 6px 12px; 
+    border-radius: 6px; 
+    
     font-size: 0.8rem;
     font-weight: 600;
     color: white;
     text-align: center;
-    min-width: 80px;
     white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.tugas .event-details {
+    flex-grow: 1; 
+    margin-right: 100px; 
+    display: flex; 
+    gap: 10px;
 }
 
 
-/* === Kalender === */
+/* kalender */
 .calendar-box {
     background-color: #d7d7d7;
     border-radius: 15px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     padding: 25px;
-    width: 90%;
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 60px auto 90px;
     display: flex;
     flex-direction: column;
@@ -269,7 +346,7 @@ body {
 
 .calendar-box h1 {
     text-align: center;
-    color: #247BA0;
+    color: #333;
     margin-bottom: 15px;
 }
 
@@ -279,7 +356,7 @@ body {
 
 #header {
     padding: 10px;
-    color: #247BA0;
+    color: #333;
     font-size: 22px;
     display: flex;
     justify-content: space-between;
@@ -288,7 +365,7 @@ body {
 }
 
 button {
-    background-color: #92a1d1;
+    background-color: #1f4bdd;
     color: white;
     border: none;
     padding: 8px 15px;
@@ -299,14 +376,14 @@ button {
 
 button:hover {
     transform: scale(1.05);
-    background-color: #7b8fc5;
+    background-color: #051d5f;
 }
 
 #weekdays {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
     text-align: center;
-    color: #247BA0;
+    color: #333;
     font-weight: bold;
     font-size: 14px;
     margin-bottom: 8px;
@@ -367,7 +444,7 @@ button:hover {
     margin-top: 1px;
 }
 
-/* === Modal (Tambah/Hapus Jadwal) === */
+/* modals */
 #newEventModal,
 #deleteEventModal {
     display: none;
@@ -393,7 +470,8 @@ button:hover {
 #eventTitleInput,
 #eventTime,
 #eventRoom,
-#eventDosenInput {
+#eventDosenInput,
+#eventNotes {
     padding: 10px;
     width: 100%;
     box-sizing: border-box;
@@ -402,6 +480,11 @@ button:hover {
     border: 1px solid #ccc;
     outline: none;
     font-size: 14px;
+}
+
+#eventNotes {
+    resize: vertical;
+    min-height: 80px;
 }
 
 #eventTitleInput.error {
@@ -434,11 +517,11 @@ button:hover {
     background-color: rgba(0,0,0,0.6);
 }
 
-/* === About Section === */
+/* footer dan about */
 .about {
-    padding: 30px 0px;
+    padding: 90px 0px;
     box-shadow: 0 4px 15px rgba(88, 186, 228, 0.25);
-    background: #ff8400;
+    background: url(../logo\ login.jpg) no-repeat center center/cover;
 }
 
 .about h2 {
@@ -469,104 +552,55 @@ button:hover {
     font-size: 1.2em;
 }
 
-/* === Footer === */
-footer {
-    background: #333;
+.footer {
+    background: #1a6099;
     color: #ffffff;
     text-align: center;
     padding: 20px 0;
 }
 
-footer .social-link {
+.footer .social-link {
     list-style: none;
     display: flex;
     justify-content: center;
     margin: 15px 0;
 }
 
-footer .social-link li {
+.footer .social-link li {
     margin: 0 10px;
 }
 
-footer .social-link a {
+.footer .social-link a {
     color: #ffffff;
     font-size: 1.2rem;
     text-decoration: none;
 }
 
-footer .social-link a:hover {
-    color: #fF6347;
+.footer .social-link a:hover {
+    color: #ffb84d;
 }
 
-/* === Search Box di Navbar === */
-.search-box {
-    display: flex;
-    align-items: center;
-    background-color: #ffffff;
-    border-radius: 25px;
-    padding: 5px 10px;
-    margin-left: 20px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-    gap: 5px;
-}
+/* responsif */
 
-.search-box input {
-    border: none;
-    outline: none;
-    padding: 6px 10px;
-    border-radius: 25px;
-    width: 160px;
-    font-size: 14px;
-    color: #333;
-}
-
-.search-box select {
-    padding: 6px 8px;
-    border-radius: 25px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    outline: none;
-    cursor: pointer;
-    background-color: #f9f9f9;
-}
-
-.search-box button {
-    background-color: #58bae4;
-    border: none;
-    color: white;
-    font-weight: bold;
-    padding: 6px 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.search-box button:hover {
-    background-color: #429cc0;
-}
-
-/* Hasil Pencarian Highlight */
-.day.highlight {
-    border: 2px solid #58bae4;
-    background-color: #e1f7ff;
-}
-
-.hidden-item {
-    display: none !important;
-}
-
-/* === Responsif === */
 @media (max-width: 1200px) {
     .navbar .container {
-        flex-direction: column;
-        gap: 10px;
+        flex-direction: row; 
+        flex-wrap: wrap; 
+        justify-content: space-around; 
     }
     .navbar .nav-links {
         margin-left: 0;
+        margin-top: 10px; 
+        justify-content: center;
+        flex-basis: 100%; 
     }
     .search-box {
-        margin-left: 0;
+        margin-left: 10px;
     }
+    .navbar .logo {
+        margin-right: auto;
+    }
+    
     .features-box {
         gap: 30px;
     }
@@ -590,6 +624,29 @@ footer .social-link a:hover {
         margin: 0 auto;
     }
 }
+
+@media (max-width: 900px) {
+    .navbar .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .navbar .nav-links {
+        flex-basis: auto;
+        justify-content: flex-start;
+        margin-top: 10px;
+        order: 2; 
+    }
+    .search-box {
+        order: 1; 
+        margin-left: 0;
+        margin-top: 10px;
+    }
+    .navbar .logo {
+        margin-right: 0;
+        order: 0;
+    }
+}
+
 
 @media (max-width: 600px) {
     #weekdays div {
