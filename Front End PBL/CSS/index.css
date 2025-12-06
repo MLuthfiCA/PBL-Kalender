@@ -192,8 +192,20 @@ body {
 }
 
 .option-card .icon {
-    font-size: 50px;
-    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 15px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.12);
+}
+.option-card .icon svg {
+    width: 36px;
+    height: 36px;
+    fill: #ffffff;
+    opacity: 0.95;
 }
 
 .option-card h3 {
@@ -300,8 +312,20 @@ body {
 }
 
 .feature-icon {
-    font-size: 3rem;
-    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 15px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #f6fbff, #ffffff);
+    box-shadow: 0 8px 20px rgba(26, 96, 153, 0.06);
+}
+.feature-icon svg {
+    width: 36px;
+    height: 36px;
+    fill: #1a6099;
 }
 
 .feature-card h3 {
