@@ -33,7 +33,6 @@ if (isset($_POST["logout"])) {
                 <li><a href="#home">Beranda</a></li>
                 <li><a href="catatan_page.php">Catatan</a></li>
                 <li><a href="#calendar">Kalender</a></li>
-                <li><a href="#tentang">Tentang Kami</a></li>
                 <li class="logout-item">
                     <form action="home_page.php" method="POST">
                         <button type="submit" name="logout" class="logout-btn">Keluar</button>

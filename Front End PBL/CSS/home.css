@@ -188,8 +188,8 @@ body {
     border: 2px solid #ddd;
     border-radius: 16px;
     text-align: center;
-    width: 515px;
-    padding: 40px 20px; /*ukuran kotak */
+    width: 450px; /* lebar kotak */
+    padding: 20px 20px; /*panjang kotak */
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     cursor: pointer;
