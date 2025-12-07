@@ -4,39 +4,44 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchInput = document.getElementById("searchInput");
   const searchBtn = document.getElementById("searchBtn");
 
-  // ===================== MUAT DATA DARI LOCALSTORAGE =====================
+  // muat data dari localstorage
   async function loadUsers(filter = "") {
-    const res = await fetch("api_jadwal.php?action=get_users");
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    // Fetch users from server API and render
+    const res = await fetch("akun.php?action=get_users");
+    let users = [];
+    try {
+      users = await res.json();
+    } catch (e) {
+      users = JSON.parse(localStorage.getItem("users")) || [];
+    }
+
+    // Persist a copy for client-side lookup (used by detail modal)
+    localStorage.setItem("users", JSON.stringify(users));
+
     tableBody.innerHTML = "";
 
     const filteredUsers = users.filter(user =>
-      user.nama.toLowerCase().includes(filter.toLowerCase()) ||
-      user.email.toLowerCase().includes(filter.toLowerCase())
+      (user.nama || "").toLowerCase().includes(filter.toLowerCase()) ||
+      (user.email || "").toLowerCase().includes(filter.toLowerCase())
     );
 
     filteredUsers.forEach((user, index) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td>${index + 1}</td>
+        <td>${user.id}</td>
         <td>${user.nama}</td>
+        <td>${user.password || ''}</td>
         <td>${user.email}</td>
-        <td>${user.active ? "Aktif" : "Nonaktif"}</td>
-<td>
-  <button class="edit-btn" onclick="editUser(${index})">Edit</button>
-  <button class="toggle-btn" onclick="toggleStatus(${index})">
-    ${user.active ? "Nonaktifkan" : "Aktifkan"}
-  </button>
-  <button class="delete-btn" onclick="deleteUser(${index})">Hapus</button>
-  <button class="detail-btn" onclick="showDetails(${index})">Detail</button>
-</td>
+        <td>
+          <button class="edit-btn" onclick="openEditModal(${user.id})">Edit</button>
+          <button class="hapus-btn" onclick="deleteUser(${user.id})">Hapus</button>
+        </td>
       `;
       tableBody.appendChild(row);
     });
   }
 
-  // ===================== TAMBAH AKUN BARU =====================
-// ========== TAMBAHAN: CREATE User via API ==========
+// tambah akun baru via API
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -44,7 +49,7 @@ form.addEventListener("submit", async (e) => {
   const email = document.getElementById("studentEmail").value.trim();
   const password = document.getElementById("studentPassword").value.trim();
 
-  const res = await fetch("api_jadwal.php?action=create_user", {
+  const res = await fetch("akun.php?action=create_user", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ nama, email, password })
@@ -58,96 +63,90 @@ form.addEventListener("submit", async (e) => {
 });
 
 
-  // ===================== FUNGSI EDIT AKUN (TERMASUK PASSWORD) via API =====================
-window.editUser = async function (id) {
-  const newName = prompt("Masukkan nama baru:");
-  const newEmail = prompt("Masukkan email baru:");
-  const newPassword = prompt("Masukkan password baru (kosong jika tidak diganti):");
-
-  const res = await fetch("api_jadwal.php?action=update_user", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      id,
-      nama: newName,
-      email: newEmail,
-      password: newPassword
-    })
-  });
-
-  const result = await res.json();
-  alert(result.message);
-  loadUsers();
-};
-
-
-  // ===================== FUNGSI AKTIF/NONAKTIF =====================
-window.toggleStatus = async function (id) {
-  const res = await fetch("api_jadwal.php?action=toggle_status", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id })
-  });
-
-  const result = await res.json();
-  alert(result.message);
-  loadUsers();
-};
-
-
-  // ===================== FUNGSI HAPUS AKUN via API=====================
-window.deleteUser = async function (id) {
-  if (!confirm("Yakin ingin menghapus akun ini?")) return;
-
-  const res = await fetch("api_jadwal.php?action=delete_user", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ id })
-  });
-  const result = await res.json();
-  alert(result.message);
-  loadUsers();
-};
-
-
-// ===================== FUNGSI DETAIL (LIHAT JADWAL) =====================
-window.showDetails = function (index) {
+// edit pake popup modal
+window.openEditModal = function (id) {
   const users = JSON.parse(localStorage.getItem("users")) || [];
-  const user = users[index];
-  
-  // Ambil semua jadwal yang dibuat mahasiswa ini (disimpan di localStorage)
-  const allEvents = JSON.parse(localStorage.getItem("events")) || [];
-  const userEvents = allEvents.filter(e => e.email === user.email);
+  const user = users.find(u => u.id == id) || {};
 
-  // Buat tampilan modal
-  const modal = document.createElement("div");
-  modal.classList.add("modal-overlay");
+  // buat modal
+  const modal = document.createElement('div');
+  modal.classList.add('modal-overlay');
   modal.innerHTML = `
-    <div class="modal-box">
-      <h2>📅 Jadwal ${user.nama}</h2>
-      <div class="calendar-mini">
-        ${userEvents.length === 0 ? "<p>Tidak ada jadwal yang ditambahkan.</p>" : ""}
-      </div>
-      <div class="event-list">
-        ${userEvents.map(ev => `
-          <div class="event-item">
-            <strong>${ev.title}</strong><br>
-            📆 ${ev.date || "-"}<br>
-            ⏰ ${ev.time || "-"}<br>
-            🏫 ${ev.room || "-"}<br>
-            👨‍🏫 ${ev.dosen || "-"}
-          </div>
-        `).join("")}
-      </div>
-      <button class="close-modal">Tutup</button>
+    <div class="modal-box" id="editUserModal">
+      <button class="modal-close" aria-label="Tutup">&times;</button>
+      <h2 class="modal-title">Edit Akun</h2>
+      <form id="editUserForm" class="modal-form">
+        <input type="hidden" id="editUserId" value="${user.id || ''}" />
+        <label for="editUserName">Nama</label>
+        <input type="text" id="editUserName" value="${user.nama || ''}" required autofocus />
+
+        <label for="editUserEmail">Email</label>
+        <input type="email" id="editUserEmail" value="${user.email || ''}" required />
+
+        <label for="editUserPassword">Password <span class="muted">(kosong = tidak diubah)</span></label>
+        <input type="password" id="editUserPassword" placeholder="Biarkan kosong jika tidak ganti" />
+
+        <div class="modal-actions">
+          <button type="submit" class="btn-primary">Simpan</button>
+          <button type="button" class="btn-secondary" id="cancelEdit">Batal</button>
+        </div>
+      </form>
     </div>
   `;
 
   document.body.appendChild(modal);
 
-  document.querySelector(".close-modal").addEventListener("click", () => {
+  // helper close
+  const cleanup = () => {
+    document.removeEventListener('keydown', escHandler);
     modal.remove();
+  };
+
+  // close handlers
+  modal.querySelector('.modal-close').addEventListener('click', cleanup);
+  modal.querySelector('#cancelEdit').addEventListener('click', cleanup);
+
+  // click outside to close
+  modal.addEventListener('click', (ev) => {
+    if (ev.target === modal) cleanup();
   });
+
+  // escape key
+  const escHandler = (ev) => { if (ev.key === 'Escape') cleanup(); };
+  document.addEventListener('keydown', escHandler);
+
+  // submit edit
+  modal.querySelector('#editUserForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('editUserId').value;
+    const nama = document.getElementById('editUserName').value.trim();
+    const email = document.getElementById('editUserEmail').value.trim();
+    const password = document.getElementById('editUserPassword').value;
+
+    const res = await fetch('akun.php?action=update_user', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, nama, email, password })
+    });
+    const result = await res.json();
+    alert(result.message);
+    cleanup();
+    loadUsers();
+  });
+};
+
+
+  // fungsi hapus user via API
+window.deleteUser = async function (id) {
+  if (!confirm("Yakin ingin menghapus akun ini?")) return;
+  const res = await fetch("akun.php?action=delete_user", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id })
+  });
+  const result = await res.json();
+  alert(result.message);
+  loadUsers();
 };
 
 
@@ -163,6 +162,5 @@ window.showDetails = function (index) {
     }
   });
 
-  // ===================== INISIALISASI AWAL =====================
   loadUsers();
 });

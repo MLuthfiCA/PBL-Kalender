@@ -71,7 +71,7 @@ body {
     transition: color 0.3s ease-in-out;
 }
 
-/* ====================== HALAMAN ADMIN ====================== */
+/* halaman admin */
 .admin-panel {
   background-color: #f9fafc;
   padding: 60px 20px;
@@ -197,7 +197,34 @@ body {
   opacity: 0.9;
 }
 
-/* === 🔍 Search Box di Navbar === */
+/* make edit/hapus styles similar to catatan.css */
+.edit-btn {
+  width: auto;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  font-weight: normal;
+  margin: 0 5px;
+  border-radius: 6px;
+  background-color: #ff8400;
+  color: white;
+  border: none;
+}
+.edit-btn:hover { background-color: #cc6a00; }
+
+.hapus-btn {
+  width: auto;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+  font-weight: normal;
+  margin: 0 5px;
+  border-radius: 6px;
+  background-color: #d9534f;
+  color: white;
+  border: none;
+}
+.hapus-btn:hover { background-color: #b52b27; }
+
+/* search box di navbar */
 .search-box {
   display: flex;
   align-items: center;
@@ -238,7 +265,7 @@ body {
   background-color: #429cc0;
 }
 
-/* Hasil Pencarian Highlight */
+/* hasil search highlight */
 .day.highlight {
   border: 2px solid #58bae4;
   background-color: #e1f7ff;
@@ -256,7 +283,7 @@ body {
   }
 }
 
-/* ========== MODAL DETAIL ========== */
+/* modal detail */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -284,6 +311,71 @@ body {
   color: #1a6099;
   margin-bottom: 15px;
 }
+
+/* Modal form styles */
+.modal-title {
+  margin: 0 0 12px 0;
+  font-size: 1.4rem;
+}
+.modal-form label {
+  display: block;
+  text-align: left;
+  margin: 10px 0 6px 0;
+  color: #333;
+  font-weight: 600;
+}
+.modal-form input[type="text"],
+.modal-form input[type="email"],
+.modal-form input[type="password"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+}
+.modal-form .muted {
+  font-weight: 400;
+  color: #777;
+  font-size: 0.9rem;
+}
+.modal-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.btn-primary {
+  background-color: #1a6099;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn-primary:hover { background-color: #15517b; }
+.btn-secondary {
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.btn-secondary:hover { background-color: #e0e0e0; }
+
+/* modal close (X) */
+.modal-close {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #666;
+  cursor: pointer;
+}
+.modal-close:hover { color: #333; }
 
 .event-list {
   max-height: 300px;
