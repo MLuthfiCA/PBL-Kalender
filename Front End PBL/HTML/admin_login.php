@@ -4,38 +4,32 @@
 
     $login_message = '';
 
-    // Notifikasi register sukses
-    if (isset($_SESSION['register_success'])) {
-        $login_message = '<p style="color:green; text-align:center;">' . $_SESSION['register_success'] . '</p>';
-        unset($_SESSION['register_success']); 
-    }
     
-    // Notifikasi error login
+    // motif error login
     if (isset($_SESSION['login_error'])) {
         $login_message = '<p style="color:red; text-align:center;">' . $_SESSION['login_error'] . '</p>';
         unset($_SESSION['login_error']); 
     }
 
-    // Jika SUDAH LOGIN, jangan kembali ke login page
+    // kalau dah login ngak perlu ke halaman login
     if (isset($_SESSION['is_login']) && $_SESSION['is_login'] === true) {
         header('location: akun.php');
         exit();
     }
 
-    // Jika tombol login ditekan
+    // tombol login
     if(isset($_POST["login"])) {
 
         $nama = $db->real_escape_string($_POST['nama']);
         $password = $db->real_escape_string($_POST['password']);
 
-        // Cari admin berdasarkan nama dan password
         $sql = "SELECT admin_id, nama FROM admins WHERE nama='$nama' AND password='$password'";
         $result = $db->query($sql);
 
         if($result->num_rows > 0) {
             $data = $result->fetch_assoc();
             
-            // Set session login
+            // sesi login
             $_SESSION["admin_id"] = $data["admin_id"];
             $_SESSION["nama"] = $data["nama"];
             $_SESSION["is_login"] = true;
@@ -61,7 +55,6 @@
 
 <body>
 
-    <!-- ❗ FORM HARUS KEMBALI KE admin_login.php -->
     <form action="admin_login.php" method="post">
         <img src="../mentahan_profil-removebg-preview.png" alt="logo" width="100">
         <h3 style="text-align: center; color:#000000">MASUK</h3>

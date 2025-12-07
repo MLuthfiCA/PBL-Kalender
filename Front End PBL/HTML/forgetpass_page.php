@@ -43,8 +43,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change_password'])) {
                 $stmt_update->bind_param("ss", $new_password, $nama); 
                 
                 if ($stmt_update->execute()) {
-                    // norif password berhasil diubah
-                    $_SESSION['pass_change_message'] = ['type' => 'success', 'text' => "Password untuk akun **$nama** telah diubah!"];
+                    // notif password berhasil diubah
+                    $_SESSION['pass_change_message'] = ['type' => 'success', 'text' => "Password untuk akun '$nama' telah diubah!"];
                     header("Location: login_page.php"); // pindah ke login
                     exit();
                 } else {

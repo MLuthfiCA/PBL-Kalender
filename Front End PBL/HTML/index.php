@@ -12,7 +12,7 @@ session_start();
 </head>
 
 <body>
-    <!-- NAVBAR -->
+    <!-- navbar -->
     <nav class="navbar">
         <div class="container">
             <a href="index.php">
@@ -31,7 +31,7 @@ session_start();
         </div>
     </nav>
 
-    <!-- MODAL LOGIN -->
+    <!-- modal login -->
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeLoginModal()">&times;</span>
@@ -51,7 +51,7 @@ session_start();
         </div>
     </div>
 
-    <!-- HERO SECTION -->
+    <!-- hero section -->
     <section id="home" class="hero">
         <div class="hero-content">
             <h1>Selamat Datang di POLIPLAN</h1>
@@ -60,7 +60,7 @@ session_start();
         </div>
     </section>
 
-    <!-- FEATURES SECTION -->
+    <!-- feature section -->
     <section id="features" class="features-section">
         <div class="container">
             <h2>Fitur Utama</h2>
@@ -94,7 +94,7 @@ session_start();
         </div>
     </section>
 
-    <!-- LOOPING BOXES -->
+    <!-- looping box -->
     <section id="team" class="team-section">
         <div class="container">
             <h2>Tim Pengembang</h2>
@@ -157,7 +157,7 @@ session_start();
         </div>
     </section>
 
-    <!-- ABOUT SECTION -->
+    <!-- about section -->
     <section id="tentang" class="about-section">
         <div class="container">
             <h2>Tentang Website Kami</h2>
@@ -173,7 +173,7 @@ session_start();
         </div>
     </section>
 
-    <!-- FOOTER -->
+    <!-- footer -->
     <footer class="footer">
         <div class="container">
             <p>&copy; 2025 Sistem Penjadwalan Kuliah. All rights reserved.</p>

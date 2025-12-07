@@ -20,8 +20,7 @@ const eventText = document.getElementById("eventText");
 const monthDisplay = document.getElementById("monthDisplay");
 const eventDosenInput = document.getElementById("eventDosenInput");
 
-// Current logged-in user (injected via PHP hidden input). Falls back to 'guest'.
-// Functions to load/save subject_count from/to server
+
 async function loadSubjectCountFromServer() {
     try {
         const res = await fetch(API_URL, {

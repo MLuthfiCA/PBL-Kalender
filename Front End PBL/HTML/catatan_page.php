@@ -1,9 +1,7 @@
 <?php
 session_start();
-// Pastikan path ke file database.php sudah benar
 include '../PHP/database.php'; 
 
-// Periksa sesi pengguna
 if (!isset($_SESSION["mahasiswa_id"])) {
     header("Location: login.php");
     exit();
@@ -11,11 +9,11 @@ if (!isset($_SESSION["mahasiswa_id"])) {
 
 $mahasiswa_id = $_SESSION["mahasiswa_id"];
 
-// --- 1. LOGIKA HAPUS CATATAN ---
+// hapus catatan
 if (isset($_POST['hapus_id'])) {
     $id_hapus = mysqli_real_escape_string($db, $_POST['hapus_id']);
     
-    // Pastikan catatan tersebut milik mahasiswa yang sedang login
+    // mastiin catatan punya user yang login
     $sql_hapus = "DELETE FROM catatan_pribadi 
                   WHERE id = '$id_hapus' AND mahasiswa_id = '$mahasiswa_id'";
     
@@ -25,13 +23,13 @@ if (isset($_POST['hapus_id'])) {
     exit();
 }
 
-// --- 2. LOGIKA SIMPAN (BARU) ATAU PERBARUI (EDIT) ---
+// logika simpan atau edit catatan
 if (isset($_POST['simpan_catatan']) || isset($_POST['edit_catatan'])) {
     $isi = mysqli_real_escape_string($db, $_POST['catatan']);
     $tanggal = date("Y-m-d"); 
     
     if (isset($_POST['catatan_id']) && !empty($_POST['catatan_id'])) {
-        // LOGIKA EDIT (UPDATE)
+        // logika edit
         $catatan_id = mysqli_real_escape_string($db, $_POST['catatan_id']);
         
         $sql_update = "UPDATE catatan_pribadi 
@@ -41,7 +39,7 @@ if (isset($_POST['simpan_catatan']) || isset($_POST['edit_catatan'])) {
         mysqli_query($db, $sql_update);
         
     } elseif (isset($_POST['simpan_catatan']) && !empty($isi)) {
-        // LOGIKA SIMPAN BARU (INSERT)
+        // logika simpan yang baru
         $sql_insert = "INSERT INTO catatan_pribadi (mahasiswa_id, tanggal, isi) 
                        VALUES ('$mahasiswa_id', '$tanggal', '$isi')";
         
@@ -53,7 +51,6 @@ if (isset($_POST['simpan_catatan']) || isset($_POST['edit_catatan'])) {
 }
 
 
-// AMBIL CATATAN LAMA UNTUK MAHASISWA INI
 $sql = "SELECT id, tanggal, isi 
         FROM catatan_pribadi 
         WHERE mahasiswa_id = '$mahasiswa_id'
@@ -109,8 +106,6 @@ $result = mysqli_query($db, $sql);
                     if ($result && mysqli_num_rows($result) > 0) {
                         $no = 1;
                         while ($row = mysqli_fetch_assoc($result)) {
-                            // Meng-encode isi catatan menjadi string JSON, lalu menggunakan htmlspecialchars
-                            // agar aman dilewatkan dalam atribut HTML (petik ganda)
                             $isi_catatan_js = htmlspecialchars(json_encode($row['isi']), ENT_QUOTES, 'UTF-8');
                             
                             echo "
