@@ -5,9 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchBtn = document.getElementById("searchBtn");
 
   // ===================== MUAT DATA DARI LOCALSTORAGE =====================
-  async function loadUsers(filter = "") {
+let usersData = []; 
+
+async function loadUsers(filter = "") {
+  try {
     const res = await fetch("api_jadwal.php?action=get_users");
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const users = await res.json();
+    usersData = users; 
     tableBody.innerHTML = "";
 
     const filteredUsers = users.filter(user =>
@@ -22,21 +26,24 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${user.nama}</td>
         <td>${user.email}</td>
         <td>${user.active ? "Aktif" : "Nonaktif"}</td>
-<td>
-  <button class="edit-btn" onclick="editUser(${index})">Edit</button>
-  <button class="toggle-btn" onclick="toggleStatus(${index})">
-    ${user.active ? "Nonaktifkan" : "Aktifkan"}
-  </button>
-  <button class="delete-btn" onclick="deleteUser(${index})">Hapus</button>
-  <button class="detail-btn" onclick="showDetails(${index})">Detail</button>
-</td>
+        <td>
+          <button class="edit-btn" onclick="editUser(${user.id})">Edit</button>
+          <button class="toggle-btn" onclick="toggleStatus(${user.id})">
+            ${user.active ? "Nonaktifkan" : "Aktifkan"}
+          </button>
+          <button class="delete-btn" onclick="deleteUser(${user.id})">Hapus</button>
+          <button class="detail-btn" onclick="showDetails(${user.id})">Detail</button>
+        </td>
       `;
       tableBody.appendChild(row);
     });
+  } catch (err) {
+    console.error("Gagal load users:", err);
   }
+}
+
 
   // ===================== TAMBAH AKUN BARU =====================
-// ========== TAMBAHAN: CREATE User via API ==========
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -64,6 +71,8 @@ window.editUser = async function (id) {
   const newEmail = prompt("Masukkan email baru:");
   const newPassword = prompt("Masukkan password baru (kosong jika tidak diganti):");
 
+  if (!newName || !newEmail) return alert("Nama dan email tidak boleh kosong");
+
   const res = await fetch("api_jadwal.php?action=update_user", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -77,8 +86,9 @@ window.editUser = async function (id) {
 
   const result = await res.json();
   alert(result.message);
-  loadUsers();
+  loadUsers(); // refresh tabel
 };
+
 
 
   // ===================== FUNGSI AKTIF/NONAKTIF =====================
@@ -91,8 +101,9 @@ window.toggleStatus = async function (id) {
 
   const result = await res.json();
   alert(result.message);
-  loadUsers();
+  loadUsers(); // refresh tabel
 };
+
 
 
   // ===================== FUNGSI HAPUS AKUN via API=====================
@@ -104,64 +115,65 @@ window.deleteUser = async function (id) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ id })
   });
+
   const result = await res.json();
   alert(result.message);
-  loadUsers();
+  loadUsers(); // refresh tabel
 };
+
 
 
 // ===================== FUNGSI DETAIL (LIHAT JADWAL) =====================
-window.showDetails = function (index) {
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  const user = users[index];
-  
-  // Ambil semua jadwal yang dibuat mahasiswa ini (disimpan di localStorage)
-  const allEvents = JSON.parse(localStorage.getItem("events")) || [];
-  const userEvents = allEvents.filter(e => e.email === user.email);
+window.showDetails = async function (id) {
+  const user = usersData.find(u => u.id === id);
+  if (!user) return alert("Data mahasiswa tidak ditemukan");
 
-  // Buat tampilan modal
-  const modal = document.createElement("div");
-  modal.classList.add("modal-overlay");
-  modal.innerHTML = `
-    <div class="modal-box">
-      <h2>📅 Jadwal ${user.nama}</h2>
-      <div class="calendar-mini">
-        ${userEvents.length === 0 ? "<p>Tidak ada jadwal yang ditambahkan.</p>" : ""}
+  try {
+    const res = await fetch("api_jadwal.php?action=get_events_all"); // endpoint admin
+    const allEvents = await res.json();
+    const userEvents = allEvents.filter(e => e.mahasiswa_id === id);
+
+    const modal = document.createElement("div");
+    modal.classList.add("modal-overlay");
+    modal.innerHTML = `
+      <div class="modal-box">
+        <h2>📅 Jadwal ${user.nama}</h2>
+        <div class="event-list">
+          ${userEvents.length === 0 ? "<p>Tidak ada jadwal.</p>" : ""}
+          ${userEvents.map(ev => `
+            <div class="event-item">
+              <strong>${ev.title}</strong><br>
+              📆 ${ev.date || "-"}<br>
+              ⏰ ${ev.time || "-"}<br>
+              🏫 ${ev.room || "-"}<br>
+              👨‍🏫 ${ev.dosen || "-"}
+            </div>
+          `).join("")}
+        </div>
+        <button class="close-modal">Tutup</button>
       </div>
-      <div class="event-list">
-        ${userEvents.map(ev => `
-          <div class="event-item">
-            <strong>${ev.title}</strong><br>
-            📆 ${ev.date || "-"}<br>
-            ⏰ ${ev.time || "-"}<br>
-            🏫 ${ev.room || "-"}<br>
-            👨‍🏫 ${ev.dosen || "-"}
-          </div>
-        `).join("")}
-      </div>
-      <button class="close-modal">Tutup</button>
-    </div>
-  `;
+    `;
+    document.body.appendChild(modal);
 
-  document.body.appendChild(modal);
+    modal.querySelector(".close-modal").addEventListener("click", () => modal.remove());
 
-  document.querySelector(".close-modal").addEventListener("click", () => {
-    modal.remove();
-  });
+  } catch (err) {
+    console.error("Gagal load jadwal:", err);
+    alert("Gagal load jadwal mahasiswa.");
+  }
 };
 
 
-  // ===================== FUNGSI PENCARIAN =====================
-  searchBtn.addEventListener("click", () => {
-    const filter = searchInput.value.trim();
-    loadUsers(filter);
-  });
 
-  searchInput.addEventListener("keyup", (e) => {
-    if (e.key === "Enter") {
-      loadUsers(searchInput.value.trim());
-    }
-  });
+  // ===================== FUNGSI PENCARIAN =====================
+searchBtn.addEventListener("click", () => {
+  const filter = searchInput.value.trim();
+  loadUsers(filter);
+});
+
+searchInput.addEventListener("keyup", (e) => {
+  if (e.key === "Enter") loadUsers(searchInput.value.trim());
+});
 
   // ===================== INISIALISASI AWAL =====================
   loadUsers();

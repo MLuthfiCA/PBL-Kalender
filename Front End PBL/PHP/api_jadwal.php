@@ -263,12 +263,10 @@ switch ($action) {
         }
 
         if ($password == "" || $password == null) {
-            // Tidak ganti password
             $sql = "UPDATE users SET nama = ?, email = ? WHERE id = ?";
             $stmt = $db->prepare($sql);
             $stmt->bind_param("ssi", $nama, $email, $id);
         } else {
-            // Ganti password
             $sql = "UPDATE users SET nama = ?, email = ?, password = ? WHERE id = ?";
             $stmt = $db->prepare($sql);
             $stmt->bind_param("sssi", $nama, $email, $password, $id);
@@ -293,7 +291,6 @@ switch ($action) {
             break;
         }
 
-        // Ambil status lama
         $sql = "SELECT active FROM users WHERE id = ?";
         $stmt = $db->prepare($sql);
         $stmt->bind_param("i", $id);
@@ -302,7 +299,6 @@ switch ($action) {
 
         $newStatus = $result['active'] == 1 ? 0 : 1;
 
-        // Update status baru
         $sql2 = "UPDATE users SET active = ? WHERE id = ?";
         $stmt2 = $db->prepare($sql2);
         $stmt2->bind_param("ii", $newStatus, $id);
