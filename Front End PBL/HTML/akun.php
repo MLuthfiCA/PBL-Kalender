@@ -1,3 +1,18 @@
+<?php
+session_start();
+if (!isset($_SESSION["nama"])) {
+    header("Location: admin_login.php");
+    exit();
+}
+
+if (isset($_POST["logout"])) {
+    session_unset();
+    session_destroy();
+    header("location: admin_login.php");
+    exit();
+} 
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -11,16 +26,15 @@
     <!-- ================= NAVBAR ================= -->
     <nav class="navbar">
       <div class="container">
-        <a href="admin_homepage.php">
           <img src="../logo login.png" class="logo">
         </a>
         <div class="search-box">
           <input type="text" id="searchInput" placeholder="Cari akun..." />
           <button id="searchBtn">🔍</button>
         </div>
-        <ul class="nav-links">
-          <li><a href="admin_homepage.php">Kembali</a></li>
-        </ul>
+            <form action="akun.php" method="POST">
+              <button type="submit" name="logout" class="logout-btn">Keluar</button>
+            </form>
       </div>
     </nav>
 

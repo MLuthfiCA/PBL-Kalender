@@ -18,7 +18,7 @@
 
     // Jika SUDAH LOGIN, jangan kembali ke login page
     if (isset($_SESSION['is_login']) && $_SESSION['is_login'] === true) {
-        header('location: admin_homepage.php');
+        header('location: akun.php');
         exit();
     }
 
@@ -40,7 +40,7 @@
             $_SESSION["nama"] = $data["nama"];
             $_SESSION["is_login"] = true;
 
-            header("location: admin_homepage.php");
+            header("location: akun.php");
             exit(); 
         } else {
             $_SESSION['login_error'] = "Nama pengguna atau kata sandi salah.";
