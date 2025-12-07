@@ -358,47 +358,89 @@ body {
     font-size: 0.95rem;
 }
 
-/* CAROUSEL SECTION */
+/* === CAROUSEL (TIM PENGEMBANG) === */
 .team-section {
-    padding: 80px 20px;
-    background-color: #ffffff;
+  padding: 80px 20px;
+  background-color: #ffffff;
 }
 
 .team-section h2 {
-    font-size: 2.5rem;
-    text-align: center;
-    color: #1a6099;
-    margin-bottom: 15px;
+  font-size: 2.5rem;
+  text-align: center;
+  color: #1a6099;
+  margin-bottom: 15px;
 }
 
 .carousel-wrapper {
-    overflow: hidden;
-    padding: 40px 0;
+  overflow: hidden;
+  padding: 40px 0;
+  position: relative;
 }
 
 .carousel {
-    display: flex;
-    gap: 30px;
-    animation: scroll 20s linear infinite;
-    width: fit-content;
+  display: flex;
+  gap: 30px;
+  width: max-content;
+  animation: scrollLoop 25s linear infinite;
 }
 
-@keyframes scroll {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-25%);
-    }
-}
-
-.carousel-wrapper:hover .carousel {
-    animation-play-state: paused;
+.carousel:hover {
+  animation-play-state: paused;
 }
 
 .carousel-item {
-    flex: 0 0 280px;
+  flex: 0 0 280px;
 }
+
+.card-profile {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.card-profile:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.card-image {
+  width: 100%;
+  height: 250px;
+  overflow: hidden;
+  border-bottom: 2px solid #1a6099;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.card-profile h3 {
+  color: #1a6099;
+  padding-top: 15px;
+  font-size: 1.3rem;
+}
+
+.card-profile p {
+  color: #666;
+  padding: 10px 20px 20px;
+  font-size: 0.95rem;
+}
+
+@keyframes scrollLoop {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 
 .card-profile {
     background: white;

@@ -70,92 +70,124 @@ session_start();
                 <div class="feature-card">
                     <div class="feature-icon icon-calendar" aria-hidden="true"></div>
                     <h3>Jadwal Kalender</h3>
-                    <p>Isi</p>
+                    <p>Kelola jadwal kuliah dan aktivitas dengan tampilan kalender interaktif.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon icon-note" aria-hidden="true"></div>
                     <h3>Catatan Pembelajaran</h3>
-                    <p>Isi</p>
+                    <p>Simpan catatan penting dan tugas agar tidak terlewat.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon icon-repeat" aria-hidden="true"></div>
                     <h3>Jadwal Berulang</h3>
-                    <p>Isi</p>
+                    <p>Buat jadwal otomatis untuk kelas rutin tanpa input ulang.</p>
                 </div>
 
                 <div class="feature-card">
                     <div class="feature-icon icon-lightning" aria-hidden="true"></div>
                     <h3>Real-time Update</h3>
-                    <p>Isi</p>
+                    <p>Setiap perubahan jadwal langsung diperbarui secara otomatis.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- looping box -->
-    <section id="team" class="team-section">
-        <div class="container">
-            <h2>Tim Pengembang</h2>
-            <p class="section-subtitle">Dibangun oleh:</p>
+    <!-- looping developer section -->
+<section id="team" class="team-section">
+  <div class="container">
+    <h2>Tim Pengembang</h2>
+    <p class="section-subtitle">Dibangun oleh:</p>
 
-            <div class="carousel-wrapper">
-                <div class="carousel">
-                    <div class="carousel-item">
-                        <div class="card-profile">
-                                    <div class="card-image">
-                                        <img src="../images/dev1.jpg" alt="Developer 1" />
-                                    </div>
-                            <h3>Nama</h3>
-                            <p>Isi Sendiri</p>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item">
-                        <div class="card-profile">
-                                    <div class="card-image">
-                                        <img src="../images/dev2.jpg" alt="Developer 2" />
-                                    </div>
-                            <h3>Nama</h3>
-                            <p>Isi Sendiri</p>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item">
-                        <div class="card-profile">
-                                    <div class="card-image">
-                                        <img src="../images/dev3.jpg" alt="Developer 3" />
-                                    </div>
-                            <h3>Nama</h3>
-                            <p>Isi Sendiri</p>
-                        </div>
-                    </div>
-
-                    <div class="carousel-item">
-                        <div class="card-profile">
-                                    <div class="card-image">
-                                        <img src="../images/dev4.jpg" alt="Developer 4" />
-                                    </div>
-                            <h3>Nama</h3>
-                            <p>Isi Sendiri</p>
-                        </div>
-                    </div>
-
-                    <!-- Clone items untuk Kelihatan looping -->
-                    <div class="carousel-item">
-                        <div class="card-profile">
-                                    <div class="card-image">
-                                        <img src="../images/dev1.jpg" alt="Developer 1" />
-                                    </div>
-                            <h3>Nama</h3>
-                            <p>Isi Sendiri</p>
-                        </div>
-                    </div>
-                </div>
+    <div class="carousel-wrapper">
+      <div class="carousel">
+        <!-- Set 1 -->
+        <div class="carousel-item">
+          <div class="card-profile">
+            <div class="card-image">
+              <img src="../dimas.jpeg" alt="Dimas Cakra Surya Ananta" />
             </div>
+            <h3>Dimas Cakra Surya Ananta</h3>
+            <p>Front End, Back End</p>
+          </div>
         </div>
-    </section>
+
+        <div class="carousel-item">
+          <div class="card-profile">
+            <div class="card-image">
+              <img src="../damar.png" alt="Damar Widi Nugroho" />
+            </div>
+            <h3>Damar Widi Nugroho</h3>
+            <p>Front End, Back End</p>
+          </div>
+        </div>
+
+        <div class="carousel-item">
+          <div class="card-profile">
+            <div class="card-image">
+              <img src="../rafi.jpeg" alt="Raffi" />
+            </div>
+            <h3>Raffi</h3>
+            <p>Front End</p>
+          </div>
+        </div>
+
+        <div class="carousel-item">
+          <div class="card-profile">
+            <div class="card-image">
+              <img src="../lutpi.jpeg" alt="M.Lutfi" />
+            </div>
+            <h3>M.Lutfi</h3>
+            <p>Front End</p>
+          </div>
+        </div>
+
+        <!-- Set 2 (duplikat untuk looping halus) -->
+        <div class="carousel-item">
+          <div class="card-profile">
+            <div class="card-image">
+              <img src="../dimas.jpeg" alt="Dimas Cakra Surya Ananta" />
+            </div>
+            <h3>Dimas Cakra Surya Ananta</h3>
+            <p>Front End, Back End</p>
+          </div>
+        </div>
+
+        <div class="carousel-item">
+          <div class="card-profile">
+            <div class="card-image">
+              <img src="../damar.png" alt="Damar Widi Nugroho" />
+            </div>
+            <h3>Damar Widi Nugroho</h3>
+            <p>Front End, Back End</p>
+          </div>
+        </div>
+
+        <div class="carousel-item">
+          <div class="card-profile">
+            <div class="card-image">
+              <img src="../rafi.jpeg" alt="Raffi" />
+            </div>
+            <h3>Raffi</h3>
+            <p>Front End</p>
+          </div>
+        </div>
+
+        <div class="carousel-item">
+          <div class="card-profile">
+            <div class="card-image">
+              <img src="../lutpi.jpeg" alt="M.Lutfi" />
+            </div>
+            <h3>M.Lutfi</h3>
+            <p>Front End</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
     <!-- about section -->
     <section id="tentang" class="about-section">
@@ -163,11 +195,12 @@ session_start();
             <h2>Tentang Website Kami</h2>
             <div class="about-content">
                 <p>
-                    Isi
+                    POLIPLAN adalah website jadwal pribadi untuk mahasiswa Teknik Informatika Politeknik Negeri Batam.
+                    Tujuannya sederhana — membantu mahasiswa mengatur waktu kuliah, tugas, dan kegiatan sehari-hari dengan lebih mudah.
                 </p>
                 
                 <p>
-                    Kami percaya bahwa teknologi dapat membuat perbedaan signifikan dalam kehidupan akademik. Itulah mengapa kami terus mengembangkan fitur-fitur baru dan meningkatkan pengalaman pengguna berdasarkan feedback dari komunitas kami.
+                    Dengan tampilan yang ringan dan praktis, POLIPLAN dirancang supaya jadwal tidak cuma tersimpan, tapi juga benar-benar berguna dalam keseharian kampus.
                 </p>
             </div>
         </div>
