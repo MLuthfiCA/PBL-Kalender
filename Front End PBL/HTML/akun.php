@@ -57,7 +57,7 @@ if (isset($_POST["logout"])) {
 
         <!-- Daftar Akun -->
         <div class="admin-table">
-          <h3>Daftar Akun Terdaftar</h3>
+          <h3>Akun Terdaftar</h3>
           <table id="studentTable">
             <thead>
               <tr>
