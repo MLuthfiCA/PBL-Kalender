@@ -196,7 +196,7 @@ session_start();
             <div class="about-content">
                 <p>
                     POLIPLAN adalah website jadwal pribadi untuk mahasiswa Teknik Informatika Politeknik Negeri Batam.
-                    Tujuannya sederhana — membantu mahasiswa mengatur waktu kuliah, tugas, dan kegiatan sehari-hari dengan lebih mudah.
+                    Tujuannya sederhana, membantu mahasiswa mengatur waktu kuliah, tugas, dan kegiatan sehari-hari dengan lebih mudah.
                 </p>
                 
                 <p>

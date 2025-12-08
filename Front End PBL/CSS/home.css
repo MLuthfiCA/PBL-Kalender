@@ -444,7 +444,7 @@ button:hover {
     margin-top: 1px;
 }
 
-/* modals */
+/* popup kalender */
 #newEventModal,
 #deleteEventModal {
     display: none;
