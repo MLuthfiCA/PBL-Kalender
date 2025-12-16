@@ -128,7 +128,7 @@ session_start();
             <div class="card-image">
               <img src="../rafi.jpeg" alt="Raffi" />
             </div>
-            <h3>Raffi</h3>
+            <h3>Ahmad Rafi' Sa'id</h3>
             <p>Front End</p>
           </div>
         </div>
@@ -138,7 +138,7 @@ session_start();
             <div class="card-image">
               <img src="../lutpi.jpeg" alt="M.Lutfi" />
             </div>
-            <h3>M.Lutfi</h3>
+            <h3>M. Lutffi causart Azavi</h3>
             <p>Front End</p>
           </div>
         </div>
@@ -169,7 +169,7 @@ session_start();
             <div class="card-image">
               <img src="../rafi.jpeg" alt="Raffi" />
             </div>
-            <h3>Raffi</h3>
+            <h3>Ahmad Rafi' Sa'id</h3>
             <p>Front End</p>
           </div>
         </div>
@@ -179,7 +179,7 @@ session_start();
             <div class="card-image">
               <img src="../lutpi.jpeg" alt="M.Lutfi" />
             </div>
-            <h3>M.Lutfi</h3>
+            <h3>M. Luthfi Causart Azavi</h3>
             <p>Front End</p>
           </div>
         </div>
