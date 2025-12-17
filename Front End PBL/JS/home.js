@@ -282,6 +282,10 @@ function openModal(date) {
         document.getElementById('closeButton').style.display = 'block'; 
         deleteEventModal.style.display = 'block'; 
     } else {
+        // Tampilkan checkbox jika membuat jadwal baru
+        const repeatContainer = repeatWeeklyCheckbox.parentElement;
+        if (repeatContainer) repeatContainer.style.display = 'block';
+        repeatWeeklyCheckbox.disabled = false;
         newEventModal.style.display = 'block';
     }
     backDrop.style.display = 'block';
@@ -296,7 +300,19 @@ function openEditModal(eventId, eventDate, eventTitle, eventDosen, eventTime, ev
     eventDosenInput.value = eventDosen;
     eventTimeInput.value = eventTime;
     eventRoomInput.value = eventRoom || '';
-    repeatWeeklyCheckbox.checked = false;
+
+    // jika jadwal tunggal, matikan dan sembunyikan checkbox perulangan
+    const repeatContainer = repeatWeeklyCheckbox.parentElement;
+    if (!clickedRepeatId) {
+        repeatWeeklyCheckbox.checked = false;
+        repeatWeeklyCheckbox.disabled = true;
+        if (repeatContainer) repeatContainer.style.display = 'none';
+    } else {
+        repeatWeeklyCheckbox.checked = true;
+        repeatWeeklyCheckbox.disabled = false;
+        if (repeatContainer) repeatContainer.style.display = 'block';
+    }
+
     document.querySelector('#newEventModal h2').textContent = 'Edit Jadwal';
     document.getElementById('saveButton').textContent = 'Update';
     newEventModal.style.display = 'block';
@@ -315,7 +331,13 @@ function closeModal() {
     eventTimeInput.value = '07:00 - 07:50';
     eventRoomInput.value = '';
     if (eventDosenInput) eventDosenInput.value = '';
+    
+    // Reset status checkbox
     repeatWeeklyCheckbox.checked = false; 
+    repeatWeeklyCheckbox.disabled = false;
+    const repeatContainer = repeatWeeklyCheckbox.parentElement;
+    if (repeatContainer) repeatContainer.style.display = 'block';
+
     eventTitleInput.classList.remove('error');
     if(eventDosenInput) eventDosenInput.classList.remove('error');
     if(eventRoomInput) eventRoomInput.classList.remove('error');
@@ -366,7 +388,6 @@ async function saveEvent() {
         if (!title) eventTitleInput.classList.add('error');
         if (!dosen) eventDosenInput.classList.add('error');
         if (!room) eventRoomInput.classList.add('error');
-        
         alert("Nama Mata Kuliah, Dosen, dan Ruangan wajib diisi.");
         return; 
     }
