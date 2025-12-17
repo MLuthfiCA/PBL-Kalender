@@ -355,7 +355,6 @@ async function updateEvent(title, dosen, time, room) {
     } catch (error) { alert('Gagal mengubah jadwal. Coba lagi.'); }
 }
 
-// --- BAGIAN UTAMA YANG DIPERBAIKI: VALIDASI INPUT ---
 async function saveEvent() {
     const title = eventTitleInput.value.trim();
     const dosen = eventDosenInput.value.trim();
@@ -363,7 +362,6 @@ async function saveEvent() {
     const room = eventRoomInput.value.trim();
     const repeatWeekly = repeatWeeklyCheckbox.checked;
 
-    // VALIDASI: Wajib isi Matkul, Dosen, dan Ruangan
     if (!title || !dosen || !room || !time || !clicked) {
         if (!title) eventTitleInput.classList.add('error');
         if (!dosen) eventDosenInput.classList.add('error');
