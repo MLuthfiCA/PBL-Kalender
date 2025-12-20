@@ -116,7 +116,7 @@ session_start();
         <div class="carousel-item">
           <div class="card-profile">
             <div class="card-image">
-              <img src="../damar.png" alt="Damar Widi Nugroho" />
+              <img src="../damar.jpeg" alt="Damar Widi Nugroho" />
             </div>
             <h3>Damar Widi Nugroho</h3>
             <p>Front End, Back End</p>
@@ -157,9 +157,9 @@ session_start();
         <div class="carousel-item">
           <div class="card-profile">
             <div class="card-image">
-              <img src="../damar.png" alt="Damar Widi Nugroho" />
+              <img src="../damar.jpeg" alt="Damar Widi Nugroho" />
             </div>
-            <h3>Damar Widi Nugroho</h3>
+            <h3>Damar Widi Nugroho </h3>
             <p>Front End, Back End</p>
           </div>
         </div>
